@@ -1,0 +1,10 @@
+@font-face {
+		  font-family: 'HealTheWebB-Regular';
+		  src: url('fonts/HealTheWebB-Regular.otf') format('otf');
+		  font-weight: normal;
+		  font-style: normal;
+		}
+		
+		body {
+		  font-family: 'HealTheWebB-Regular', sans-serif;
+		}

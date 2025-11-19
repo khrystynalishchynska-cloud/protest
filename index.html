@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Protest Symbol Catalog Prototype</title>
+    <!-- Link External CSS -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Load Tailwind CSS from CDN for utility classes -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom font import for better aesthetics */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="text-gray-900">
+
+    <div id="app-container" class="min-h-screen flex flex-col">
+        
+        <!-- Header / Navigation Bar -->
+        <header id="main-header" class="w-full bg-white border-b border-gray-200 shadow-sm sticky top-0 z-40">
+            <div class="max-w-7xl mx-auto p-4 flex justify-between items-center">
+                <h1 class="text-xl font-bold text-gray-900">NETWERK ARCHIEVEN <br> DESIGN EN DIGITALE CULTUUR</h1>
+                <nav class="flex space-x-6 text-base font-medium text-gray-600">
+                    <a href="#" class="hover:text-black transition">Over NADD</a>
+                    <a href="#" class="hover:text-black transition underline underline-offset-4 text-black font-semibold">Artikelen</a>
+                    <a href="#" class="hover:text-black transition">Activiteiten</a>
+                    <a href="#" class="hover:text-black transition">Contact</a>
+                    <a href="#" class="hover:text-black transition">EN</a>
+                    <button class="text-gray-600 hover:text-black"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content Wrapper (Controls Split View) -->
+        <main id="main-content-area" class="flex-grow pt-8 pb-10 transition-all duration-300">
+            
+            <div id="symbol-detail" class="max-w-7xl mx-auto flex">
+                
+                <!-- Left Content Area (Image and Controls) -->
+                <div class="w-full lg:w-[65%] px-4">
+                    <div class="flex flex-col md:flex-row gap-8">
+                        
+                        <!-- Image Column -->
+                        <div class="md:w-1/3">
+                            <img id="symbol-image" class="w-full h-auto object-cover border-none" alt="Protest Symbol Placeholder">
+                            
+                            <!-- Filter/Highlight Control Buttons -->
+                            <div class="mt-6 p-0">
+                                <div class="flex flex-col gap-2">
+                                    <h3 class="font-bold text-lg mb-1 text-gray-700">Explore by Tag:</h3>
+                                    <!-- HANDLERS REMOVED: JS will attach event listeners now -->
+                                    <button
+                                        class="control-button text-gray-600 border border-gray-300 px-4 py-1 text-sm text-left hover:bg-gray-100 transition rounded-md"
+                                        data-highlight-target="country"
+                                    >
+                                        🌍 Highlight Countries
+                                    </button>
+                                    <button
+                                        class="control-button text-gray-600 border border-gray-300 px-4 py-1 text-sm text-left hover:bg-gray-100 transition rounded-md"
+                                        data-highlight-target="cause"
+                                    >
+                                        📣 Highlight Causes
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Description Text Column -->
+                        <div class="md:w-2/3">
+                            <h3 class="text-2xl font-semibold mb-4 text-gray-900">Object Description</h3>
+                            <!-- Description content will be injected here by JavaScript -->
+                            <div id="symbol-description" class="text-base leading-relaxed text-gray-700"></div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Split-Screen Catalog Preview Panel (Hidden/Minimized by default) -->
+                <div id="catalog-preview-panel" class="catalog-panel fixed right-0 top-0 h-full shadow-2xl z-30">
+                    <div class="p-6">
+                        <button onclick="closeSplitView()" class="close-button text-gray-600 hover:text-black transition float-right text-3xl font-light">
+                            &times;
+                        </button>
+                        <h3 id="preview-title" class="text-xl font-bold text-gray-900 border-b pb-3 mb-6 mt-10">Filtered Symbols</h3>
+                        
+                        <!-- Filtered List Content -->
+                        <div id="catalog-list-content">
+                            <!-- Dynamic list will be injected here -->
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+        </main>
+
+        <!-- Popover Preview (Hidden by default, used for hover on individual tags) -->
+        <div id="preview-popover" class="fixed z-50 p-3 max-w-xs bg-white rounded-md shadow-xl border border-gray-300 transition-opacity duration-150 opacity-0 invisible pointer-events-none">
+            <!-- Content injected on hover -->
+        </div>
+
+    </div>
+    
+    <!-- Link External JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>

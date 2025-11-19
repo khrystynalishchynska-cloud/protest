@@ -1,0 +1,238 @@
+
+ .main-header {
+           
+            position: fixed; 
+            top: 0;
+            left: 0;
+            position: ;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            height: 10vh;
+            background-color: #e15544;
+            overflow: hidden;
+            top: 0; /* At the top */
+            z-index: 99; 
+        }
+
+.headertext {
+    color: #215e56;
+    text-align: center;
+    font-size: 5vw;
+}
+
+.split-screen-container {
+            display: flex; 
+            width: 100%;
+            height: 100vh;
+        
+        }
+
+.split {
+  height: 100vh;
+  width: 50%;
+  position: fixed;
+  top: 10vh;
+  overflow-x: hidden;
+  overflow: scroll;
+}
+
+/* left side */
+.left {
+  left: 0;
+   background-color: #e37a8b;
+   overflow-x: hidden;
+
+
+}
+
+/* right side */
+.right {
+  right: 0;
+  background-color: #215e56;
+
+}
+
+#content{
+    padding: 10%;
+}
+
+#cover h1 {
+    font-family: 'Open Sans';
+}
+
+img{
+    
+}
+
+
+ body {
+   /* 
+   background-color: #f4ecde;
+    color: #000000;
+    font-size: 18px;
+    line-height: 1.6;
+    margin: 1%;20px;30px;20px;
+    padding: 10px;40px;40px;40px;
+  */
+    } 
+  
+
+ a {
+    display: inline-block;
+    background-color: #f3ff0e;
+    padding: 10;
+ }
+h1, h2, h3, h4, h5, h6 {
+    font-family: am-majella, sans-serif;
+    text-align: center;
+   
+}
+   /* 
+.p-link {
+    color: #1a0088;
+    font-size: 20px;
+    background-color: #ffffff00;
+} */
+
+h1 {
+font-family: am-majella, sans-serif;
+font-weight: 400;
+font-style: normal;
+font-size: 7vw;
+line-height: 100%;
+color: aliceblue;
+}
+
+
+h2{
+font-family: am-majella, sans-serif;
+font-weight: 400;
+font-style: normal;
+font-size: 70vw;
+}
+
+h3{
+    font-family: am-majella, sans-serif;
+    font-size: 4vw;
+    text-align: left; 
+
+    }
+h6{
+font-family: am-majella, sans-serif;
+font-weight: 400;
+font-style: normal;
+}
+
+p{
+font-family: dico-typewriter, monospace; 
+font-weight: 400; 
+font-style: normal;
+size: 8 px;
+line-height: 1.3;
+font-size: 1.5vw;
+padding-left: 10%;
+padding-right: 10%;
+}
+.textlight {
+    color: #f4ecde;
+}
+
+.colorheader {
+    color: #e37a8b;
+}
+.speech {
+
+    border: #000000 solid 2px;
+    padding: 3px 2px;
+    border-radius: 4 px; 
+   font-family: dico-typewriter-script, monospace;
+   font-weight: 400;
+   font-style: normal;
+    color: #000000;
+    font-weight: 400;
+    line-height: 1.3;
+    font-size: 1.5vw;
+    line-height: 1.8;
+}
+
+.indirectspeech {
+
+    border: #000000 solid 2px;
+    padding: 3px 2px;
+    text-transform: uppercase;
+    border-radius: 5 px;
+    font-family: dico-typewriter, monospace;
+    font-weight: 400;
+    font-style: italic;
+    color: #000000;
+    font-weight: 700;
+    line-height: 1.3;
+    font-size: 1.5vw;
+    line-height: 1.8;
+}
+
+.speechondark {
+    border: #f4ecde solid 2px;
+    padding: 3px 2px;
+    border-radius: 4 px; 
+   font-family: dico-typewriter-script, monospace;
+   font-weight: 400;
+   font-style: normal;
+    color: #f4ecde;
+    font-weight: 400;
+    font-size: 1.5vw;
+    line-height: 1.8;
+    }
+
+.umbrella1 {
+    margin-right: 60%;
+    padding-bottom: 20px;
+    rotate: 30deg;
+    }
+
+.imageheader {
+    width: 50vw;
+
+}
+    
+.overlap-container {
+    /* display: flex; */
+    position: relative; /* The child text will be positioned relative to this element */
+    text-align: center; /* Centers the image inside the container */
+    display: inline-block; ;
+    margin-bottom: 4%;
+    width: 100%;
+    
+
+}
+
+.headoverlay1 {
+    position: absolute; 
+    top: 70%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    color: white; 
+    font-family: am-majella, sans-serif;
+    font-weight: 400;
+    font-style: normal;;
+}
+
+.headoverlaycolor {
+    position: absolute; 
+    top: 30%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    color: #e37a8b; 
+    font-family: am-majella, sans-serif;
+    font-weight: 400;
+    font-style: normal;
+
+}
+
+/*comment for myself with description and what it makes */
+
+

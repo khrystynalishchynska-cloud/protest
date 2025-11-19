@@ -1,0 +1,216 @@
+@media print {
+
+    /* Size and marin for all pages ------------- */
+    @page {
+        size: 108mm 180mm;
+        margin-top: 10mm;
+        margin-bottom: 10mm;
+    }  
+
+
+    /* LEFT PAGES -------------------------------- */
+
+    @page:left {
+        margin-left: 5mm;
+        margin-right: 20mm;
+        margin-bottom: 5mm;
+        margin-top: 5mm;
+        @left-middle {
+            content: counter(page);
+            width: 40px;
+            font-family: dico-typewriter-script, monospace;
+            font-weight: 400;
+            font-style: normal;
+            line-height: 1;
+            font-size: 25pt;
+            color: #e15544;
+            text-align: center;
+        }
+        }
+
+       /* @bottom-left {
+             content: counter(page);
+            width: 40px;
+            font-family: dico-typewriter-script, monospace;
+            font-weight: 400; 
+            font-style: normal;
+            line-height: 1;
+            font-size: 12pt;
+            padding-left: 10%;
+            padding-right: 10%;
+         
+        @bottom-center{
+           
+        }}*/
+    }
+
+
+    /* RIGHT PAGES -------------------------------- */
+
+    @page:right {
+        margin-top: 5mm;
+        margin-bottom: 5mm;
+        margin-left: 20mm;
+        margin-right: 5mm;
+         /*  @bottom-right {
+            content: counter(page);
+            font-family: dico-typewriter-script, monospace;
+        }*/
+        @right-middle {
+            content: counter(page);
+            position: absolute;
+            right: 0;
+            width: 50mm;
+            top: 80mm;
+            font-family: dico-typewriter-script, monospace;
+            font-weight: 400;
+            font-style: normal;
+            line-height: 1;
+            font-size: 25pt;
+            color: #e15544;
+            text-align: right;
+    
+              }
+
+           
+              
+    }
+
+     /* .chapter  h1 { string-set: chapTitle content(text); }*/
+
+
+
+    /* BLANK PAGES -------------------------------- */
+
+    @page:blank {
+        @bottom-left { content: none; }
+        @bottom-center { content: none; }
+        @bottom-right { content: none; }
+
+    }
+
+
+
+    /* COUVERTURE -------------------------------- */
+
+    @page:first{
+        margin: 10mm 10mm;
+        background-color:e15544;
+        @right-middle { content: none;}
+    
+    }
+
+   @page chapter-start {
+    /* This defines the page template named 'chapter-start' */
+    
+    /* HIDE THE COUNTERS for this page template */
+    @left-middle { 
+        content: none; 
+    }
+    @right-middle { 
+        content: none; 
+    }
+    
+}
+
+.chapter {
+    /* 1. Tell Paged.js to use the template named 'chapter-start' */
+    page: chapter-start;
+    
+    /* 2. Force the chapter to always start on a new page */
+    break-before: right;
+}
+    
+
+
+
+    /* SECTION BREAKS -------------------------------- */
+
+    /* .chapter {
+        break-before: right;
+    }*/
+    .chapter {
+       
+        break-after: always;
+        break-before: always;
+        
+    }
+
+    
+
+
+
+
+    /* CONTENT --------------------------------------- */
+
+    p 
+    { font-family: dico-typewriter, monospace; 
+        font-weight: 400; 
+        font-style: normal;
+        line-height: 1.5;
+        font-size: 8pt;
+}
+    
+  h1 {
+    font-family: am-majella, sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 40px;
+    text-align: center;
+}
+
+.overlap-container {
+    /* display: flex; */
+    position: relative; 
+    text-align: center; /
+    display: inline-block; 
+}
+
+.headoverlay1 {
+    position: absolute; 
+    top: 80%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    color: rgb(0, 0, 0); 
+    font-family: am-majella, sans-serif;
+    font-weight: 400;
+    font-style: normal;;
+}
+
+.headertext {
+    color: #215e56;
+    text-align: left;
+    font-size: 60pt;
+
+}
+
+.speech {
+
+    border: #e37a8b solid 2px;
+    padding: 1px 1px;
+    font-family: dico-typewriter-script, monospace;
+    font-weight: 400;
+    font-style: normal;
+    color: #000000;
+    font-weight: 400;
+    font-size: 8pt;
+    line-height: 2;
+}
+
+.speechondark {
+
+    border: #215e56 solid 2px;
+    padding: 1px 1px;
+    font-family: dico-typewriter-script, monospace;
+    font-weight: 400;
+    font-style: normal;
+    color: #000000;
+    font-weight: 400;
+    font-size: 8pt;
+    line-height: 2;
+}
+
+
+
+    
+

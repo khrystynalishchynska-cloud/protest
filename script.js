@@ -1,0 +1,260 @@
+// Global variable to hold ALL protest objects, accessible by all functions
+let ALL_PROTEST_DATA = [];
+
+// --- 1. CORE DATA FETCH AND INITIALIZATION ---
+(async () => {
+    const descriptionText = document.getElementById('description-text');
+    const closePanelBtn = document.getElementById('close-panel-btn');
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const objectId = parseInt(urlParams.get('id')) || 1; 
+
+    try {
+        const response = await fetch('protest_data.json');
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        
+        // CRITICAL FIX: Store the full data array globally
+        ALL_PROTEST_DATA = data;
+        
+        const objectData = data.find(obj => obj.id === objectId);
+
+        if (objectData) {
+            renderObjectPage(objectData);
+            setupHighlighting(objectData);
+            
+            // Setup close button listener
+            closePanelBtn.addEventListener('click', () => togglePanel(false)); 
+        } else {
+            descriptionText.textContent = `Error: Object not found for ID ${objectId}.`;
+        }
+
+    } catch (error) {
+        console.error('Error loading data:', error);
+        descriptionText.textContent = 'Error loading project data file.';
+    }
+})();
+
+
+// --- 2. DATA RENDERING FUNCTIONS (No changes needed) ---
+
+function renderObjectPage(data) {
+    document.getElementById('object-title').textContent = data.name;
+    document.getElementById('object-image').src = data.image_filename || 'placeholder.jpg';
+    
+    document.getElementById('description-text').innerHTML = data.description_html; 
+
+    renderFilterButtons(data);
+    
+    document.getElementById('type-tag').textContent = data.categories_object_type?.join(', ') || '';
+    document.getElementById('timeframe-tag').textContent = data.categories_timeframe?.join(', ') || '';
+}
+
+
+function renderFilterButtons(data) {
+    const buttonContainer = document.getElementById('filter-buttons-container');
+    
+    const highlightCategories = [
+        { key: 'categories_country', label: 'Where?', classPrefix: 'highlight-country' },
+        { key: 'categories_cause', label: 'Why?', classPrefix: 'highlight-cause' },
+        { key: 'categories_protest', label: 'Protest/Movement', classPrefix: 'highlight-protest' },
+        { key: 'categories_timeframe', label: 'When?', classPrefix: 'highlight-timeframe' }
+    ];
+
+    highlightCategories.forEach(cat => {
+        if (data[cat.key] && data[cat.key].length > 0) {
+            const button = document.createElement('button');
+            button.className = 'filter-button';
+            button.textContent = cat.label;
+            button.dataset.target = cat.classPrefix; 
+            
+            buttonContainer.appendChild(button);
+        }
+    });
+}
+
+
+// --- 3. FEATURE LOGIC: HIGHLIGHTING & SPLIT-SCREEN ---
+
+function setupHighlighting(objectData) {
+    const buttons = document.querySelectorAll('.filter-button');
+
+    buttons.forEach(button => {
+        const targetClass = button.dataset.target;
+
+        // Unified function to toggle the 'highlight-active' class
+        const toggleHighlight = (isActive) => {
+            document.querySelectorAll(`.${targetClass}`)
+                .forEach(span => {
+                    span.classList.toggle('highlight-active', isActive);
+                });
+        };
+
+        // Mouseover/Mouseout Logic
+        button.addEventListener('mouseover', () => toggleHighlight(true));
+        button.addEventListener('mouseout', () => toggleHighlight(false));
+        
+        // Click Logic (Triggers the Split-Screen/Context Panel)
+        button.addEventListener('click', (event) => {
+            // PASS THE FULL GLOBAL DATA ARRAY HERE
+            handleContextPanel(event);
+        });
+    });
+
+    // Add click event to highlighted spans in description
+    document.getElementById('description-text').addEventListener('click', async function(e) {
+        if (e.target.matches('span[class^="highlight-"]')) {
+            const typeClass = Array.from(e.target.classList).find(cls => cls.startsWith('highlight-'));
+            const categoryKey = typeClass.replace('highlight-', 'categories_');
+            const value = e.target.textContent.trim();
+
+
+            const panelContent = document.getElementById('context-panel-content');
+            document.getElementById('context-panel').classList.add('active');
+            document.getElementById('object-container').classList.add('split');
+
+            if (categoryKey === 'categories_protest') {
+                if (value === 'Umbrella Revolution') {
+                    // Show the photo essay page in an iframe
+                    panelContent.innerHTML = `
+                        <iframe src="umbrella-movement.html" style="width:100%;height:600px;border:none;"></iframe>
+                    `;
+                } else {
+                    // Fetch protest info from protest_info.json
+                    try {
+                        const response = await fetch('protest_info.json');
+                        if (!response.ok) throw new Error('Could not load protest info');
+                        const protestInfo = await response.json();
+                        const info = protestInfo[value];
+                        if (info) {
+                            panelContent.innerHTML = `
+                                <h3>${value}</h3>
+                                <p><strong>Year:</strong> ${info.year}</p>
+                                <p>${info.summary}</p>
+                                ${info.key_events ? `<ul>${info.key_events.map(event => `<li>${event}</li>`).join('')}</ul>` : ''}
+                            `;
+                        } else {
+                            panelContent.innerHTML = `<p>No information available for ${value}.</p>`;
+                        }
+                    } catch (err) {
+                        panelContent.innerHTML = `<p>Error loading protest info.</p>`;
+                    }
+                }
+            } else {
+                // Filter all objects by the clicked tag value
+                const filteredResults = ALL_PROTEST_DATA.filter(obj =>
+                    obj[categoryKey] && obj[categoryKey].map(v => v.trim()).includes(value)
+                );
+                panelContent.innerHTML = `
+                    <h3>Protest objects in: ${value}</h3>
+                    <ul>
+                        ${filteredResults.map(obj => 
+                            `<li>
+                                <a href="object-detail.html?id=${obj.id}" class="context-object-link">
+                                    <strong>${obj.name}</strong>
+                                </a>
+                            </li>`
+                        ).join('')}
+                    </ul>
+                    <p>Showing all objects linked to <strong>${value}</strong>.</p>
+                `;
+            }
+        }
+    });
+}
+
+
+function handleContextPanel(event) {
+    const clickedButton = event.currentTarget;
+    // Converts 'highlight-country' to 'categories_country'
+    const categoryKey = clickedButton.dataset.target.replace('highlight-', 'categories_'); 
+    const categoryLabel = clickedButton.textContent; 
+
+    // Find all unique terms associated with this category across ALL objects
+    const allTerms = new Set();
+    ALL_PROTEST_DATA.forEach(obj => {
+        if (obj[categoryKey]) {
+            obj[categoryKey].forEach(term => allTerms.add(term));
+        }
+    });
+    
+    // Convert set back to array for display
+    const filterTerms = Array.from(allTerms);
+
+    // Toggle the panel open and pass the necessary filter information
+    document.getElementById('context-panel').classList.add('active');
+    document.getElementById('object-container').classList.add('split');
+    document.getElementById('content-display').classList.add('split');
+    togglePanel(true, { 
+        key: categoryKey, 
+        label: categoryLabel,
+        terms: filterTerms
+    });
+}
+
+// ... togglePanel and populateContextPanel remain the same, but I've updated populateContextPanel to use the new ALL_PROTEST_DATA global variable.
+
+function togglePanel(open, filterData = null) {
+    const panel = document.getElementById('context-panel');
+    const container = document.getElementById('object-container');
+
+    panel.classList.toggle('active', open);
+    container.classList.toggle('split', open);
+
+    if (open && filterData) {
+        populateContextPanel(filterData); 
+    } else if (!open) {
+        document.getElementById('context-panel-content').innerHTML = '';
+    document.getElementById('context-panel').classList.remove('active');
+    document.getElementById('object-container').classList.remove('split');
+    document.getElementById('content-display').classList.remove('split');
+    }
+}
+
+
+function populateContextPanel(filterData) {
+    const panelContent = document.getElementById('context-panel-content');
+    
+    // Filter the global data array based on the clicked term (if a specific term was clicked)
+    // If a button was clicked, we show ALL terms linked to that category.
+    const termToFilterBy = filterData.term; // This will only be defined if a span was clicked
+    let filteredResults = [];
+
+    if (termToFilterBy) {
+        // If a specific term (e.g., 'Hong Kong') was clicked, filter to show only those objects
+        filteredResults = ALL_PROTEST_DATA.filter(obj => 
+            obj[filterData.key] && obj[filterData.key].includes(termToFilterBy)
+        );
+    } else {
+        // If a primary button (e.g., 'Country') was clicked, show a summary.
+        // We will just show the mock-up summary for the primary button click for simplicity.
+        
+        const termsList = filterData.terms.map(term => `<li>**${term}**</li>`).join('');
+
+        panelContent.innerHTML = `
+            <h3>Context: All ${filterData.label} Terms</h3>
+            <p>The **${filterData.label}** filter button was clicked. The full list of terms linked to this category across all objects are:</p>
+            <ul>${termsList}</ul>
+            <hr>
+            <h4>Project Demonstration:</h4>
+            <p>This dynamic panel confirms the data is correctly linked and the split-screen UI is functional.</p>
+        `;
+        return;
+    }
+
+    // This section runs ONLY if a specific term (like 'Hong Kong') was clicked.
+    const resultsList = filteredResults.map(obj => 
+        `<div class="context-result"><strong>${obj.name}</strong> (${obj.categories_country[0]})</div>`
+    ).join('');
+
+
+    panelContent.innerHTML = `
+        <h3>Results for: ${termToFilterBy}</h3>
+        <p>Found ${filteredResults.length} object(s) linked to **${termToFilterBy}**:</p>
+        ${resultsList}
+        <hr>
+        <p>This demonstrates real-time filtering based on a term clicked in the description text.</p>
+    `;
+}

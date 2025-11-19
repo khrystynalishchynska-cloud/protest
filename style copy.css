@@ -1,0 +1,126 @@
+/* Custom Styles for the Prototype */
+
+/* ------------------------------------ */
+/* 1. Base Styles & Transitions */
+/* ------------------------------------ */
+
+.tag-link {
+    /* Base style for clickable/interactive words */
+    color: #1d4ed8; /* blue-700 */
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-color: #93c5fd; /* blue-300 */
+    font-weight: 600;
+    padding: 2px 4px; /* Small padding for better touch targeting */
+    border-radius: 4px;
+    transition: background-color 0.2s, color 0.2s;
+    white-space: nowrap; /* Prevent words from breaking across lines unexpectedly */
+}
+
+.tag-link:hover {
+    background-color: #bfdbfe; /* blue-200 */
+}
+
+/* Highlight style applied by external buttons (Highlight Countries/Causes) */
+.tag-link.is-highlighted {
+    background-color: #fde047; /* Yellow highlight */
+    color: #1f2937; /* Dark text for contrast */
+    text-decoration: none;
+    box-shadow: 0 0 5px rgba(253, 224, 71, 0.7);
+}
+
+
+/* ------------------------------------ */
+/* 2. Split Screen Management */
+/* ------------------------------------ */
+
+/* This style is applied when the split view is NOT active (default 100% view) */
+#main-content-area {
+    transition: width 0.3s ease-out, margin-right 0.3s ease-out;
+    width: 100%;
+    margin-right: 0;
+}
+
+/* The panel itself (the "second tab") is initially hidden off-screen */
+.catalog-panel {
+    transition: width 0.3s ease-out;
+    height: 100%;
+    /* Start with 0 width */
+    width: 0;
+}
+
+/* Styles applied to the overall container when the 'split-active' class is added */
+#app-container.split-active #main-content-area {
+    /* 65% width for the main content area */
+    width: 65%; 
+    margin-right: 35%; /* Push main content to the left to make room for the panel */
+}
+
+#app-container.split-active .catalog-panel {
+    /* 35% width for the side panel */
+    width: 35%;
+}
+
+/* Ensure controls remain accessible inside the panel */
+.close-button {
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+/* ------------------------------------ */
+/* 3. Responsive Adjustments */
+/* ------------------------------------ */
+
+@media (max-width: 1024px) {
+    /* On tablets/mobile, we don't do a side-by-side split. */
+    /* Instead, the main content takes up 100% and the panel slides over it. */
+
+    #app-container.split-active #main-content-area {
+        width: 100%; 
+        margin-right: 0;
+        /* Optionally dim the background of the main content */
+        filter: brightness(0.9);
+    }
+    
+    #app-container.split-active .catalog-panel {
+        /* Side panel takes up most of the mobile screen */
+        width: 80%;
+    }
+}
+/* ------------------------------------ */
+/* 1. General design */ 
+/* ------------------------------------ */
+
+@font-face {
+    font-family: 'Blur Bold';
+    src: url('fonts/Blur Bold.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Blur Medium';
+    src: url('fonts/Blur Medium.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Blur Regular';
+    src: url('fonts/Blur Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Blur Light';
+    src: url('fonts/Blur Light.ttf') format('truetype');
+}
+
+@import url('https://use.typekit.net/szj6zhi.css');
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Blur Light', sans-serif;
+}
+
+p {
+font-family: "dico-mono", mono;
+font-weight: 400;
+font-style: normal;
+}

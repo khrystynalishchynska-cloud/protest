@@ -1,0 +1,282 @@
+/* Highlight clickable tag spans on hover */
+.highlight-country:hover,
+.highlight-cause:hover,
+.highlight-protest:hover,
+.highlight-timeframe:hover {
+    background: #ff9;
+    color: #1a202c;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.2s, color 0.2s;
+}
+/* --- Global Reset & Minimal Aesthetic --- */
+body {
+    background-color: #f0f0f0; /* Off-white/light gray background */
+    color: #000000;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Lekton-Regular', sans-serif;
+    font-size: 20px;
+    line-height: 1.3;
+}
+
+
+/* --- Split-Screen Layout (Desktop View) --- */
+
+.split-layout {
+    display: flex;
+    max-width: 1400px;
+    margin: 0 auto;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.split-layout.split {
+    max-width: 100vw;
+    width: 100vw;
+    margin: 0;
+}
+
+/* Ensure content column lays out horizontally when split is active */
+.split-layout.split .content-column {
+    flex-direction: row;
+}
+
+/* Use the parent .split flag to size the context panel on desktop */
+.split-layout.split #context-panel {
+    flex: 0 0 65%;
+    width: 65%;
+    border-left: 1px solid #000;
+    padding: 30px;
+}
+
+/* Fixed 50/50 split: description and context panel each take half the content area */
+.split-layout.split #description-text {
+    flex: 0 0 50%;
+    width: 50%;
+    padding-right: 20px;
+}
+
+.split-layout.split #context-panel {
+    flex: 0 0 50%;
+    width: 50%;
+    border-left: 1px solid #000;
+    padding: 30px;
+}
+
+.metadata-column {
+    flex: 0 0 350px;
+    padding: 30px;
+    border-right: 1px solid #000;
+    transition: flex 0.4s, width 0.4s;
+}
+
+
+.split-layout.split .metadata-column {
+    flex: 0 0 140px;
+    width: 140px;
+}
+
+.split-layout.split #object-image {
+    max-width: 100px;
+    transition: max-width 0.4s, width 0.4s;
+}
+
+.content-column {
+    flex: 1;
+    display: flex;
+    padding: 85px;
+    padding-right: 20%;
+    overflow: hidden;
+    transition: flex 0.4s, width 0.4s;
+}
+
+/* --- Image & Typography --- */
+#object-image-wrapper {
+    margin-bottom: 20px;
+   /* border: 1px solid #000;*/
+}
+#object-image {
+    width: 100%;
+    display: block;
+    height: auto;
+}
+
+
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Blur Light', sans-serif;
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-top: 0;
+}
+
+.strong-emphasis {
+    font-weight: bold;
+    font-style: italic;
+    text-decoration: underline;
+}
+
+.empasisc {
+    font-family: 'Blur Light', sans-serif;
+    font-size: 25px;
+}
+/* --- Filter Buttons --- */
+#filter-buttons-container {
+    margin: 20px 0;
+}
+.filter-button {
+    background: transparent;
+    border: 2px solid #000;
+    padding: 8px 15px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: background-color 0.2s;
+}
+.filter-button:hover {
+    background-color: #ddd; /* Subtle hover effect */
+}
+
+/* --- Contextual Highlighting (The key CSS for your feature) --- */
+.highlight-country.highlight-active,
+.highlight-cause.highlight-active,
+.highlight-protest.highlight-active,
+.highlight-timeframe.highlight-active {
+    background-color: #ff9; /* A soft, visible yellow for highlighting */
+    padding: 1px 3px;
+    transition: background-color 0.2s;
+   
+}
+
+/* --- Dynamic Context Panel (The key for the Split-Screen feature) --- */
+
+/* The main description article */
+#description-text {
+    flex-grow: 1; /* Takes up all available space by default */
+    width: 100%; /* Default full width */
+    transition: width 0.4s ease-in-out, flex-grow 0.4s ease-in-out;
+    padding-right: 20px; /* Add some space before the panel opens */
+}
+
+/* The panel itself, initially hidden by taking no space */
+#context-panel {
+    flex: 0 0 0; /* Starts with zero width */
+    width: 0; 
+    background-color: #eee; 
+    border-left: none; /* Initially no border */
+    overflow: hidden; /* Hides content when width is 0 */
+    transition: flex 0.4s ease-in-out, width 0.4s ease-in-out;
+}
+
+
+/* Do NOT shrink description column when split is active */
+
+/* Class added by JavaScript to activate the split screen */
+#content-display.split #context-panel {
+    flex: 0 0 65%; /* Panel takes up 65% of the right column space */
+    width: 65%;
+    border-left: 1px solid #000;
+    padding: 30px; /* Apply padding once it's visible */
+}
+
+/* --- Context Panel specific content --- */
+#close-panel-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: transparent;
+    border: 1px solid #000;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 0.8em;
+}
+/* Hide close button by default; show only when panel is active */
+#close-panel-btn { display: none; }
+
+/* Show close button when context panel is active or when split layout is active */
+#context-panel.active #close-panel-btn,
+.split-layout.split #context-panel.active #close-panel-btn,
+.split-layout.split #close-panel-btn {
+    display: block;
+}
+#context-panel-content {
+    margin-top: 20px; 
+}
+
+
+/* --- Responsive Layout (Crucial for mobile experience) --- */
+@media (max-width: 900px) {
+    .split-layout {
+        flex-direction: column; 
+    }
+    .metadata-column {
+        flex: auto;
+        border-right: none;
+        border-bottom: 1px solid #000; 
+    }
+    .content-column {
+        flex-direction: column; /* Stacks description and panel vertically on small screens */
+    }
+
+    /* On mobile, the panel stacks instead of splitting, taking full width */
+    #content-display.split #description-text {
+        width: 100%;
+        flex: auto;
+        padding-right: 0;
+    }
+    
+    #context-panel {
+        width: 100%;
+        flex: 1 1 auto; /* Allows it to occupy space when active */
+    }
+
+    /* We can hide the description completely on mobile when context panel is open */
+    #content-display.split #description-text {
+        display: none;
+    }
+
+    #content-display.split #context-panel {
+        padding: 30px;
+        border-left: none;
+        border-top: 1px solid #000;
+    }
+
+}
+
+/* ------------------------------------ */
+/* 1. General design */ 
+/* ------------------------------------ */
+
+@font-face {
+    font-family: 'Blur Bold';
+    src: url('fonts/Blur Bold.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Blur Medium';
+    src: url('fonts/Blur Medium.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Blur Regular';
+    src: url('fonts/Blur Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Blur Light';
+    src: url('fonts/Blur Light.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Lekton-Regular';
+    src: url('fonts/Lekton-Regular.ttf') format('truetype');
+}
+
+
+

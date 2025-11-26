@@ -23,7 +23,17 @@
     "description_html": "A white piece of paper, or blank sheet, has become a powerful symbol of <span class=\"highlight-cause\">protest against censorship</span> and repression, most notably during the <span class=\"highlight-timeframe\">2022</span> <span class=\"highlight-cause\">anti-lockdown</span> demonstrations in <span class=\"highlight-country\">China</span>. Protesters held up blank sheets to silently express everything they were forbidden to say, making the absence of words a direct metaphor for silenced voices and <span class=\"dramatic-emphasis\">government control</span>. The tactic originated earlier in the <span class=\"highlight-timeframe\">2019–2020</span> <span class=\"highlight-country\">Hong Kong</span> protests, where demonstrators used blank paper after protest slogans were banned. The symbol has since appeared in other countries."
   }
 
-
+{
+    "id": 3,
+    "name": "The Blank Sheet of Paper",
+    "image_filename": "images/blank_sheet.jpg",
+    "categories_object_type": ["Stationery", "Sign/Banner"],
+    "categories_country": ["China", "Hong Kong"],
+    "categories_cause": ["Anti-Censorship", "Freedom of Speech", "Anti-Repression"],
+    "categories_protest": ["Anti-Lockdown Protests", "White Paper Revolution"],
+    "categories_timeframe": ["2022", "2019-2020", "21st Century"],
+    "description_html": "A white piece of paper, or blank sheet, has become a powerful symbol of <span class=\"highlight-cause\">protest against censorship</span> and repression, most notably during the <span class=\"highlight-timeframe\">2022</span> <span class=\"highlight-cause\">anti-lockdown</span> demonstrations in <span class=\"highlight-country\">China</span>. Protesters held up blank sheets to silently express everything they were forbidden to say, making the absence of words a direct metaphor for silenced voices and <span class=\"dramatic-emphasis\">government control</span>. The tactic originated earlier in the <span class=\"highlight-timeframe\">2019–2020</span> <span class=\"highlight-country\">Hong Kong</span> protests, where demonstrators used blank paper after protest slogans were banned. The symbol has since appeared in other countries."
+  }
 
 ]
 

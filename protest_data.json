@@ -9,30 +9,48 @@
   "categories_protest": ["Umbrella Movement", "Umbrella Revolution"],
   "categories_timeframe": ["2014", "21st Century"],
   "description_html": "Umbrellas became a defining symbol of the  <span class=\"highlight-timeframe\">2014</span> <span class=empasisc> <span class=\"highlight-country\"> Hong Kong</span></span> <span class=strong-emphasis><span class=\"highlight-cause\">pro-democracy</span>  protests </span> – soon dubbed the <span class=strong-emphasis> “<span class=\"highlight-protest\">Umbrella Movement</span>” or “<span class=\"highlight-protest\">Umbrella Revolution</span>”.</span> When police first fired tear-gas canisters at student-led sit-ins on 28 September <span class=\"highlight-timeframe\">2014</span>, demonstrators instinctively <span class=strong-emphasis> raised umbrellas to block pepper spray, rubber bullets, and the blazing midday sun,</span> turning an everyday accessory into an emblem of passive resistance and the fight for <span class=\"highlight-cause\">universal suffrage</span>. Images of pastel-colored canopies clustered outside government headquarters in Admiralty – and later across Mong Kok and Causeway Bay – spread worldwide, capturing the movement’s creativity and determination. <span class=strong-emphasis> Yellow umbrellas, especially, became shorthand for the cause:</span> they appeared in protest art, were projected onto skyscrapers, and even inspired the 3-metre-tall <span class=strong-emphasis>“Umbrella Man”</span> statue erected in the occupied streets. Beyond defence, umbrellas served as makeshift banners for slogans such as “I want real <span class=\"highlight-cause\">democracy</span>,” and were lashed together into improvised barricades or held high to shield protesters’ faces from surveillance cameras. The symbolism soon travelled: activists in <span class=empasisc> <span class=\"highlight-country\"> Myanmar</span></span>,  <span class=empasisc> <span class=\"highlight-country\"> Thailand,</span> </span> and elsewhere have since wielded umbrellas in their own demonstrations, using them both for physical protection and as a vivid visual link to <span class=empasisc> <span class=\"highlight-country\">Hong Kong</span>’s</span> precedent."
+ ,
+  "images": [
+    { "src": "images/1-264.jpg", "caption": "Yellow umbrellas outside government headquarters, Admiralty, 2014" },
+    { "src": "images/1-396.jpg", "caption": "Crowd assembled during sit-in, Mong Kok" },
+    { "src": "images/1-397.jpg", "caption": "A line of umbrellas forming a barrier" }
+  ]
 },
 
 {
     "id": 2,
-    "name": "The Blank Sheet of Paper",
-    "image_filename": "images/blank_sheet.jpg",
-    "categories_object_type": ["Stationery", "Sign/Banner"],
-    "categories_country": ["China", "Hong Kong"],
-    "categories_cause": ["Anti-Censorship", "Freedom of Speech", "Anti-Repression"],
-    "categories_protest": ["Anti-Lockdown Protests", "White Paper Revolution"],
-    "categories_timeframe": ["2022", "2019-2020", "21st Century"],
-    "description_html": "A white piece of paper, or blank sheet, has become a powerful symbol of <span class=\"highlight-cause\">protest against censorship</span> and repression, most notably during the <span class=\"highlight-timeframe\">2022</span> <span class=\"highlight-cause\">anti-lockdown</span> demonstrations in <span class=\"highlight-country\">China</span>. Protesters held up blank sheets to silently express everything they were forbidden to say, making the absence of words a direct metaphor for silenced voices and <span class=\"dramatic-emphasis\">government control</span>. The tactic originated earlier in the <span class=\"highlight-timeframe\">2019–2020</span> <span class=\"highlight-country\">Hong Kong</span> protests, where demonstrators used blank paper after protest slogans were banned. The symbol has since appeared in other countries."
-  }
+    "name": "The White Head Scarf",
+    "image_filename": "images/1-212.jpg",
+    "categories_object_type": ["Visual Claims"],
+    "categories_country": ["Argentina", "Iran"],
+    "categories_cause": ["Truth and Justice", "Human Rights", "Women's Rights", "Anti-Compulsory Veiling"],
+    "categories_protest": ["Mothers of Plaza de Mayo", "White Wednesdays", "Girl of Enghelab Street"],
+    "categories_timeframe": ["1977", "2017", "20th Century", "21st Century"],
+    "description_html": "In <span class=\"highlight-timeframe\">1977</span> <span class=\"highlight-country\">Argentina</span>’s <span class=\"highlight-protest\">Mothers of Plaza de Mayo</span> donned white scarves—evoking diapers—to mark the innocence of children who disappeared under military rule. Their weekly marches in Buenos Aires turned the scarf into a <span class=\"dramatic-emphasis\">global emblem</span> of the quest for <span class=\"highlight-cause\">truth and justice</span>. In <span class=\"highlight-country\">Iran</span>, white scarves signal defiance of compulsory <span class=\"highlight-cause\">hijab laws</span>. Spurred by <span class=\"highlight-protest\">#WhiteWednesdays</span>, women wore or waved white scarves to protest mandatory veiling. The gesture drew worldwide attention in <span class=\"highlight-timeframe\">2017</span> when Vida Movahed, the “<span class=\"highlight-protest\">Girl of Enghelab Street</span>,” stood unveiled and brandished her scarf, inspiring similar protests and arrests."
+  },
 
 {
     "id": 3,
     "name": "The Blank Sheet of Paper",
-    "image_filename": "images/blank_sheet.jpg",
-    "categories_object_type": ["Stationery", "Sign/Banner"],
+    "image_filename": "images/1-404.jpg",
+    "categories_object_type": ["Visual Claims"],
     "categories_country": ["China", "Hong Kong"],
     "categories_cause": ["Anti-Censorship", "Freedom of Speech", "Anti-Repression"],
     "categories_protest": ["Anti-Lockdown Protests", "White Paper Revolution"],
     "categories_timeframe": ["2022", "2019-2020", "21st Century"],
     "description_html": "A white piece of paper, or blank sheet, has become a powerful symbol of <span class=\"highlight-cause\">protest against censorship</span> and repression, most notably during the <span class=\"highlight-timeframe\">2022</span> <span class=\"highlight-cause\">anti-lockdown</span> demonstrations in <span class=\"highlight-country\">China</span>. Protesters held up blank sheets to silently express everything they were forbidden to say, making the absence of words a direct metaphor for silenced voices and <span class=\"dramatic-emphasis\">government control</span>. The tactic originated earlier in the <span class=\"highlight-timeframe\">2019–2020</span> <span class=\"highlight-country\">Hong Kong</span> protests, where demonstrators used blank paper after protest slogans were banned. The symbol has since appeared in other countries."
+  },
+
+  {
+    "id": 4,
+    "name": "Vinegar",
+    "image_filename": "images/vinegar.jpg",
+    "categories_object_type": ["Shields & Mitigation"],
+    "categories_country": ["Brazil"],
+    "categories_cause": ["Anti-Tear Gas", "Freedom of Assembly", "Anti-Police Brutality"],
+    "categories_protest": ["Vinegar Protests", "Revolta do Vinagre"],
+    "categories_timeframe": ["2013", "21st Century"],
+    "description_html": "<span class=\"highlight-cause\">Vinegar</span> became an emblematic tool during the <span class=\"highlight-timeframe\">2013</span> protests in <span class=\"highlight-country\">Brazil</span>, often called the “<span class=\"dramatic-emphasis\"><span class=\"highlight-protest\">Vinegar Protests</span></span>” (<span class=\"highlight-protest\">Revolta do Vinagre</span>). Protesters carried bottles of vinegar, believing that breathing through a cloth soaked in vinegar could help neutralize the effects of tear gas and pepper spray used by police, though its medical effectiveness is debated. The tactic became so widespread that police arrested over 60 people for carrying vinegar, including journalists, turning the substance into a symbol of <span class=\"highlight-cause\">resistance</span> and sparking sarcastic nicknames like “the vinegar march”."
   }
 
 ]

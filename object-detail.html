@@ -29,7 +29,26 @@
 
         <section id="content-display" class="content-column">
             
-            <article id="description-text"></article>
+            <div id="description-block" class="description-block">
+                <article id="description-text"></article>
+
+                <!-- Photo gallery placed under the description in the same column -->
+                <div id="photo-gallery" class="photo-gallery" aria-label="Photo gallery for this object">
+                    <!-- Thumbnails will be injected here by script.js -->
+                </div>
+            </div>
+
+            <!-- Lightbox modal for gallery images -->
+            <div id="lightbox" class="lightbox" aria-hidden="true">
+                <div class="lightbox-backdrop" id="lightbox-backdrop"></div>
+                <div class="lightbox-content" role="dialog" aria-modal="true" aria-label="Image preview">
+                    <button id="lightbox-close" class="lightbox-close" aria-label="Close">✕</button>
+                    <button id="lightbox-prev" class="lightbox-nav lightbox-prev" aria-label="Previous image">‹</button>
+                    <button id="lightbox-next" class="lightbox-nav lightbox-next" aria-label="Next image">›</button>
+                    <img id="lightbox-image" src="" alt="" />
+                    <div id="lightbox-caption" class="lightbox-caption"></div>
+                </div>
+            </div>
             
             <aside id="context-panel" class="hidden-panel">
                 <button id="close-panel-btn">✕ Close Context</button>

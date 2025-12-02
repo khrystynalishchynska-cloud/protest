@@ -47,6 +47,8 @@ function renderObjectPage(data) {
     document.getElementById('description-text').innerHTML = data.description_html; 
 
     renderFilterButtons(data);
+    // Render the photo gallery (uses data.images if present, otherwise falls back to image_filename)
+    renderGallery(data);
     
     document.getElementById('type-tag').textContent = data.categories_object_type?.join(', ') || '';
     document.getElementById('timeframe-tag').textContent = data.categories_timeframe?.join(', ') || '';
@@ -257,4 +259,155 @@ function populateContextPanel(filterData) {
         <hr>
         <p>This demonstrates real-time filtering based on a term clicked in the description text.</p>
     `;
+}
+
+/* --- PHOTO GALLERY RENDERING --- */
+function renderGallery(data) {
+    const gallery = document.getElementById('photo-gallery');
+    if (!gallery) return;
+
+    // Determine list of images to show: prefer `images` array, else fallback to `image_filename`
+    const rawImages = Array.isArray(data.images) && data.images.length > 0 ? data.images : [data.image_filename].filter(Boolean);
+
+    // Normalize images to objects: { src, thumb, caption }
+    const images = rawImages.map(item => {
+        if (typeof item === 'string') return { src: item, thumb: item, caption: '' };
+        // item is expected to be an object; support both `src` and `thumb`
+        return {
+            src: item.src || item,
+            thumb: item.thumb || item.src || item,
+            caption: item.caption || item.caption === '' ? item.caption : ''
+        };
+    });
+
+    gallery.innerHTML = '';
+
+    images.forEach((item, idx) => {
+        const img = document.createElement('img');
+        img.src = item.thumb || item.src;
+        img.alt = item.caption || `${data.name} — photo ${idx + 1}`;
+        img.className = 'thumb';
+        img.tabIndex = 0; // make focusable for accessibility
+        img.dataset.index = idx;
+
+        // Mark the first thumb as selected visually (optional)
+        if (idx === 0) img.classList.add('selected');
+
+        // Open lightbox on click or keyboard Enter
+        const openHandler = () => {
+            openLightbox(images, idx, data.name);
+            gallery.querySelectorAll('.thumb').forEach(t => t.classList.remove('selected'));
+            img.classList.add('selected');
+        };
+
+        img.addEventListener('click', openHandler);
+        img.addEventListener('keydown', (e) => { if (e.key === 'Enter') openHandler(); });
+
+        gallery.appendChild(img);
+    });
+
+    // If there's only one image, reduce visual emphasis
+    if (images.length === 1) {
+        gallery.style.opacity = '0.9';
+    }
+}
+
+/* --- LIGHTBOX / MODAL --- */
+// Open the lightbox with an array of images and a starting index
+function openLightbox(images, startIndex = 0, baseCaption = '') {
+    const lb = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lightbox-image');
+    const lbCaption = document.getElementById('lightbox-caption');
+    const lbClose = document.getElementById('lightbox-close');
+    const lbBackdrop = document.getElementById('lightbox-backdrop');
+    const lbPrev = document.getElementById('lightbox-prev');
+    const lbNext = document.getElementById('lightbox-next');
+
+    if (!lb || !lbImg) return;
+
+    // Normalize images array to objects { src, caption }
+    const imgs = (Array.isArray(images) ? images : [images]).map(item => {
+        if (typeof item === 'string') return { src: item, caption: '' };
+        return { src: item.src || item, caption: item.caption || '' };
+    });
+
+    // Save state on the lightbox element
+    lb._state = {
+        images: imgs,
+        index: Math.max(0, Math.min(startIndex, imgs.length - 1)),
+        baseCaption: baseCaption || ''
+    };
+
+    // Helper to show a given index
+    function showIndex(i) {
+        const idx = (i + lb._state.images.length) % lb._state.images.length; // wrap
+        lb._state.index = idx;
+        const imageObj = lb._state.images[idx];
+        lbImg.src = imageObj.src;
+        const captionText = imageObj.caption ? imageObj.caption : `${lb._state.baseCaption} — photo ${idx + 1}`;
+        lbImg.alt = captionText;
+        lbCaption.textContent = captionText;
+    }
+
+    // initial show
+    showIndex(lb._state.index);
+
+    lb.classList.add('active');
+    lb.setAttribute('aria-hidden', 'false');
+
+    // Event handlers
+    const onClose = () => closeLightbox();
+    const onKey = (e) => {
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowLeft') showIndex(lb._state.index - 1);
+        if (e.key === 'ArrowRight') showIndex(lb._state.index + 1);
+    };
+    const onPrev = () => showIndex(lb._state.index - 1);
+    const onNext = () => showIndex(lb._state.index + 1);
+
+    lbClose?.addEventListener('click', onClose);
+    lbBackdrop?.addEventListener('click', onClose);
+    lbPrev?.addEventListener('click', onPrev);
+    lbNext?.addEventListener('click', onNext);
+    document.addEventListener('keydown', onKey);
+
+    // store cleanup references on the element so closeLightbox can remove listeners
+    lb._cleanup = { onClose, onKey, onPrev, onNext };
+
+    // Accessibility: focus on close button
+    lbClose?.focus();
+}
+
+function closeLightbox() {
+    const lb = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lightbox-image');
+    const lbClose = document.getElementById('lightbox-close');
+    const lbBackdrop = document.getElementById('lightbox-backdrop');
+    const lbPrev = document.getElementById('lightbox-prev');
+    const lbNext = document.getElementById('lightbox-next');
+
+    if (!lb) return;
+
+    lb.classList.remove('active');
+    lb.setAttribute('aria-hidden', 'true');
+
+    // remove image src to stop playback / free memory
+    if (lbImg) lbImg.src = '';
+
+    // remove listeners if present
+    if (lb._cleanup) {
+        if (lbClose && typeof lb._cleanup.onClose === 'function') lbClose.removeEventListener('click', lb._cleanup.onClose);
+        if (lbBackdrop && typeof lb._cleanup.onClose === 'function') lbBackdrop.removeEventListener('click', lb._cleanup.onClose);
+        if (lbPrev && typeof lb._cleanup.onPrev === 'function') lbPrev.removeEventListener('click', lb._cleanup.onPrev);
+        if (lbNext && typeof lb._cleanup.onNext === 'function') lbNext.removeEventListener('click', lb._cleanup.onNext);
+        if (typeof lb._cleanup.onKey === 'function') document.removeEventListener('keydown', lb._cleanup.onKey);
+        delete lb._cleanup;
+    }
+
+    // clear state
+    if (lb._state) delete lb._state;
+
+    // return focus to the gallery (nice to have): focus first thumbnail if present
+    const firstThumb = document.querySelector('#photo-gallery .thumb');
+    if (firstThumb) firstThumb.focus();
 }

@@ -49,9 +49,107 @@ function renderObjectPage(data) {
     renderFilterButtons(data);
     // Render the photo gallery (uses data.images if present, otherwise falls back to image_filename)
     renderGallery(data);
+    // Render optional extra sections: eyewitness stories and sources
+    renderExtraSections(data);
+    // Initialize collapsible subsections after rendering content
+    setupCollapsibles();
     
     document.getElementById('type-tag').textContent = data.categories_object_type?.join(', ') || '';
     document.getElementById('timeframe-tag').textContent = data.categories_timeframe?.join(', ') || '';
+}
+
+// --- 4. COLLAPSIBLE SUBSECTIONS ---
+function setupCollapsibles() {
+    const toggles = document.querySelectorAll('.subsection-toggle');
+    toggles.forEach(btn => {
+        const subsection = btn.closest('.subsection');
+        const body = subsection.querySelector('.subsection-body');
+        // ensure initial state is expanded
+        subsection.classList.remove('collapsed');
+        btn.setAttribute('aria-expanded', 'true');
+
+        const collapse = () => {
+            // set explicit height for transition
+            const fullH = body.scrollHeight;
+            body.style.maxHeight = fullH + 'px';
+            // allow paint
+            requestAnimationFrame(() => {
+                subsection.classList.add('collapsed');
+                btn.setAttribute('aria-expanded', 'false');
+                body.style.maxHeight = '0px';
+            });
+        };
+
+        const expand = () => {
+            subsection.classList.remove('collapsed');
+            btn.setAttribute('aria-expanded', 'true');
+            // set to measured height then remove inline style when done to allow natural growth
+            const fullH = body.scrollHeight;
+            body.style.maxHeight = fullH + 'px';
+            // after transition, clear maxHeight so content can size naturally
+            const cleanup = () => {
+                body.style.maxHeight = '';
+                body.removeEventListener('transitionend', cleanup);
+            };
+            body.addEventListener('transitionend', cleanup);
+        };
+
+        const toggle = () => {
+            if (subsection.classList.contains('collapsed')) {
+                expand();
+            } else {
+                collapse();
+            }
+        };
+
+        btn.addEventListener('click', toggle);
+        // allow Enter/Space when focused
+        btn.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                toggle();
+            }
+        });
+    });
+}
+
+function renderExtraSections(data) {
+    // Eyewitness stories
+    const eyewitnessContainer = document.getElementById('eyewitness-contents');
+    if (!eyewitnessContainer) return;
+    eyewitnessContainer.innerHTML = '';
+    if (Array.isArray(data.eyewitness) && data.eyewitness.length > 0) {
+        const list = document.createElement('ul');
+        data.eyewitness.forEach(item => {
+            const li = document.createElement('li');
+            li.innerHTML = item; // assume HTML-safe or plain text
+            list.appendChild(li);
+        });
+        eyewitnessContainer.appendChild(list);
+    } else {
+        eyewitnessContainer.innerHTML = '<p>No eyewitness accounts available.</p>';
+    }
+
+    // Sources & News
+    const sourcesContainer = document.getElementById('sources-contents');
+    sourcesContainer.innerHTML = '';
+    if (Array.isArray(data.sources) && data.sources.length > 0) {
+        const list = document.createElement('ul');
+        data.sources.forEach(src => {
+            const li = document.createElement('li');
+            if (typeof src === 'string') {
+                li.innerHTML = src;
+            } else if (src.url) {
+                li.innerHTML = `<a href="${src.url}" target="_blank" rel="noopener noreferrer">${src.title || src.url}</a>${src.note ? ' — ' + src.note : ''}`;
+            } else {
+                li.textContent = JSON.stringify(src);
+            }
+            list.appendChild(li);
+        });
+        sourcesContainer.appendChild(list);
+    } else {
+        sourcesContainer.innerHTML = '<p>No sources available.</p>';
+    }
 }
 
 
@@ -218,6 +316,7 @@ function togglePanel(open, filterData = null) {
 
 function populateContextPanel(filterData) {
     const panelContent = document.getElementById('context-panel-content');
+    console.log('populateContextPanel called with', filterData);
     
     // Filter the global data array based on the clicked term (if a specific term was clicked)
     // If a button was clicked, we show ALL terms linked to that category.
@@ -230,19 +329,77 @@ function populateContextPanel(filterData) {
             obj[filterData.key] && obj[filterData.key].includes(termToFilterBy)
         );
     } else {
-        // If a primary button (e.g., 'Country') was clicked, show a summary.
-        // We will just show the mock-up summary for the primary button click for simplicity.
-        
-        const termsList = filterData.terms.map(term => `<li>**${term}**</li>`).join('');
+        // If a primary button (e.g., 'Country') was clicked, show a narrow list of objects on the left
+        // and a larger detail area on the right. The detail area is collapsed until an item is selected.
+        panelContent.innerHTML = '';
+        const panel = document.getElementById('context-panel');
+        // ensure panel is in compact mode for list-first view
+        if (panel) {
+            panel.classList.remove('expanded');
+            panel.classList.add('compact');
+        }
 
-        panelContent.innerHTML = `
-            <h3>Context: All ${filterData.label} Terms</h3>
-            <p>The **${filterData.label}** filter button was clicked. The full list of terms linked to this category across all objects are:</p>
-            <ul>${termsList}</ul>
-            <hr>
-            <h4>Project Demonstration:</h4>
-            <p>This dynamic panel confirms the data is correctly linked and the split-screen UI is functional.</p>
-        `;
+        const layout = document.createElement('div');
+        layout.className = 'context-panel-layout no-detail';
+
+        const list = document.createElement('div');
+        list.className = 'context-panel-list';
+        list.id = 'context-list';
+
+        const detail = document.createElement('div');
+        detail.className = 'context-panel-detail';
+        detail.id = 'context-detail';
+        detail.innerHTML = '<p>Select an item from the list to see more details.</p>';
+
+    // Build list of objects that have this category key
+        const objectsWithCategory = ALL_PROTEST_DATA.filter(obj => Array.isArray(obj[filterData.key]) && obj[filterData.key].length > 0);
+
+    console.log('objectsWithCategory count:', objectsWithCategory.length);
+
+        if (objectsWithCategory.length === 0) {
+            list.innerHTML = '<p>No objects available for this category.</p>';
+        } else {
+            objectsWithCategory.forEach(obj => {
+                const item = document.createElement('div');
+                item.className = 'context-item';
+                item.tabIndex = 0;
+                item.dataset.objId = obj.id;
+                item.innerHTML = `<strong>${obj.name}</strong><div style="font-size:0.85em;color:#666;margin-top:4px">${(obj.categories_country || []).join(', ')}</div>`;
+
+                // Click handler: populate detail pane
+                item.addEventListener('click', () => {
+                    console.log('context item clicked:', obj.id, obj.name);
+                    // mark active
+                    document.querySelectorAll('.context-panel-list .context-item').forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+
+                    // remove no-detail so detail column becomes visible
+                    layout.classList.remove('no-detail');
+
+                    // expand the outer context panel so the detail area has more room
+                    if (panel) {
+                        panel.classList.remove('compact');
+                        panel.classList.add('expanded');
+                    }
+
+                    // populate detail with larger text about the object
+                    detail.innerHTML = `
+                        <h3>${obj.name}</h3>
+                        <div class="context-detail-body">${obj.description_html || '<p>No description available.</p>'}</div>
+                    `;
+                    // ensure images or other interactive elements (gallery links) still work — no extra wiring here.
+                });
+
+                // keyboard accessibility
+                item.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); item.click(); } });
+
+                list.appendChild(item);
+            });
+        }
+
+        layout.appendChild(list);
+        layout.appendChild(detail);
+        panelContent.appendChild(layout);
         return;
     }
 

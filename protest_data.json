@@ -18,6 +18,16 @@
     ,
     { "src": "https://www.youtube.com/embed/zU0QVpew1-s", "thumb": "https://img.youtube.com/vi/zU0QVpew1-s/hqdefault.jpg", "caption": "Short clip: umbrella moment (YouTube)", "type": "embed" }
   ]
+  ,
+  "eyewitness": [
+    "I was standing near Admiralty when the students first raised umbrellas — the crowd was calm but determined. (Anonymous eyewitness, 2014)",
+    "Several people I spoke with described how umbrellas were used both to shield from tear gas and to protect identities from cameras."
+  ],
+  "sources": [
+    { "url": "https://www.example-news.org/umbrella-movement-report", "title": "Coverage of the Umbrella Movement", "note": "Example news summary" },
+    "Chan, L. (2015). Visual symbols in protest movements. Journal of Social Movements.",
+    { "url": "https://www.youtube.com/watch?v=example", "title": "Documentary excerpt (video)", "note": "YouTube" }
+  ]
 },
 
 {
@@ -47,7 +57,7 @@
   {
     "id": 4,
     "name": "Vinegar",
-    "image_filename": "images/vinegar.jpg",
+    "image_filename": "images/1-309.webp",
     "categories_object_type": ["Shields & Mitigation"],
     "categories_country": ["Brazil"],
     "categories_cause": ["Anti-Tear Gas", "Freedom of Assembly", "Anti-Police Brutality"],

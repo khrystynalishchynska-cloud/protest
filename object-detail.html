@@ -30,12 +30,44 @@
         <section id="content-display" class="content-column">
             
             <div id="description-block" class="description-block">
-                <article id="description-text"></article>
+                <section id="desc-section" class="subsection">
+                    <h2 class="subsection-title"><button class="subsection-toggle" aria-expanded="true">Description</button></h2>
+                    <div class="divider" aria-hidden="true"></div>
+                    <div class="subsection-body">
+                        <article id="description-text"></article>
+                    </div>
+                </section>
 
-                <!-- Photo gallery placed under the description in the same column -->
-                <div id="photo-gallery" class="photo-gallery" aria-label="Photo gallery for this object">
-                    <!-- Thumbnails will be injected here by script.js -->
-                </div>
+                <section id="gallery-section" class="subsection">
+                    <h2 class="subsection-title"><button class="subsection-toggle" aria-expanded="true">Gallery</button></h2>
+                    <div class="divider" aria-hidden="true"></div>
+                    <div class="subsection-body">
+                        <!-- Photo gallery placed under the description in the same column -->
+                        <div id="photo-gallery" class="photo-gallery" aria-label="Photo gallery for this object">
+                            <!-- Thumbnails will be injected here by script.js -->
+                        </div>
+                    </div>
+                </section>
+
+                <section id="eyewitness-section" class="subsection">
+                    <h2 class="subsection-title"><button class="subsection-toggle" aria-expanded="true">Eyewitness stories</button></h2>
+                    <div class="divider" aria-hidden="true"></div>
+                    <div class="subsection-body">
+                        <div id="eyewitness-contents" class="eyewitness-contents">
+                            <!-- Populated from data if available -->
+                        </div>
+                    </div>
+                </section>
+
+                <section id="sources-section" class="subsection">
+                    <h2 class="subsection-title"><button class="subsection-toggle" aria-expanded="true">Sources &amp; News</button></h2>
+                    <div class="divider" aria-hidden="true"></div>
+                    <div class="subsection-body">
+                        <div id="sources-contents" class="sources-contents">
+                            <!-- Populated from data if available -->
+                        </div>
+                    </div>
+                </section>
             </div>
 
             <!-- Lightbox modal for gallery images -->

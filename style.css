@@ -70,12 +70,26 @@ body {
     padding: 30px;
     border-right: 1px solid #000;
     transition: flex 0.4s, width 0.4s;
+    /* Keep the metadata column visible while the middle column scrolls */
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+    height: 100vh; /* fill viewport height so it doesn't scroll away */
+    overflow: auto; /* allow internal scrolling if metadata content is long */
 }
 
 
 .split-layout.split .metadata-column {
+    /* Make metadata column completely fixed in the viewport when split layout is active */
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 60;
     flex: 0 0 140px;
     width: 140px;
+    overflow: auto; /* allow internal scroll if content is taller than viewport (safer than clipping) */
 }
 
 .split-layout.split #object-image {
@@ -88,8 +102,15 @@ body {
     display: flex;
     padding: 85px;
     padding-right: 20%;
-    overflow: hidden;
+    /* Make the content column scroll independently so the left column can remain fixed */
+    max-height: 100vh;
+    overflow-y: auto;
     transition: flex 0.4s, width 0.4s;
+}
+
+/* When the left metadata column is fixed, push the content to the right so it doesn't sit under it */
+.split-layout.split .content-column {
+    margin-left: 140px;
 }
 
 /* --- Image & Typography --- */
@@ -185,6 +206,64 @@ body {
     flex: 1 1 auto; /* allow it to grow to fill available content-column space */
 }
 
+/* Subsection titles and dividers inside the description column */
+.subsection { margin-bottom: 28px; }
+.subsection-title {
+    font-family: 'Blur Medium', sans-serif;
+    font-size: 1.3em;
+    margin: 0 0 8px 0;
+}
+.divider {
+    height: 2px;
+    background: #000;
+    margin: 8px 0 16px 0;
+}
+.eyewitness-contents, .sources-contents {
+    font-size: 0.95em;
+    color: #111;
+}
+
+/* Collapsible subsection body styles */
+.subsection .subsection-body {
+    overflow: hidden;
+    max-height: 2000px; /* large default to allow content; JS will set explicit heights for transitions */
+    transition: max-height 280ms ease, opacity 220ms ease, padding 220ms ease;
+    opacity: 1;
+}
+.subsection.collapsed .subsection-body {
+    max-height: 0 !important;
+    opacity: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+/* Toggle button inside subsection title */
+.subsection-toggle {
+    all: unset;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+    display: inline-block;
+    width: 100%;
+    text-align: left;
+    padding: 4px 2px;
+}
+.subsection-toggle:focus {
+    outline: 2px solid #000;
+    outline-offset: 2px;
+}
+.subsection-title .subsection-toggle::after {
+    /* Show minus when section is expanded (default) */
+    content: '−'; /* Unicode minus */
+    float: right;
+    font-weight: 700;
+    transition: transform 220ms ease, content 120ms ease;
+}
+.subsection.collapsed .subsection-title .subsection-toggle::after {
+    /* Show plus when collapsed */
+    content: '+';
+}
+
 /* Make sure the gallery sits below the description even when split layout is active */
 #content-display.split .description-block,
 .split-layout.split .description-block {
@@ -236,14 +315,14 @@ body {
     top: 8px;
     right: 8px;
     z-index: 1020;
-    background: rgba(255,255,255,0.9);
+    background: rgba(255, 255, 255, 0.315);
     border: 0;
     padding: 6px 10px;
     cursor: pointer;
     font-size: 18px;
 }
 .lightbox-caption {
-    color: #fff;
+    color: #ffffff;
     font-size: 14px;
     max-width: 90vw;
     text-align: center;
@@ -255,7 +334,7 @@ body {
     top: 50%;
     transform: translateY(-50%);
     z-index: 1020;
-    background: rgba(255,255,255,0.85);
+    background: rgba(255, 255, 255, 0.315);
     border: 0;
     width: 42px;
     height: 72px;
@@ -270,7 +349,7 @@ body {
 }
 .lightbox-prev { left: 8px; }
 .lightbox-next { right: 8px; }
-.lightbox-nav:focus { outline: 2px solid #000; }
+.lightbox-nav:focus { outline: 2px solid #ffffff; }
 
 
 
@@ -281,6 +360,20 @@ h1, h2, h3, h4, h5, h6 {
 h1 {
     font-size: 2.5em;
     margin-top: 0;
+}
+
+/* Responsive object title specifically for the left metadata column
+   Uses clamp to scale with viewport while providing sensible min/max sizes.
+   Also ensures the title wraps instead of overflowing when the column is narrow. */
+.metadata-column h1 {
+    /* increased by ~20% from previous values */
+    font-size: clamp(22px, 3.84vw, 33.6px);
+    line-height: 1.05;
+    margin-top: 0;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    transition: font-size 0.18s ease;
 }
 
 .strong-emphasis {
@@ -343,6 +436,23 @@ h1 {
     transition: flex 0.4s ease-in-out, width 0.4s ease-in-out;
 }
 
+/* Smooth width transition when panel switches between compact (list) and expanded (detail) */
+#context-panel {
+    transition: flex 260ms ease, width 260ms ease;
+}
+
+/* Compact: narrow panel for list view */
+#content-display.split #context-panel.compact {
+    flex: 0 0 28%;
+    width: 28%;
+}
+
+/* Expanded: larger panel for detailed content */
+#content-display.split #context-panel.expanded {
+    flex: 0 0 65%;
+    width: 65%;
+}
+
 
 /* Do NOT shrink description column when split is active */
 
@@ -401,6 +511,42 @@ h1 {
     margin-top: 20px; 
 }
 
+/* Inner layout for context panel: narrow list at left, detail at right */
+.context-panel-layout {
+    display: grid;
+    grid-template-columns: 220px 1fr; /* left list narrow, right detail flexible */
+    gap: 18px;
+    align-items: start;
+}
+.context-panel-layout.no-detail {
+    grid-template-columns: 220px 0; /* hide detail area until an item is selected */
+}
+.context-panel-list {
+    border-right: 1px solid #e6e6e6;
+    padding-right: 8px;
+    max-height: calc(100vh - 220px);
+    overflow: auto;
+}
+.context-panel-list .context-item {
+    padding: 10px 6px;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+}
+.context-panel-list .context-item:hover,
+.context-panel-list .context-item.active {
+    background: #f7f7f7;
+}
+.context-panel-detail {
+    padding-left: 8px;
+    max-height: calc(100vh - 180px);
+    overflow: auto;
+    font-size: 1.05rem; /* slightly larger text for reading */
+    line-height: 1.5;
+}
+.context-panel-detail h3 {
+    margin-top: 0;
+}
+
 
 /* --- Responsive Layout (Crucial for mobile experience) --- */
 @media (max-width: 900px) {
@@ -408,6 +554,9 @@ h1 {
         flex-direction: column; 
     }
     .metadata-column {
+        /* On small screens, revert sticky/fixed behavior so header stacks naturally */
+        position: static;
+        height: auto;
         flex: auto;
         border-right: none;
         border-bottom: 1px solid #000; 
@@ -437,6 +586,19 @@ h1 {
         padding: 30px;
         border-left: none;
         border-top: 1px solid #000;
+    }
+
+    /* Ensure fixed metadata column is disabled on small screens even when .split is present */
+    .split-layout.split .metadata-column {
+        position: static;
+        width: auto;
+        height: auto;
+        overflow: visible;
+    }
+
+    /* Remove the left offset on small screens */
+    .split-layout.split .content-column {
+        margin-left: 0;
     }
 
 }

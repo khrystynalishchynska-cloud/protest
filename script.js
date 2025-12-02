@@ -269,20 +269,30 @@ function renderGallery(data) {
     // Determine list of images to show: prefer `images` array, else fallback to `image_filename`
     const rawImages = Array.isArray(data.images) && data.images.length > 0 ? data.images : [data.image_filename].filter(Boolean);
 
-    // Normalize images to objects: { src, thumb, caption }
+    // Normalize images to objects: { src, thumb, caption, type }
     const images = rawImages.map(item => {
-        if (typeof item === 'string') return { src: item, thumb: item, caption: '' };
-        // item is expected to be an object; support both `src` and `thumb`
-        return {
-            src: item.src || item,
-            thumb: item.thumb || item.src || item,
-            caption: item.caption || item.caption === '' ? item.caption : ''
-        };
+        if (typeof item === 'string') {
+            // infer type from extension
+            const ext = (item.split('.').pop() || '').toLowerCase();
+            const t = (ext === 'mp4' || ext === 'webm') ? 'video' : 'image';
+            return { src: item, thumb: item, caption: '', type: t };
+        }
+        // item is expected to be an object; support `src`, `thumb`, `caption`, `type`
+        const src = item.src || item;
+        const thumb = item.thumb || src;
+        const caption = (typeof item.caption === 'string') ? item.caption : '';
+        const type = item.type || (/(youtube\.com|vimeo\.com|\.mp4|\.webm)/i.test(src) ? (src.includes('youtube.com') || src.includes('vimeo.com') ? 'embed' : (src.match(/\.mp4|\.webm/i) ? 'video' : 'image')) : 'image');
+        return { src, thumb, caption, type };
     });
 
     gallery.innerHTML = '';
 
     images.forEach((item, idx) => {
+        // Wrap thumbnails so we can add a play overlay for non-image items
+        const wrapper = document.createElement('div');
+        wrapper.className = 'thumb-wrapper';
+        wrapper.tabIndex = -1;
+
         const img = document.createElement('img');
         img.src = item.thumb || item.src;
         img.alt = item.caption || `${data.name} — photo ${idx + 1}`;
@@ -290,20 +300,30 @@ function renderGallery(data) {
         img.tabIndex = 0; // make focusable for accessibility
         img.dataset.index = idx;
 
+        // If item is video or embed, add a play icon overlay
+        if (item.type && item.type !== 'image') {
+            const play = document.createElement('span');
+            play.className = 'play-icon';
+            play.innerHTML = '▶';
+            wrapper.appendChild(img);
+            wrapper.appendChild(play);
+        } else {
+            wrapper.appendChild(img);
+        }
+
         // Mark the first thumb as selected visually (optional)
         if (idx === 0) img.classList.add('selected');
 
-        // Open lightbox on click or keyboard Enter
         const openHandler = () => {
             openLightbox(images, idx, data.name);
             gallery.querySelectorAll('.thumb').forEach(t => t.classList.remove('selected'));
             img.classList.add('selected');
         };
 
-        img.addEventListener('click', openHandler);
+        wrapper.addEventListener('click', openHandler);
         img.addEventListener('keydown', (e) => { if (e.key === 'Enter') openHandler(); });
 
-        gallery.appendChild(img);
+        gallery.appendChild(wrapper);
     });
 
     // If there's only one image, reduce visual emphasis
@@ -316,19 +336,27 @@ function renderGallery(data) {
 // Open the lightbox with an array of images and a starting index
 function openLightbox(images, startIndex = 0, baseCaption = '') {
     const lb = document.getElementById('lightbox');
-    const lbImg = document.getElementById('lightbox-image');
+    const lbMedia = document.getElementById('lightbox-media');
     const lbCaption = document.getElementById('lightbox-caption');
     const lbClose = document.getElementById('lightbox-close');
     const lbBackdrop = document.getElementById('lightbox-backdrop');
     const lbPrev = document.getElementById('lightbox-prev');
     const lbNext = document.getElementById('lightbox-next');
 
-    if (!lb || !lbImg) return;
+    if (!lb || !lbMedia) return;
 
-    // Normalize images array to objects { src, caption }
+    // Normalize images array to objects { src, thumb, caption, type } and preserve type when present
     const imgs = (Array.isArray(images) ? images : [images]).map(item => {
-        if (typeof item === 'string') return { src: item, caption: '' };
-        return { src: item.src || item, caption: item.caption || '' };
+        if (typeof item === 'string') {
+            const ext = (item.split('.').pop() || '').toLowerCase();
+            const t = (ext === 'mp4' || ext === 'webm') ? 'video' : 'image';
+            return { src: item, thumb: item, caption: '', type: t };
+        }
+        const src = item.src || item;
+        const thumb = item.thumb || src;
+        const caption = (typeof item.caption === 'string') ? item.caption : '';
+        const type = item.type || (/(youtube\.com|vimeo\.com)/i.test(src) ? 'embed' : (src.match(/\.mp4|\.webm/i) ? 'video' : 'image'));
+        return { src, thumb, caption, type };
     });
 
     // Save state on the lightbox element
@@ -338,14 +366,38 @@ function openLightbox(images, startIndex = 0, baseCaption = '') {
         baseCaption: baseCaption || ''
     };
 
-    // Helper to show a given index
+    // Helper to show a given index and render appropriate media
     function showIndex(i) {
         const idx = (i + lb._state.images.length) % lb._state.images.length; // wrap
         lb._state.index = idx;
         const imageObj = lb._state.images[idx];
-        lbImg.src = imageObj.src;
+
+        // clear previous media
+        lbMedia.innerHTML = '';
+
         const captionText = imageObj.caption ? imageObj.caption : `${lb._state.baseCaption} — photo ${idx + 1}`;
-        lbImg.alt = captionText;
+
+        if (!imageObj.type || imageObj.type === 'image') {
+            const img = document.createElement('img');
+            img.src = imageObj.src;
+            img.alt = captionText;
+            lbMedia.appendChild(img);
+        } else if (imageObj.type === 'video') {
+            const video = document.createElement('video');
+            video.controls = true;
+            video.src = imageObj.src;
+            if (imageObj.thumb) video.poster = imageObj.thumb;
+            lbMedia.appendChild(video);
+        } else if (imageObj.type === 'embed') {
+            const iframe = document.createElement('iframe');
+            // if src already contains query params, do not append autoplay; leave control to user
+            iframe.src = imageObj.src;
+            iframe.setAttribute('frameborder', '0');
+            iframe.setAttribute('allow', 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture');
+            iframe.setAttribute('allowfullscreen', '');
+            lbMedia.appendChild(iframe);
+        }
+
         lbCaption.textContent = captionText;
     }
 
@@ -391,8 +443,8 @@ function closeLightbox() {
     lb.classList.remove('active');
     lb.setAttribute('aria-hidden', 'true');
 
-    // remove image src to stop playback / free memory
-    if (lbImg) lbImg.src = '';
+    // clear media to stop playback / free memory
+    if (lbMedia) lbMedia.innerHTML = '';
 
     // remove listeners if present
     if (lb._cleanup) {

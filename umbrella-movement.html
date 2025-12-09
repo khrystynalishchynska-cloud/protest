@@ -69,11 +69,18 @@
         .text-with-aside {
             display: grid;
             grid-template-columns: 1fr 320px;
-            gap: 24px;
+            gap: 12px; /* reduced gap */
             align-items: start;
+            padding: 0; /* reduce padding */
+            margin: 0; /* reduce margins in the section */
         }
         .aside-figure {
             margin: 0;
+        }
+        /* reduce paragraph spacing specifically inside the Historical & Political Context block */
+        .section-heading-with-aside + .text-with-aside .aside-text p {
+            margin: 0 0 0.6em 0; /* smaller bottom margin */
+            padding: 0;
         }
         .aside-photo {
             width: 100%;
@@ -111,6 +118,39 @@
             .essay-title {
                 font-size: 2em;
             }
+        }
+        /* heading + aside layout: place a figure next to the H2 on wide screens */
+        .section-heading-with-aside {
+            display: flex;
+            align-items: flex-start; /* align top of photo with top of title */
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+        .section-heading-with-aside h2 {
+            margin: 0;
+            flex: 1 1 auto;
+            min-width: 0;
+            line-height: 1.05;
+            font-size: 1.6rem;
+            word-break: break-word;
+        }
+        .heading-aside {
+            width: 320px;
+            flex: 0 0 320px;
+            margin: 0;
+        }
+        .heading-aside .aside-photo {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+            filter: grayscale(100%);
+        }
+        @media (max-width: 600px) {
+            .section-heading-with-aside { flex-direction: column; align-items: stretch; }
+            .heading-aside { width: 100%; flex: 0 0 auto; }
+            .heading-aside .aside-photo { height: auto; }
+            .section-heading-with-aside h2 { font-size: 1.25rem; }
         }
         /* timeline styles */
         .timeline-container {
@@ -207,21 +247,23 @@
         <h1 class="essay-title">The Umbrella Revolution: <br>Hong Kong's 2014 Pro-Democracy Movement</h1>
         <p class="essay-lead">The Umbrella Revolution, also known as the Umbrella Movement or Occupy Central, was a series of sit-in street protests that took place in Hong Kong in 2014. Over 79 days, tens of thousands of demonstrators occupied major thoroughfares in the city's  commercial and governmental districts, demanding genuine universal suffrage for the election of Hong Kong's leader.</p>
         <div class="essay-section">
-            <img src="images/Hong_Kong_Umbrella_Revolution_-umbrellarevolution_-UmbrellaMovement_(15292823874)-min.webp" alt="Protesters with umbrellas" class="essay-photo full-bleed">   
+            <img src="images/2014_Hong_Kong_Umbrella_Revolution_as_Police_Attacked_Peaceful_Demonstrators_with_Tear_Gas.jpg" alt="Protesters with umbrellas" class="essay-photo full-bleed">   
             <div class="essay-caption">Protesters shield themselves with umbrellas during a tear gas incident, September 2014.</div>
         </div>
       
         <div class="essay-section">
-            <h2>Historical and Political Context</h2>
-            <div class="text-with-aside">
-                <div class="aside-text">
-                    <p>Hong Kong’s political tension is rooted in its 1997 handover from Britain to China. Under the "One Country, Two Systems" principle, Hong Kong was promised eventual democracy (universal suffrage) via the Basic Law. However, on 31 August 2014, Beijing shattered these expectations. While allowing a public vote for the 2017 Chief Executive, the ruling required all candidates to be pre-approved by a committee dominated by Beijing loyalists. Critics condemned this as "fake democracy," sparking the massive civil disobedience campaign known as the Umbrella Movement.</p>
+                <div class="section-heading-with-aside">
+                    <h2>Historical and Political Context</h2>
+                    <figure class="aside-figure heading-aside" tabindex="0">
+                        <img src="images/1country2systems.jpg" alt="Diagram: One Country, Two Systems" class="aside-photo" loading="lazy">
+                        <figcaption class="essay-caption">Sign in Xiamen reading "一国两制统一中国" (Yīguó liǎngzhì tǒngyī Zhōngguó, transl. One country, two systems unites China)</figcaption>
+                    </figure>
                 </div>
-                <figure class="aside-figure" tabindex="0">
-                    <img src="images/1country2systems.jpg" alt="Diagram: One Country, Two Systems" class="aside-photo" loading="lazy">
-                    <figcaption class="essay-caption">Sign in Xiamen reading "一国两制统一中国" (Yīguó liǎngzhì tǒngyī Zhōngguó, transl. One country, two systems unites China)</figcaption>
-                </figure>
-            </div>
+                <div class="text-with-aside">
+                    <div class="aside-text">
+                        <p>Hong Kong’s political tension is rooted in its 1997 handover from Britain to China. Under the "One Country, Two Systems" principle, Hong Kong was promised eventual democracy (universal suffrage) via the Basic Law. However, on 31 August 2014, Beijing shattered these expectations. While allowing a public vote for the 2017 Chief Executive, the ruling required all candidates to be pre-approved by a committee dominated by Beijing loyalists. Critics condemned this as "fake democracy," sparking the massive civil disobedience campaign known as the Umbrella Movement.</p>
+                    </div>
+                </div>
         </div>
        
 

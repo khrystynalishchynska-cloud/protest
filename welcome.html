@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Index of Dissent — Welcome</title>
+  <link rel="stylesheet" href="style.css?v=2">
+  <style>
+    /* Welcome page specific layout (lightweight, relies on existing site fonts/styles) */
+    /* 12-column design with 20px outer margin and 20px gutter */
+    .welcome-hero {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 20px; /* gutter */
+      align-items: start; /* align children to the top */
+      padding: var(--site-gutter); /* outer margin uses site-wide gutter */
+      max-width: 1400px;
+      margin: 0 auto;
+      box-sizing: border-box;
+      position: relative; /* allow absolute positioning of the title */
+      /* layout variables for exact spacing */
+      --hero-padding: var(--site-gutter);
+  --image-margin-left: var(--site-gutter);
+  --image-size: 403.81px;
+  --title-gap: 20px; /* desired gap between image right edge and title */
+  --title-font-size: 100px;
+  --title-line-height: 90px;
+    }
+    /* Column placement: left 3 cols, center 6 cols, right 3 cols */
+  .welcome-left { grid-column: 1 / span 3; align-self: start; justify-self: start; margin-left: var(--site-gutter); }
+    .welcome-center { grid-column: 4 / span 6; }
+  /* right small image: we'll position it absolutely so it sits 20px from the right margin and top-aligned */
+  .welcome-right { grid-column: 10 / span 3; position: absolute; top: var(--hero-padding); right: 0; }
+
+    /* Make the left image a square filling its column width */
+  .welcome-left img, .welcome-center img { width:100%; height:auto; display:block; }
+  .welcome-right img { width:193px; height:193px; object-fit:cover; display:block; }
+  /* Left image: fixed square size and nudged closer to left edge (20px) */
+  .welcome-left img { width: 403.81px; height: 403.81px; max-width: none; object-fit: cover; display:block; }
+
+    /* Position title exactly 20px to the right of the left image */
+    .welcome-title {
+      position: absolute;
+      left: calc(var(--hero-padding) + var(--image-margin-left) + var(--image-size) + var(--title-gap));
+      top: var(--hero-padding);
+      font-family: 'Blur Bold', 'Blur Light', sans-serif;
+      font-size: var(--title-font-size);
+      line-height: var(--title-line-height);
+      margin: 0 0 12px 0;
+      text-align: left;
+    }
+    .welcome-lead {
+      grid-column: 4 / span 6;
+      font-family: 'Lekton-Regular', sans-serif;
+      font-size: 1.05rem;
+      color: #111;
+      max-width: 44ch;
+      margin-top: calc(var(--title-line-height) + 8px); /* push below the absolutely positioned title */
+      margin-bottom: 18px;
+      text-transform: none;
+      letter-spacing: 0.2px;
+    }
+    /* Element 7: large uppercase block (Lekton Bold) */
+    .element-7 {
+      grid-column: 4 / span 6;
+      font-family: 'Lekton', 'Lekton-Bold', sans-serif;
+      font-weight: 700;
+      font-size: 33px;
+      line-height: 33px;
+      text-transform: uppercase;
+      color: #000;
+      max-width: 720px;
+      letter-spacing: 0.4px;
+    }
+  .welcome-cta { display:inline-block; margin-top: 10px; position: absolute; z-index: 14; }
+  .welcome-cta a { text-decoration: none; display:inline-block; padding: 10px 16px; border: 2px solid #000; background:transparent; color:inherit; font-weight:700; }
+
+    /* Left caption (number 4) */
+    .left-caption {
+      margin-top: 20px; /* 20px under the image */
+      font-family: 'Lekton-Bold', sans-serif;
+      font-weight: 700;
+      font-size: 33px;
+      line-height: 33px;
+      text-transform: uppercase;
+      color: #000;
+  max-width: 403.81px;
+    }
+
+    /* Center image (number 5) — placed 20px to the right of the right edge of image 1 and 20px below the title */
+    .center-image {
+      position: absolute;
+      left: calc(var(--hero-padding) + var(--image-margin-left) + var(--image-size) + 20px);
+      top: calc(var(--hero-padding) + var(--title-line-height) + 20px);
+      width: 298.84px;
+      height: 298.84px;
+      overflow: hidden;
+      z-index: 10;
+    }
+    .center-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+      /* Image 6: small square 89x89, bottom-aligned to center-image and 20px to its right */
+      .image-6 { width: 89px; height: 89px; overflow: hidden; display:block; }
+      .image-6 img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* Image 8: 227x227, right edge aligned to right edge of image 1 (left hero image) */
+  .image-8 { width: 227px; height: 227px; overflow: hidden; display:block; }
+  .image-8 img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  /* Image 9: 89x89, top-aligned to element 8 and 20px to its right */
+  .image-9 { width: 89px; height: 89px; overflow: hidden; display:block; }
+  .image-9 img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  /* Image 10: 298.84x298.84, top-aligned to element 6 and 20px to the right */
+  .image-10 { width: 298.84px; height: 298.84px; overflow: hidden; display:block; }
+  .image-10 img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    /* Element 11: paragraph text block left-aligned to element 10 on desktop */
+    .element-11 {
+      font-family: 'Lekton', 'Lekton-Regular', sans-serif;
+      font-size: 13px;
+      line-height: 14px;
+      color: #111;
+      max-width: 420px;
+      text-align: left;
+      letter-spacing: 0.2px;
+    }
+
+    /* tighter layout on narrow screens */
+    @media (max-width: 980px){
+      .welcome-hero{ grid-template-columns: 1fr; padding: 28px 18px; }
+      .welcome-title{ grid-column: 1; font-size: clamp(28px, 10vw, 60px); }
+      .welcome-lead{ grid-column: 1; }
+      /* Reset absolute positioning on small screens so the layout stacks naturally */
+      .welcome-right { position: static; right: auto; top: auto; grid-column: 1; }
+      .welcome-right img { width: 100%; max-width: 320px; height: auto; }
+      .center-image { position: static; left: auto; top: auto; width: 100%; max-width: 298.84px; margin: 20px auto; }
+  .image-6 { position: static; width: 89px; height: 89px; margin: 12px auto; }
+  .welcome-cta { position: static; margin: 12px auto; }
+  .center-image img { width: 100%; height: auto; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="welcome-hero" role="banner" aria-label="Welcome">
+      <div class="welcome-left">
+        <img src="images/1-264.jpg" alt="Yellow umbrella folded" />
+        <p class="left-caption">EACH ITEM GAINS<br> POLITICAL POWER ONLY<br> THROUGH USE,<br> TRANSFORMING INTO A<br> TOOL FOR NOISE,<br> VISIBILITY, OR<br> DEFIANCE.</p>
+      </div>
+
+      <div>
+        <h1 class="welcome-title">Index of<br> Dissent</h1>
+        
+        <div class="welcome-cta"><a href="search.html">Explore</a></div>
+      </div>
+
+      <!-- Center image (number 5) -->
+      <div class="center-image">
+        <img src="images/eggs.webp" alt="Eggshells on white surface" />
+      </div>
+
+        <!-- Element 7: large uppercase block -->
+        <div class="element-7">THIS CATALOGUE DOCUMENTS <br> COMMON, EVERYDAY OBJECTS<br> —RIBBONS, SHIELDS, BLANK<br>PAGES—THAT HAVE BEEN<br> REPURPOSED AS SYMBOLS OF<br> PROTEST.</div>
+
+      <!-- Image 6: small 89x89 square, positioned via JS on desktop -->
+      <div class="image-6"><img src="images/9037776533_0a4706f476_o.webp" alt="Small protest object" /></div>
+
+  <!-- Element 8: 227x227 image (keffiyeh) aligned to right edge of image 1 -->
+  <div class="image-8"><img src="images/keffiyeh.webp" alt="Keffiyeh pattern" /></div>
+  <!-- Element 9: 89x89 image (westsquare) top-aligned with element 8, 20px to the right -->
+  <div class="image-9"><img src="images/westsquare.webp" alt="West square" /></div>
+  <!-- Element 10: 298.84x298.84 image (tractortank) top-aligned to image-6 and 20px to the right of image-6 -->
+  <div class="image-10"><img src="images/tractortank.webp" alt="Tractor tank" /></div>
+
+  <!-- Element 11: descriptive paragraph, left-aligned to element 10 on desktop -->
+  <div class="element-11">The collection is selective and strictly documentary, recording how commonplace items gain unexpected meaning. Consider these pages a concise field guide to dissent in material form: evidence that resistance often starts with whatever is within arm's reach.</div>
+
+      <aside class="welcome-right">
+        <img src="images/lilies.webp" alt="Fragmented protest image" />
+      </aside>
+
+      
+
+    </header>
+
+   
+  </main>
+
+  <script>
+  // Position `.center-image` exactly 20px below the lower edge of the headline (.welcome-title)
+  (function(){
+    function debounce(fn, wait){ let t; return function(){ clearTimeout(t); t = setTimeout(() => fn.apply(this, arguments), wait); }; }
+
+    function positionCenterImage(){
+      var title = document.querySelector('.welcome-title');
+      var center = document.querySelector('.center-image');
+      var hero = document.querySelector('.welcome-hero');
+      var elem7 = document.querySelector('.element-7');
+      if (!title || !center || !hero) return;
+      // On small screens we let CSS stack naturally (media query sets position:static)
+      if (window.innerWidth <= 980){
+        center.style.position = '';
+        center.style.top = '';
+        center.style.left = '';
+        if (elem7){ elem7.style.position = ''; elem7.style.top = ''; elem7.style.left = ''; elem7.style.width = ''; }
+        var smallElem6 = document.querySelector('.image-6');
+        if (smallElem6){ smallElem6.style.position=''; smallElem6.style.top=''; smallElem6.style.left=''; smallElem6.style.width=''; smallElem6.style.height=''; }
+        var smallElem8 = document.querySelector('.image-8');
+        if (smallElem8){ smallElem8.style.position=''; smallElem8.style.top=''; smallElem8.style.left=''; smallElem8.style.width=''; smallElem8.style.height=''; }
+        var smallElem9 = document.querySelector('.image-9');
+        if (smallElem9){ smallElem9.style.position=''; smallElem9.style.top=''; smallElem9.style.left=''; smallElem9.style.width=''; smallElem9.style.height=''; }
+        var smallElem10 = document.querySelector('.image-10');
+        if (smallElem10){ smallElem10.style.position=''; smallElem10.style.top=''; smallElem10.style.left=''; smallElem10.style.width=''; smallElem10.style.height=''; }
+        var smallElem11 = document.querySelector('.element-11');
+        if (smallElem11){ smallElem11.style.position=''; smallElem11.style.top=''; smallElem11.style.left=''; smallElem11.style.width=''; }
+        var smallCTA = document.querySelector('.welcome-cta');
+        if (smallCTA){ smallCTA.style.position=''; smallCTA.style.top=''; smallCTA.style.left=''; smallCTA.style.marginTop=''; }
+        return;
+      }
+
+  var cs = getComputedStyle(hero);
+      var heroPadding = parseFloat(cs.getPropertyValue('--hero-padding')) || parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--site-gutter')) || 20;
+      var imageMarginLeft = parseFloat(cs.getPropertyValue('--image-margin-left')) || heroPadding;
+      var imageSize = parseFloat(cs.getPropertyValue('--image-size')) || 477;
+      // left position: hero padding + image margin + image width + 20px gap
+      var left = heroPadding + imageMarginLeft + imageSize + 20;
+      center.style.left = left + 'px';
+
+      // title is absolutely positioned relative to hero so offsetTop is relative to hero
+      var titleTop = title.offsetTop || 0;
+      var top = titleTop + title.offsetHeight + 20; // 20px below lower edge of title
+      center.style.top = top + 'px';
+      center.style.position = 'absolute';
+
+      // Position element-7 so its top aligns with the top of center-image
+      if (elem7){
+        var centerTop = center.offsetTop || top;
+        elem7.style.position = 'absolute';
+        elem7.style.left = left + 'px';
+        elem7.style.top = centerTop + 'px';
+        // constrain width to the same max used in CSS
+        elem7.style.width = '720px';
+      }
+
+      // Position image-6: 20px to the right of center-image, bottom-aligned to center-image
+      var elem6 = document.querySelector('.image-6');
+      if (elem6){
+        var smallSize = 89;
+        var centerW = center.offsetWidth || 298.84;
+        var centerH = center.offsetHeight || 298.84;
+        var left6 = left + centerW + 20; // 20px gap to the right of center-image
+        var top6 = top + centerH - smallSize; // bottom-aligned to center-image
+        elem6.style.position = 'absolute';
+        elem6.style.left = left6 + 'px';
+        elem6.style.top = top6 + 'px';
+        elem6.style.width = smallSize + 'px';
+        elem6.style.height = smallSize + 'px';
+        elem6.style.zIndex = 12;
+      }
+      // Position image-10: top-aligned to image-6, 20px to the right of image-6
+      var elem10 = document.querySelector('.image-10');
+      if (elem10 && elem6){
+        // Use recorded left6/top6 if available; otherwise compute from elem6
+        var left6_actual = (typeof left6 !== 'undefined') ? left6 : (elem6.offsetLeft || 0);
+        var top6_actual = (typeof top6 !== 'undefined') ? top6 : (elem6.offsetTop || 0);
+        var width10 =298.84 ;
+        var left10 = left6_actual + (elem6.offsetWidth || smallSize) + 20; // 20px to the right of image-6
+        var top10 = top6_actual; // top-aligned with image-6
+        elem10.style.position = 'absolute';
+        elem10.style.left = left10 + 'px';
+        elem10.style.top = top10 + 'px';
+        elem10.style.width = width10 + 'px';
+        elem10.style.height = width10 + 'px';
+        elem10.style.zIndex = 13;
+      }
+
+      // Position element-11: paragraph left-aligned to image-10, placed below image-10 with a small gap
+      var elem11 = document.querySelector('.element-11');
+      if (elem11 && elem10){
+        // ensure elem10 position values are available
+        var left10_actual = elem10.offsetLeft || left10 || 0;
+        var top10_actual = elem10.offsetTop || top10 || 0;
+        var height10 = elem10.offsetHeight || width10 || 298.84;
+        var gap = 12; // small gap between image-10 and the paragraph
+        elem11.style.position = 'absolute';
+        elem11.style.left = left10_actual + 'px';
+        elem11.style.top = (top10_actual + height10 + gap) + 'px';
+        elem11.style.width = Math.min(420, 800) + 'px';
+        elem11.style.zIndex = 11;
+      }
+
+      // Position the Explore CTA: horizontally center inside the hero and bottom-align to the bottom of element-11
+      var elemCTA = document.querySelector('.welcome-cta');
+      if (elemCTA && elem11){
+        var ctaWidth = elemCTA.offsetWidth || (elemCTA.getBoundingClientRect && elemCTA.getBoundingClientRect().width) || 0;
+        var heroWidth = hero.clientWidth || (parseFloat(cs.width) || 0);
+        // left relative to hero: center the CTA
+        var leftCTA = Math.max(0, Math.round((heroWidth - ctaWidth) / 2));
+        // bottom-align: place CTA so its bottom equals element-11 bottom
+        var topCTA = (elem11.offsetTop || 0) + (elem11.offsetHeight || 0) - (elemCTA.offsetHeight || 0);
+        elemCTA.style.position = 'absolute';
+        elemCTA.style.left = leftCTA + 'px';
+        elemCTA.style.top = topCTA + 'px';
+        elemCTA.style.zIndex = 14;
+      }
+
+      // Position image-8: right edge aligned to the right edge of image 1 (left hero image)
+      // and place it approximately 222px under image 1 (image1 bottom + 222px)
+      var elem8 = document.querySelector('.image-8');
+      if (elem8){
+        var rightEdgeOfImage1 = heroPadding + imageMarginLeft + imageSize; // x coordinate of right edge of image 1 relative to hero left
+        var width8 = 227;
+        var left8 = rightEdgeOfImage1 - width8; // so elem8's right edge equals rightEdgeOfImage1
+        // compute top: image1 top (heroPadding) + imageSize (height) + 222px gap
+        var top8 = heroPadding + imageSize + 222;
+        elem8.style.position = 'absolute';
+        elem8.style.left = left8 + 'px';
+        elem8.style.top = top8 + 'px';
+        elem8.style.width = width8 + 'px';
+        elem8.style.height = width8 + 'px';
+        elem8.style.zIndex = 11;
+      }
+      // Position image-9: top aligned to image-8, 20px to its right
+      var elem9 = document.querySelector('.image-9');
+      if (elem9){
+        var width9 = 89;
+        var left9 = left8 + width8 + 20; // 20px to the right of image-8's right edge
+        var top9 = top8; // top-aligned with image-8
+        elem9.style.position = 'absolute';
+        elem9.style.left = left9 + 'px';
+        elem9.style.top = top9 + 'px';
+        elem9.style.width = width9 + 'px';
+        elem9.style.height = width9 + 'px';
+        elem9.style.zIndex = 12;
+      }
+    }
+
+    window.addEventListener('resize', debounce(positionCenterImage, 80));
+    document.addEventListener('DOMContentLoaded', positionCenterImage);
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Search Objects | Protest Archive</title>
+  <link rel="stylesheet" href="style.css?v=2">
+  <style>
+   /* Small search-specific tweaks */
+   /* Layout the hero as a two-column grid: title left, search box right; the lead paragraph
+     sits below spanning both columns. Keeps the search field vertically aligned with title. */
+  /* Use auto for the title column so it hugs the heading, and a flexible second
+    column for the search box. This lets the search box sit directly to the
+    right of the title instead of being pushed to the far right. */
+  .search-hero { display: grid; grid-template-columns: auto minmax(320px, 1fr); grid-auto-rows: auto; gap: 8px 20px; align-items: center; padding: 28px 60px; }
+   .search-hero h1 { margin: 0; grid-column: 1; }
+   .search-hero .lead { margin: 6px 0 0 0; grid-column: 1 / -1; color: #333; }
+  /* Place the search box on the same row as the title (right column) so it
+    sits at the same vertical height as the 'Object Index' heading. */
+  /* Place the search box in the second column and left-align it so it sits
+    close to the title; adjust gap for a small comfortable space. */
+  .search-box { grid-column: 2; margin: 0; display:flex; gap:10px; align-items:center; justify-self: start; margin-left: 12px; }
+  /* Replace full input border with a single bottom rule for a cleaner, line-style field */
+  .search-input {
+    min-width: 240px;
+    max-width: 420px;
+    width: min(38vw, 420px);
+    padding: 10px 12px;
+    font-size: 1rem;
+    border: none;
+    border-bottom: 1px solid #000; /* black underline */
+    background: transparent;
+    color: inherit;
+  }
+  .search-input::placeholder { color: rgba(0, 0, 0 ); font-size: 32px; font-family: blur; }
+  .search-input:focus { outline: none; border-bottom-color: #000; box-shadow: 0 2px 0 0 rgba(0,0,0,0.06); background: rgba(255,255,255,0.02); }
+  /* Make results area full-width so the masonry can span the site with minimal margins */
+  .search-results { max-width: none; margin: 0; padding: 0; width: 100%; }
+    .result-item { display:flex; gap:12px; padding:12px 8px; border-bottom:1px solid #eee; align-items:flex-start; }
+    .result-thumb { width:88px; height:64px; object-fit:cover; background:#ddd; flex:0 0 88px; }
+    .result-meta { flex:1; }
+    .result-title { font-weight:700; margin:0 0 6px 0; }
+    .result-snippet { margin:0; color:#222; }
+    .result-link { color:inherit; text-decoration:none; }
+    /* Results grid: column-based masonry so items keep natural heights but share column width */
+    .results-grid {
+      --results-cols: 6;
+      column-count: var(--results-cols);
+      column-gap: 12px;
+      padding: 8px 10px;
+      box-sizing: border-box;
+      width: 100%;
+    }
+    .result-item-grid {
+      display: inline-block;
+      width: 100%;
+      margin: 0 0 12px 0;
+      break-inside: avoid;
+      -webkit-column-break-inside: avoid;
+      box-sizing: border-box;
+      overflow: hidden;
+      border-radius: 2px;
+    }
+    .result-item-grid img { width:100%; height:auto; object-fit:cover; display:block; background-color: #efefef; }
+    .result-thumb { background-color: #efefef; }
+    /* Smooth fade-in when image finishes loading */
+    .lazy-img { opacity: 0; transition: opacity 300ms ease; display:block; }
+    .lazy-img.img-loaded { opacity: 1; }
+
+  /* Responsive column counts for results grid */
+  @media (max-width: 1400px) { .results-grid { --results-cols: 5; } }
+  @media (max-width: 1200px) { .results-grid { --results-cols: 4; } }
+  @media (max-width: 980px)  { .results-grid { --results-cols: 3; } }
+  @media (max-width: 700px)  { .results-grid { --results-cols: 2; } }
+  @media (max-width: 420px)  { .results-grid { --results-cols: 1; } }
+    .filter-panel { position:absolute; background:#fff; border:1px solid #ddd; padding:8px; max-height:260px; overflow:auto; box-shadow:0 8px 20px rgba(0,0,0,0.08); z-index:40; }
+    .filter-dropdown { position:relative; }
+    .filter-panel label { display:flex; gap:8px; align-items:center; padding:4px 6px; }
+  </style>
+</head>
+<body>
+  <header class="search-hero">
+    <h1>Object Index</h1>
+
+
+    <div class="search-box" role="search" aria-label="Search objects">
+      <input id="search-input" class="search-input" type="search" placeholder="Type to search" aria-label="Search objects">
+      <button id="clear-btn" class="filter-button">Clear</button>
+    </div>
+    
+    <!-- Filters toolbar -->
+    <div id="filter-bar" style="max-width:920px;margin:16px auto 0 auto;display:flex;gap:12px;align-items:center;">
+      <div class="filter-dropdown" data-filter="countries">
+        <button class="filter-toggle filter-button" aria-expanded="false">Country ▾</button>
+        <div class="filter-panel" hidden></div>
+      </div>
+      <div class="filter-dropdown" data-filter="causes">
+        <button class="filter-toggle filter-button" aria-expanded="false">Cause ▾</button>
+        <div class="filter-panel" hidden></div>
+      </div>
+      <div class="filter-dropdown" data-filter="timeframes">
+        <button class="filter-toggle filter-button" aria-expanded="false">Timeframe ▾</button>
+        <div class="filter-panel" hidden></div>
+      </div>
+      <div style="margin-left:auto;display:flex;gap:8px;align-items:center;">
+        <button id="view-list" class="filter-button" aria-pressed="true">List</button>
+        <button id="view-grid" class="filter-button" aria-pressed="false">Grid</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="search-results" id="search-results">
+      <p class="search-count" id="search-count">Loading...</p>
+      <div id="results-list"></div>
+    </div>
+  </main>
+
+  <script src="js/search.js"></script>
+</body>
+</html>

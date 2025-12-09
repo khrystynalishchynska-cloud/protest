@@ -33,25 +33,63 @@
 {
     "id": 2,
     "name": "The White Head Scarf",
-    "image_filename": "images/1-212.jpg",
+    "image_filename": "images/headscarve.webp",
     "categories_object_type": ["Visual Claims"],
     "categories_country": ["Argentina", "Iran"],
     "categories_cause": ["Truth and Justice", "Human Rights", "Women's Rights", "Anti-Compulsory Veiling"],
     "categories_protest": ["Mothers of Plaza de Mayo", "White Wednesdays", "Girl of Enghelab Street"],
     "categories_timeframe": ["1977", "2017", "20th Century", "21st Century"],
     "description_html": "In <span class=\"highlight-timeframe\">1977</span> <span class=\"highlight-country\">Argentina</span>’s <span class=\"highlight-protest\">Mothers of Plaza de Mayo</span> donned white scarves—evoking diapers—to mark the innocence of children who disappeared under military rule. Their weekly marches in Buenos Aires turned the scarf into a <span class=\"dramatic-emphasis\">global emblem</span> of the quest for <span class=\"highlight-cause\">truth and justice</span>. In <span class=\"highlight-country\">Iran</span>, white scarves signal defiance of compulsory <span class=\"highlight-cause\">hijab laws</span>. Spurred by <span class=\"highlight-protest\">#WhiteWednesdays</span>, women wore or waved white scarves to protest mandatory veiling. The gesture drew worldwide attention in <span class=\"highlight-timeframe\">2017</span> when Vida Movahed, the “<span class=\"highlight-protest\">Girl of Enghelab Street</span>,” stood unveiled and brandished her scarf, inspiring similar protests and arrests."
+    ,
+  "images": [
+    { "src": "images/2014_Hong_Kong_Umbrella_Revolution_as_Police_Attacked_Peaceful_Demonstrators_with_Tear_Gas.jpg", "caption": "Yellow umbrellas outside government headquarters, Admiralty, 2014" },
+    { "src": "images/Umbrella_Revolution_Harcourt_Road_View_20141028-min.webp", "caption": "Crowd assembled during sit-in, Mong Kok" },
+    { "src": "images/Hong_Kong_protests_P1190346_(15547120677)-min.webp", "caption": "A line of umbrellas forming a barrier" },
+    { "src": "images/49094162413_17f5c63969_o-min.webp", "caption": "A line of umbrellas forming a barrier" }
+    ,
+    { "src": "https://www.youtube.com/embed/zU0QVpew1-s", "thumb": "https://img.youtube.com/vi/zU0QVpew1-s/hqdefault.jpg", "caption": "Short clip: umbrella moment (YouTube)", "type": "embed" }
+  ]
+  ,
+  "eyewitness": [
+    "I was standing near Admiralty when the students first raised umbrellas — the crowd was calm but determined. (Anonymous eyewitness, 2014)",
+    "Several people I spoke with described how umbrellas were used both to shield from tear gas and to protect identities from cameras."
+  ],
+  "sources": [
+    { "url": "https://www.example-news.org/umbrella-movement-report", "title": "Coverage of the Umbrella Movement", "note": "Example news summary" },
+    "Chan, L. (2015). Visual symbols in protest movements. Journal of Social Movements.",
+    { "url": "https://www.youtube.com/watch?v=example", "title": "Documentary excerpt (video)", "note": "YouTube" }
+  ]
   },
 
 {
     "id": 3,
     "name": "The Blank Sheet of Paper",
-    "image_filename": "images/1-404.jpg",
+    "image_filename": "images/blankpaper.webp",
     "categories_object_type": ["Visual Claims"],
     "categories_country": ["China", "Hong Kong"],
     "categories_cause": ["Anti-Censorship", "Freedom of Speech", "Anti-Repression"],
     "categories_protest": ["Anti-Lockdown Protests", "White Paper Revolution"],
     "categories_timeframe": ["2022", "2019-2020", "21st Century"],
     "description_html": "A white piece of paper, or blank sheet, has become a powerful symbol of <span class=\"highlight-cause\">protest against censorship</span> and repression, most notably during the <span class=\"highlight-timeframe\">2022</span> <span class=\"highlight-cause\">anti-lockdown</span> demonstrations in <span class=\"highlight-country\">China</span>. Protesters held up blank sheets to silently express everything they were forbidden to say, making the absence of words a direct metaphor for silenced voices and <span class=\"dramatic-emphasis\">government control</span>. The tactic originated earlier in the <span class=\"highlight-timeframe\">2019–2020</span> <span class=\"highlight-country\">Hong Kong</span> protests, where demonstrators used blank paper after protest slogans were banned. The symbol has since appeared in other countries."
+      ,
+  "images": [
+    { "src": "images/2014_Hong_Kong_Umbrella_Revolution_as_Police_Attacked_Peaceful_Demonstrators_with_Tear_Gas.jpg", "caption": "Yellow umbrellas outside government headquarters, Admiralty, 2014" },
+    { "src": "images/Umbrella_Revolution_Harcourt_Road_View_20141028-min.webp", "caption": "Crowd assembled during sit-in, Mong Kok" },
+    { "src": "images/Hong_Kong_protests_P1190346_(15547120677)-min.webp", "caption": "A line of umbrellas forming a barrier" },
+    { "src": "images/49094162413_17f5c63969_o-min.webp", "caption": "A line of umbrellas forming a barrier" }
+    ,
+    { "src": "https://www.youtube.com/embed/zU0QVpew1-s", "thumb": "https://img.youtube.com/vi/zU0QVpew1-s/hqdefault.jpg", "caption": "Short clip: umbrella moment (YouTube)", "type": "embed" }
+  ]
+  ,
+  "eyewitness": [
+    "I was standing near Admiralty when the students first raised umbrellas — the crowd was calm but determined. (Anonymous eyewitness, 2014)",
+    "Several people I spoke with described how umbrellas were used both to shield from tear gas and to protect identities from cameras."
+  ],
+  "sources": [
+    { "url": "https://www.example-news.org/umbrella-movement-report", "title": "Coverage of the Umbrella Movement", "note": "Example news summary" },
+    "Chan, L. (2015). Visual symbols in protest movements. Journal of Social Movements.",
+    { "url": "https://www.youtube.com/watch?v=example", "title": "Documentary excerpt (video)", "note": "YouTube" }
+  ]
   },
 
   {
@@ -64,7 +102,271 @@
     "categories_protest": ["Vinegar Protests", "Revolta do Vinagre"],
     "categories_timeframe": ["2013", "21st Century"],
     "description_html": "<span class=\"highlight-cause\">Vinegar</span> became an emblematic tool during the <span class=\"highlight-timeframe\">2013</span> protests in <span class=\"highlight-country\">Brazil</span>, often called the “<span class=\"dramatic-emphasis\"><span class=\"highlight-protest\">Vinegar Protests</span></span>” (<span class=\"highlight-protest\">Revolta do Vinagre</span>). Protesters carried bottles of vinegar, believing that breathing through a cloth soaked in vinegar could help neutralize the effects of tear gas and pepper spray used by police, though its medical effectiveness is debated. The tactic became so widespread that police arrested over 60 people for carrying vinegar, including journalists, turning the substance into a symbol of <span class=\"highlight-cause\">resistance</span> and sparking sarcastic nicknames like “the vinegar march”."
-  }
+      ,
+  "images": [
+    { "src": "images/2014_Hong_Kong_Umbrella_Revolution_as_Police_Attacked_Peaceful_Demonstrators_with_Tear_Gas.jpg", "caption": "Yellow umbrellas outside government headquarters, Admiralty, 2014" },
+    { "src": "images/Umbrella_Revolution_Harcourt_Road_View_20141028-min.webp", "caption": "Crowd assembled during sit-in, Mong Kok" },
+    { "src": "images/Hong_Kong_protests_P1190346_(15547120677)-min.webp", "caption": "A line of umbrellas forming a barrier" },
+    { "src": "images/49094162413_17f5c63969_o-min.webp", "caption": "A line of umbrellas forming a barrier" }
+    ,
+    { "src": "https://www.youtube.com/embed/zU0QVpew1-s", "thumb": "https://img.youtube.com/vi/zU0QVpew1-s/hqdefault.jpg", "caption": "Short clip: umbrella moment (YouTube)", "type": "embed" }
+  ]
+  ,
+  "eyewitness": [
+    "I was standing near Admiralty when the students first raised umbrellas — the crowd was calm but determined. (Anonymous eyewitness, 2014)",
+    "Several people I spoke with described how umbrellas were used both to shield from tear gas and to protect identities from cameras."
+  ],
+  "sources": [
+    { "url": "https://www.example-news.org/umbrella-movement-report", "title": "Coverage of the Umbrella Movement", "note": "Example news summary" },
+    "Chan, L. (2015). Visual symbols in protest movements. Journal of Social Movements.",
+    { "url": "https://www.youtube.com/watch?v=example", "title": "Documentary excerpt (video)", "note": "YouTube" }
+  ]
+  },
+  
+    {
+    "id": 5,
+    "name": "Brazilian football jersey",
+    "image_filename": "images/1-224.webp",
+    "categories_object_type": ["Dress to protest"],
+    "categories_country": ["Brazil"],
+    "categories_cause": ["Political Alignment", "Nationalism", "Anti-Government"],
+    "categories_protest": ["Brasília Insurrection", "Bolsonaro Supporters"],
+    "categories_timeframe": ["Recent years", "2023", "21st Century"],
+    "description_html": "The yellow <span class=\"highlight-country\">Brazilian football jersey</span>, traditionally a unifying national symbol, has been controversially co-opted as a <span class=\"highlight-cause\">protest symbol</span> in <span class=\"highlight-timeframe\">recent years</span>. Most notably, <span class=\"dramatic-emphasis\">supporters of former President Jair Bolsonaro</span> adopted the jersey during political rallies and protests, including the storming of government buildings in <span class=\"highlight-country\">Brasília</span> in <span class=\"highlight-timeframe\">January 2023</span>. The jersey, once seen as non-partisan, became closely linked to right-wing and <span class=\"highlight-cause\">nationalist movements</span>, leading to widespread controversy and debate over its meaning. The Brazilian Football Confederation publicly condemned the <span class=\"highlight-cause\">politicization</span> of the jersey, emphasizing its intended role to unite, not divide, Brazilians."
+      ,
+  "images": [
+    { "src": "images/2014_Hong_Kong_Umbrella_Revolution_as_Police_Attacked_Peaceful_Demonstrators_with_Tear_Gas.jpg", "caption": "Yellow umbrellas outside government headquarters, Admiralty, 2014" },
+    { "src": "images/Umbrella_Revolution_Harcourt_Road_View_20141028-min.webp", "caption": "Crowd assembled during sit-in, Mong Kok" },
+    { "src": "images/Hong_Kong_protests_P1190346_(15547120677)-min.webp", "caption": "A line of umbrellas forming a barrier" },
+    { "src": "images/49094162413_17f5c63969_o-min.webp", "caption": "A line of umbrellas forming a barrier" }
+    ,
+    { "src": "https://www.youtube.com/embed/zU0QVpew1-s", "thumb": "https://img.youtube.com/vi/zU0QVpew1-s/hqdefault.jpg", "caption": "Short clip: umbrella moment (YouTube)", "type": "embed" }
+  ]
+  ,
+  "eyewitness": [
+    "I was standing near Admiralty when the students first raised umbrellas — the crowd was calm but determined. (Anonymous eyewitness, 2014)",
+    "Several people I spoke with described how umbrellas were used both to shield from tear gas and to protect identities from cameras."
+  ],
+  "sources": [
+    { "url": "https://www.example-news.org/umbrella-movement-report", "title": "Coverage of the Umbrella Movement", "note": "Example news summary" },
+    "Chan, L. (2015). Visual symbols in protest movements. Journal of Social Movements.",
+    { "url": "https://www.youtube.com/watch?v=example", "title": "Documentary excerpt (video)", "note": "YouTube" }
+  ]
+  },
+
+   {
+    "id": 6,
+    "name": "Keys",
+    "image_filename": "images/1-402.webp",
+    "categories_object_type": ["Sound & Protest"],
+    "categories_country": ["Czechia", "Czech Republic", "Slovakia"],
+    "categories_cause": ["Political Alignment", "Nationalism", "Anti-Government"],
+    "categories_protest": ["Brasília Insurrection", "Bolsonaro Supporters"],
+    "categories_timeframe": ["Recent years", "2023", "21st Century"],
+    "description_html": "In Czech protests, especially those harkening back to the 1989 Velvet Revolution, rattling keys became a symbolic act of defiance, representing the end of Communist-era surveillance (keys to locked-down lives) and a call for transparency, with protesters shaking them in squares like Wenceslas Square to demand change and echo democratic ideals. This tradition continues in modern demonstrations, linking current demands for accountability (like against then-PM Babiš in 2019) with the legacy of freedom from 1989."
+      ,
+  "images": [
+    { "src": "images/2014_Hong_Kong_Umbrella_Revolution_as_Police_Attacked_Peaceful_Demonstrators_with_Tear_Gas.jpg", "caption": "Yellow umbrellas outside government headquarters, Admiralty, 2014" },
+    { "src": "images/Umbrella_Revolution_Harcourt_Road_View_20141028-min.webp", "caption": "Crowd assembled during sit-in, Mong Kok" },
+    { "src": "images/Hong_Kong_protests_P1190346_(15547120677)-min.webp", "caption": "A line of umbrellas forming a barrier" },
+    { "src": "images/49094162413_17f5c63969_o-min.webp", "caption": "A line of umbrellas forming a barrier" }
+    ,
+    { "src": "https://www.youtube.com/embed/zU0QVpew1-s", "thumb": "https://img.youtube.com/vi/zU0QVpew1-s/hqdefault.jpg", "caption": "Short clip: umbrella moment (YouTube)", "type": "embed" }
+  ]
+  ,
+  "eyewitness": [
+    "I was standing near Admiralty when the students first raised umbrellas — the crowd was calm but determined. (Anonymous eyewitness, 2014)",
+    "Several people I spoke with described how umbrellas were used both to shield from tear gas and to protect identities from cameras."
+  ],
+  "sources": [
+    { "url": "https://www.example-news.org/umbrella-movement-report", "title": "Coverage of the Umbrella Movement", "note": "Example news summary" },
+    "Chan, L. (2015). Visual symbols in protest movements. Journal of Social Movements.",
+    { "url": "https://www.youtube.com/watch?v=example", "title": "Documentary excerpt (video)", "note": "YouTube" }
+  ]
+  },
+
+  {
+    "id": 7,
+    "name": "Fireworks",
+    "image_filename": "images/1-266.webp",
+    "categories_object_type": ["Shields & Mitigation"],
+    "categories_country": ["Georgia"],
+    "categories_cause": ["Pro-EU / Anti-Russian Influence", "Self-Defense", "Freedom of Assembly"],
+    "categories_protest": ["Pro-EU Protests (2024-2025)"],
+    "categories_timeframe": ["2024", "2025", "21st Century"],
+    "description_html": "During <span class=\"highlight-country\">Georgia’s</span> <span class=\"highlight-timeframe\">2024–25</span> <span class=\"highlight-cause\">pro-EU protests</span>, fireworks have become both rallying beacon and improvised weapon. Night after night in <span class=\"highlight-country\">Tbilisi</span>—and in smaller rallies in <span class=\"highlight-country\">Batumi</span> and <span class=\"highlight-country\">Kutaisi</span>—thousands launch rockets skyward or toward police cordons outside parliament. The crackling bursts energise crowds, mask tear-gas plumes, and disrupt water-cannon advances. Protesters frame the pyrotechnics as a non-lethal form of <span class=\"highlight-cause\">self-defence</span> and defiance; riot police answer with tear gas, stun grenades, and mass arrests. The salvos have so unsettled officials that Prime Minister Irakli Kobakhidze has ordered an <span class=\"dramatic-emphasis\">emergency ban on retail fireworks</span>, accusing shops of “arming a revolution,” while rights groups argue the measure merely criminalises dissent. In this clash of light and law, fireworks have come to symbolise the creativity—and determination—of Georgia’s EU-leaning generation."
+        ,
+  "images": [
+    { "src": "images/2014_Hong_Kong_Umbrella_Revolution_as_Police_Attacked_Peaceful_Demonstrators_with_Tear_Gas.jpg", "caption": "Yellow umbrellas outside government headquarters, Admiralty, 2014" },
+    { "src": "images/Umbrella_Revolution_Harcourt_Road_View_20141028-min.webp", "caption": "Crowd assembled during sit-in, Mong Kok" },
+    { "src": "images/Hong_Kong_protests_P1190346_(15547120677)-min.webp", "caption": "A line of umbrellas forming a barrier" },
+    { "src": "images/49094162413_17f5c63969_o-min.webp", "caption": "A line of umbrellas forming a barrier" }
+    ,
+    { "src": "https://www.youtube.com/embed/zU0QVpew1-s", "thumb": "https://img.youtube.com/vi/zU0QVpew1-s/hqdefault.jpg", "caption": "Short clip: umbrella moment (YouTube)", "type": "embed" }
+  ]
+  ,
+  "eyewitness": [
+    "I was standing near Admiralty when the students first raised umbrellas — the crowd was calm but determined. (Anonymous eyewitness, 2014)",
+    "Several people I spoke with described how umbrellas were used both to shield from tear gas and to protect identities from cameras."
+  ],
+  "sources": [
+    { "url": "https://www.example-news.org/umbrella-movement-report", "title": "Coverage of the Umbrella Movement", "note": "Example news summary" },
+    "Chan, L. (2015). Visual symbols in protest movements. Journal of Social Movements.",
+    { "url": "https://www.youtube.com/watch?v=example", "title": "Documentary excerpt (video)", "note": "YouTube" }
+  ]
+  },
+
+  {
+    "id": 8,
+    "name": "The Watermelon",
+    "image_filename": "images/watermelon.webp",
+    "categories_object_type": ["Food/Consumable", "Visual Claims"],
+    "categories_country": ["Palestine", "Global"],
+    "categories_cause": ["National Identity", "Anti-Censorship", "Solidarity"],
+    "categories_protest": ["Six-Day War Aftermath", "Gaza Conflict (2023)"],
+    "categories_timeframe": ["1967", "2023", "20th Century", "21st Century"],
+    "description_html": "The watermelon has become a creative stand-in for the Palestinian flag: its red flesh, green rind, white pith, and black seeds echo the flag’s four colours. After <span class=\"highlight-country\">Israel</span> outlawed public displays of the Palestinian flag and even its colour combination following the <span class=\"highlight-timeframe\">1967</span> <span class=\"highlight-protest\">Six-Day War</span>, <span class=\"highlight-country\">Palestinians</span> began painting, carrying, and photographing watermelon slices to sidestep the ban and signal <span class=\"dramatic-emphasis\">national identity</span>. The fruit soon appeared in murals, posters, and street rallies. During the <span class=\"highlight-timeframe\">2023</span> <span class=\"highlight-protest\">Gaza conflict</span>, its image and emoji spread <span class=\"highlight-country\">globally</span> online, letting supporters show solidarity and evade <span class=\"highlight-cause\">censorship</span> when the flag itself was still forbidden."
+  },
+
+  {
+    "id": 9,
+    "name": "The Coat Hanger",
+    "image_filename": "images/hanger.webp",
+    "categories_object_type": ["Tool/Object", "Visual Claims"],
+    "categories_country": ["USA", "Poland", "Global"],
+    "categories_cause": ["Abortion Rights", "Reproductive Healthcare", "Anti-Criminalization"],
+    "categories_protest": ["Pre-Roe v. Wade Era", "Black Monday Strike", "Post-Roe Protests"],
+    "categories_timeframe": ["1969", "2016", "21st Century"],
+    "description_html": "A coat hanger is a powerful and enduring symbol in <span class=\"highlight-cause\">abortion rights protests</span>, representing the dangers of unsafe, illegal abortions. Its origins as a protest icon date back to the <span class=\"highlight-protest\">pre-Roe v. Wade era</span> in the <span class=\"highlight-country\">United States</span>, when women sometimes resorted to using wire coat hangers to self-induce abortions due to lack of access to safe medical procedures. The coat hanger thus serves as a stark warning of the <span class=\"dramatic-emphasis\">life-threatening risks</span> women face when abortion is criminalized. Activists have prominently featured coat hangers in demonstrations, such as the <span class=\"highlight-timeframe\">1969</span> Washington march where protesters wore them around their necks and in more recent actions, including sending hangers to the U.S. Supreme Court. In <span class=\"highlight-country\">Poland</span>, coat hangers have also become a central visual element in protests against abortion bans. During the <span class=\"highlight-timeframe\">2016</span> “<span class=\"highlight-protest\">Black Monday</span>” strike and subsequent demonstrations, <span class=\"highlight-country\">Polish</span> women held up wire coat hangers to represent the peril of illegal abortions, warning against the consequences of restrictive legislation. The use of coat hangers in both American and Polish contexts underscores their role as a universal symbol of <span class=\"highlight-cause\">resistance to abortion bans</span> and a call for safe, legal <span class=\"highlight-cause\">reproductive healthcare</span>."
+  },
+
+  {
+    "id": 10,
+    "name": "Chrysanthemums & Asters",
+    "image_filename": "images/Chrysanthemums.webp",
+    "categories_object_type": ["Protest Flowers"],
+    "categories_country": ["Hungary", "Hong Kong", "USA"],
+    "categories_cause": ["Peaceful Resistance", "Remembrance", "Anti-War"],
+    "categories_protest": ["Aster Revolution", "Tiananmen Commemorations", "March on the Pentagon"],
+    "categories_timeframe": ["1918", "1967", "20th Century", "21st Century"],
+    "description_html": "Chrysanthemums and their close relative, asters, have occasionally served as protest emblems, drawing on their associations with remembrance or <span class=\"highlight-cause\">peaceful resistance</span>. The clearest political use came in <span class=\"highlight-country\">Hungary’s</span> <span class=\"highlight-timeframe\">1918</span> <span class=\"highlight-protest\">Aster Revolution</span>, when supporters pinned asters to their coats while proclaiming the First Hungarian People’s Republic. In East <span class=\"highlight-country\">Asia</span>, white chrysanthemums—long linked to mourning—appear at vigils such as <span class=\"highlight-country\">Hong Kong’s</span> annual <span class=\"highlight-protest\">Tiananmen commemorations</span>, honoring those lost in political struggle. A famous Western image is Marc Riboud’s <span class=\"highlight-timeframe\">1967</span> photograph from the <span class=\"highlight-protest\">March on the Pentagon</span>, showing 17-year-old Jan Rose Kasmir holding a chrysanthemum in front of soldiers’ bayonets, powerfully representing <span class=\"dramatic-emphasis\">peaceful resistance</span> during the <span class=\"highlight-cause\">anti–Vietnam War movement</span>."
+  },
+
+  {
+    "id": 11,
+    "name": "The Spoon",
+    "image_filename": "images/spoon.webp",
+    "categories_object_type": ["Tool/Object", "Visual Claims"],
+    "categories_country": ["Palestine", "Israel"],
+    "categories_cause": ["Prisoner Rights", "Freedom", "Ingenuity"],
+    "categories_protest": ["Gilboa Prison Escape"],
+    "categories_timeframe": ["2021", "21st Century"],
+    "description_html": "The spoon emerged as a powerful symbol of <span class=\"highlight-country\">Palestinian</span> <span class=\"highlight-cause\">resistance</span> following the dramatic escape of six Palestinian prisoners from <span class=\"highlight-country\">Israel’s</span> high-security Gilboa Prison in <span class=\"highlight-timeframe\">September 2021</span>. According to reports, the escapees used spoons, along with plates and kettle handles, to dig a tunnel from their cell, evading security measures and sparking widespread admiration. The event quickly inspired artists, activists, and demonstrators, who began featuring spoons in protest art, sculptures, and public rallies as an emblem of determination, <span class=\"dramatic-emphasis\">ingenuity</span>, and the struggle for <span class=\"highlight-cause\">freedom</span>."
+  }, 
+  {
+    "id": 12,
+    "name": "The Wooden Spoon",
+    "image_filename": "images/woodspoon.webp",
+    "categories_object_type": ["Tool/Object", "Sound & Noise"],
+    "categories_country": ["Slovakia", "Burkina Faso"],
+    "categories_cause": ["Reproductive Rights", "Women's Rights", "Civil Disobedience"],
+    "categories_protest": ["Anti-Abortion Protests (Slovakia)", "Women's Civil Action (Burkina Faso)"],
+    "categories_timeframe": ["2020", "21st Century"],
+    "description_html": "In <span class=\"highlight-country\">Slovakia</span>, the wooden spoon has become a prominent symbol in protests against the restriction of <span class=\"highlight-cause\">reproductive rights</span>. During demonstrations opposing stricter abortion laws in <span class=\"highlight-timeframe\">2020</span>, organizers encouraged participants to bring wooden spoons—alongside pots and brooms—as a representation of care, domestic labor, and <span class=\"highlight-cause\">civil disobedience</span>. The spoons were often customized with messages, symbolizing both the everyday work of women and <span class=\"dramatic-emphasis\">resistance to political attempts to control their bodies</span>. In <span class=\"highlight-country\">Burkina Faso</span>, the wooden spoon has also been used as a <span class=\"highlight-cause\">protest symbol</span>, particularly by women who bang them against pots to make noise and draw attention to their demands. This act, rooted in local traditions, highlights the role of women in civic action and <span class=\"highlight-cause\">protest</span>."
+  },
+
+  {
+    "id": 13,
+    "name": "The Rubber Duck",
+    "image_filename": "images/duck.webp",
+    "categories_object_type": ["Toy", "Shields & Mitigation"],
+    "categories_country": ["Thailand"],
+    "categories_cause": ["Pro-Democracy", "Anti-Police Violence", "Satire"],
+    "categories_protest": ["Thai Pro-Democracy Protests (2020)"],
+    "categories_timeframe": ["2020", "21st Century"],
+    "description_html": "Rubber ducks became an iconic symbol of <span class=\"highlight-country\">Thailand’s</span> <span class=\"highlight-cause\">pro-democracy protests</span> in <span class=\"highlight-timeframe\">2020</span>. Initially brought to demonstrations as a humorous response to government barricades, inflatable yellow ducks quickly gained prominence when protesters used them as improvised <span class=\"dramatic-emphasis\">shields against police water cannons</span> and tear gas during violent clashes near parliament. Their cheerful, fragile appearance contrasted with their new role as protectors, capturing public imagination and inspiring widespread protest art and memes."
+  },
+
+  {
+    "id": 14,
+    "name": "The Yellow Ribbon",
+    "image_filename": "images/yellowribbon.webp",
+    "categories_object_type": ["Textile", "Visual Claims"],
+    "categories_country": ["Ukraine", "Philippines", "South Korea"],
+    "categories_cause": ["Hope", "Accountability", "Sovereignty", "Democratization", "Nonviolent Resistance"],
+    "categories_protest": ["Sewol Ferry Disaster", "Yellow Ribbon Resistance Movement"],
+    "categories_timeframe": ["1980s", "2014", "2022", "21st Century"],
+    "description_html": "Yellow ribbons have historically symbolized <span class=\"dramatic-emphasis\">hope for a loved one’s safe return</span>. In the <span class=\"highlight-timeframe\">1980s</span>, they became a sign of <span class=\"highlight-cause\">democratization</span> in the <span class=\"highlight-country\">Philippines</span>. After the <span class=\"highlight-timeframe\">2014</span> <span class=\"highlight-protest\">Sewol Ferry disaster</span> in <span class=\"highlight-country\">South Korea</span>, they spread online as a symbol of hope, later evolving into a <span class=\"highlight-cause\">protest icon</span> as public anger toward the government grew, representing grief and the demand for <span class=\"highlight-cause\">accountability</span>. Since <span class=\"highlight-timeframe\">2022</span>, <span class=\"highlight-country\">Ukraine’s</span> “<span class=\"highlight-protest\">Yellow Ribbon</span>” resistance movement has used the symbol in russian-occupied territories. Tied in public spaces, the ribbons express support for <span class=\"highlight-cause\">Ukrainian sovereignty</span> and serve as quiet signs of unity and <span class=\"highlight-cause\">nonviolent resistance</span>."
+  }, 
+
+  {
+    "id": 15,
+    "name": "The Water Jug",
+    "image_filename": "images/waterjug.webp",
+    "categories_object_type": ["Container", "Shields & Mitigation", "Thrown & Spilled"],
+    "categories_country": ["USA"],
+    "categories_cause": ["Pro-Palestinian Solidarity", "Anti-Police Sentiment", "Grassroots Resistance"],
+    "categories_protest": ["Student Encampments (2024-2025)", "Cal Poly Humboldt Protest"],
+    "categories_timeframe": ["2024", "2025", "21st Century"],
+    "description_html": "The water jug has emerged as an unexpected symbol in <span class=\"highlight-cause\">pro-Palestinian protests</span> across the <span class=\"highlight-country\">United States</span>, particularly during the wave of student-led demonstrations in <span class=\"highlight-timeframe\">2024</span> and <span class=\"highlight-timeframe\">2025</span>. Its rise began with viral incidents at university protests, most notably at <span class=\"highlight-protest\">California Polytechnic State University, Humboldt</span>, where a protester struck a police officer with a large, empty water jug. The moment, captured on video, quickly spread across social media, where the jug was dubbed the “<span class=\"dramatic-emphasis\">Jug of Justice</span>” and became an emblem of <span class=\"highlight-cause\">grassroots resistance</span>. Protesters began bringing water jugs to demonstrations, using them as makeshift shields, tools for practical needs, and a symbol of anti-police sentiment and solidarity with the <span class=\"highlight-cause\">Palestinian cause</span>."
+  },
+  {
+    "id": 16,
+    "name": "Tape",
+    "image_filename": "images/blacktape.webp",
+    "categories_object_type": ["Material/Accessory", "Visual Claims"],
+    "categories_country": ["Zimbabwe", "Global"],
+    "categories_cause": ["Censorship", "Free Speech", "Anti-Repression"],
+    "categories_protest": ["Cricket World Cup (2003)", "Silence Protests"],
+    "categories_timeframe": ["2003", "21st Century"],
+    "description_html": "Tape has become a stark <span class=\"highlight-cause\">protest symbol</span>. Protesters often place tape over their mouths to represent <span class=\"highlight-cause\">censorship</span>, <span class=\"dramatic-emphasis\">forced silence</span>, or the suppression of <span class=\"highlight-cause\">free speech</span>, making visible the experience of being silenced by authorities or unjust laws. Another notable example of tape’s symbolic use occurred during the <span class=\"highlight-timeframe\">2003</span> <span class=\"highlight-protest\">Cricket World Cup</span> when <span class=\"highlight-country\">Zimbabwean</span> players Andy Flower and Henry Olonga, lacking black armbands, wore strips of black insulating tape to “mourn the death of democracy,” drawing global attention to government repression. This highlights how an ordinary item can instantly signal profound political dissent."
+  },
+
+  {
+    "id": 17,
+    "name": "Eggs",
+    "image_filename": "images/eggs.webp",
+    "categories_object_type": ["Food/Consumable", "Thrown & Spilled"],
+    "categories_country": ["Global"],
+    "categories_cause": ["Humiliation", "Moral Objection", "Anti-Politician"],
+    "categories_protest": ["Suffragette Movement", "General Political Protests"],
+    "categories_timeframe": ["1910", "20th Century", "21st Century"],
+    "description_html": "The act of throwing eggs at people or property has a long history as a <span class=\"highlight-cause\">protest tactic</span>, especially against politicians and public figures. The intention is typically to <span class=\"dramatic-emphasis\">humiliate the target</span> rather than cause physical harm, turning them into figures of ridicule and signaling moral objection to their actions or presence. Notable incidents include the egging of Winston Churchill by a suffragette in <span class=\"highlight-timeframe\">1910</span>, and various politicians like Richard Nixon, Harold Wilson, and Scott Morrison. Egging is considered vandalism and can result in legal consequences, especially if property is damaged or injuries occur."
+  },
+
+  {
+    "id": 18,
+    "name": "Flour",
+    "image_filename": "images/flour.webp",
+    "categories_object_type": ["Food/Consumable", "Thrown & Spilled"],
+    "categories_country": ["New Zealand", "USA", "Global"],
+    "categories_cause": ["Humiliation", "Disruption", "Anti-Politician", "Economic Protest"],
+    "categories_protest": ["Springbok Tour (1981)", "Flour Riot of 1837"],
+    "categories_timeframe": ["1837", "1981", "20th Century", "21st Century"],
+    "description_html": "Flour bombing is a classic protest method involving the throwing of flour, often contained in paper bags, at people or objects. This tactic is used to create an inconvenient and messy stain, serving as a form of <span class=\"highlight-cause\">public humiliation</span> or disruption. Flour bombs have been used alongside eggs in protests against politicians like Tony Blair and Emmanuel Macron, and during major demonstrations, such as the <span class=\"highlight-timeframe\">1981</span> <span class=\"highlight-protest\">Springbok Tour</span> in <span class=\"highlight-country\">New Zealand</span>. Historically, flour has also been central to <span class=\"highlight-cause\">food riots</span>, such as the <span class=\"highlight-timeframe\">1837</span> <span class=\"highlight-protest\">Flour Riot</span> in <span class=\"highlight-country\">New York City</span>, where public anger over rising prices led to mass looting and destruction of flour stores. The tactic remains a simple, non-lethal way to achieve <span class=\"dramatic-emphasis\">maximum disruption</span>."
+  },
+{
+  "id": 19,
+    "name": "Soup",
+    "image_filename": "images/soup.webp",
+    "categories_object_type": ["Food/Consumable", "Thrown & Spilled"],
+    "categories_country": ["Global"],
+    "categories_cause": ["Climate Action", "Food Security", "Systemic Change"],
+    "categories_protest": ["Art Museum Protests"],
+    "categories_timeframe": ["2023", "21st Century"],
+    "description_html": "Soup has become a notable tool in <span class=\"highlight-cause\">climate and social justice protests</span>, particularly in high-profile actions targeting famous artworks in museums. Activists have thrown soup at protected paintings such as Leonardo da Vinci’s Mona Lisa and Vincent van Gogh’s Sunflowers to draw attention to issues like <span class=\"highlight-cause\">environmental policy</span> and <span class=\"highlight-cause\">food security</span>. These acts are intended to provoke public debate and highlight the perceived <span class=\"dramatic-emphasis\">imbalance between the protection of art and urgent social needs</span>. The protests often include statements demanding systemic changes, such as the right to healthy and sustainable food, and are orchestrated by groups aiming to integrate food justice into broader social security systems. The artworks themselves are typically unharmed due to protective glass coverings."
+  },
+{
+    "id": 20,
+    "name": "Cake and Pie",
+    "image_filename": "images/pie.webp",
+    "categories_object_type": ["Food/Consumable", "Thrown & Spilled"],
+    "categories_country": ["USA", "Belgium", "Global"],
+    "categories_cause": ["Ridicule", "Anti-Authority", "Anti-Greed/Corruption", "Humor/Spectacle"],
+    "categories_protest": ["Patisserie Guerrilla", "Biotic Baking Brigade"],
+    "categories_timeframe": ["Late 20th Century", "1980s", "21st Century"],
+    "description_html": "Throwing cakes and pies at public figures is a long-standing protest tactic used to ridicule, embarrass, or draw attention to the actions of politicians and celebrities. This form of protest gained prominence in the <span class=\"highlight-timeframe\">late 20th century</span>, with activists targeting political and cultural figures to challenge authority through <span class=\"dramatic-emphasis\">humor and spectacle</span>. Belgian anarchist Noël Godin popularized “<span class=\"highlight-protest\">patisserie guerrilla</span>,” turning pie-throwing into an art form. Groups like the <span class=\"highlight-protest\">Biotic Baking Brigade</span> in the <span class=\"highlight-country\">U.S.</span> have used pieing to protest against perceived greed or corruption among “titans of power.” Notable incidents span decades, involving figures from William F. Buckley Jr. and Anita Bryant to Bill Gates, highlighting the endurance of this tactic."
+  }  
 
 ]
 

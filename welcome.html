@@ -26,18 +26,99 @@
   /* top and bottom sentinels used to detect scroll edges */
   #gallery-sentinel, #gallery-sentinel-top{height:1px;pointer-events:none}
     @media (max-width:520px){ .card img{height:160px} }
+    /* Controls bar and list view styles. The controls bar is hidden by default
+       and is shown when the Search toggle is activated. */
+    .controls-bar{
+      display:none; /* hidden until Search is pressed */
+      gap:12px;align-items:center;flex-wrap:wrap;justify-content:flex-start;padding:10px;border-radius:8px;background:#fff;box-shadow:0 8px 24px rgba(0,0,0,0.12);width:320px;box-sizing:border-box}
+    .controls-bar.visible{display:flex;flex-direction:column}
+    .view-toggle{display:inline-flex;border:1px solid rgba(0,0,0,0.08);border-radius:6px;overflow:hidden}
+    .view-toggle button{all:unset;padding:8px 12px;cursor:pointer;font-weight:600}
+    .view-toggle button[aria-pressed="true"]{background:#000;color:#fff}
+    .controls-inputs{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .controls-inputs input[type="search"],.controls-inputs select{padding:8px 10px;border-radius:6px;border:1px solid rgba(0,0,0,0.08);font-size:15px}
+    #list-view{max-width:1400px;margin:0 auto;display:none;padding:0  var(--site-gutter);box-sizing:border-box}
+    .list-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+  /* List view: tags-only rows (no photos). */
+  #list-grid{display:block}
+  .list-row{background:#fff;padding:10px 14px;border-radius:8px;margin-bottom:10px;box-shadow:0 6px 14px rgba(0,0,0,0.06);display:block;text-decoration:none;color:inherit}
+  .list-row h3{margin:0 0 6px 0;font-size:18px}
+  .list-row .tags{margin-top:6px}
+  .list-card{display:none}
+    @media (max-width:520px){ .list-card img{height:120px} }
+   /* Tag chips for list view: four kinds with distinct colors */
+  .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .tag{display:inline-block;padding:4px 8px;border-radius:5px;font-size:22px;color:#000000}
+  .tag.name{background:#f8f162}    /* blue */
+  .tag.country{background:#849e15} /* green */
+  .tag.type{background:#f76f54}    /* orange */
+  .tag.cause{background:#fbb28b}   /* red */
+  .tag.clickable-tag{cursor:pointer;opacity:0.95}
+  .tag.clickable-tag:hover{filter:brightness(0.95);transform:translateY(-1px)}
+  .tag.active{box-shadow:0 0 0 3px rgba(0,0,0,0.06) inset}
+  /* List controls: search + kind toggles (appears at top of #list-view) */
+  #list-controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+  #list-controls .list-search{flex:1;min-width:160px;padding:8px 10px;border-radius:6px;border:1px solid rgba(0,0,0,0.08);font-size:15px}
+  .tag-toggles{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .tag-toggle{display:inline-flex;align-items:center;gap:8px;background:#fff;padding:6px 10px;border-radius:999px;border:1px solid rgba(0,0,0,0.06);cursor:pointer;font-size:13px}
+  .tag-toggle input{display:none}
+  .tag-toggle.active{background:#000;color:#fff;border-color:transparent}
+  /* Photo results grid used when a tag is clicked */
+  .photo-results-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+  .photo-result img{width:100%;height:140px;object-fit:cover;border-radius:6px;display:block}
+  @media (max-width:520px){ .photo-result img{height:110px} }
+    
   </style>
 </head>
 <body>
   <main>
+    <!-- Controls: view toggle, search, filters -->
+    <div class="controls-bar" role="region" aria-label="View and filter controls">
+      <div class="view-toggle" role="tablist" aria-label="View toggle">
+        <button id="btn-gallery" aria-pressed="true" type="button">Gallery</button>
+        <button id="btn-list" aria-pressed="false" type="button">List</button>
+      </div>
+      <div class="controls-inputs">
+        <label for="search-input" class="sr-only">Search</label>
+        <input id="search-input" type="search" placeholder="Search by name or description" aria-label="Search" />
+        <select id="filter-type" aria-label="Filter by type"><option value="">Type (all)</option></select>
+        <select id="filter-country" aria-label="Filter by country"><option value="">Country (all)</option></select>
+        <select id="filter-cause" aria-label="Filter by cause"><option value="">Cause (all)</option></select>
+      </div>
+    </div>
+
   <div id="gallery-sentinel-top" aria-hidden="true"></div>
   <section id="infinite-gallery" aria-label="All objects gallery"></section>
   <div id="gallery-sentinel" aria-hidden="true"></div>
+    <!-- List view (hidden by default) -->
+    <section id="list-view" aria-label="List of objects">
+      <!-- list-level filters: search tags and toggle kinds -->
+      <div id="list-controls" aria-hidden="false">
+        <input id="list-search" class="list-search" type="search" placeholder="Search tags..." aria-label="Search tags" />
+        <div class="tag-toggles" role="toolbar" aria-label="Tag kinds">
+          <label class="tag-toggle active" data-kind="name"><input type="checkbox" data-kind="name" checked />Names</label>
+          <label class="tag-toggle active" data-kind="country"><input type="checkbox" data-kind="country" checked />Countries</label>
+          <label class="tag-toggle active" data-kind="type"><input type="checkbox" data-kind="type" checked />Types</label>
+          <label class="tag-toggle active" data-kind="cause"><input type="checkbox" data-kind="cause" checked />Causes</label>
+        </div>
+      </div>
+      <div id="list-count" style="margin:8px 0;color:#333"></div>
+      <div id="list-grid" class="list-grid"></div>
+    </section>
     <noscript>
       <p>Please enable JavaScript to view the gallery.</p>
     </noscript>
   </main>
 
+  <!-- Floating toggle in bottom-right: Explore / List / Search -->
+  <div id="floating-toggle" style="position:fixed;right:14px;bottom:14px;z-index:1500;">
+    <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end;">
+      <button id="btn-gallery-float" aria-label="Explore (gallery)" title="Explore" style="all:unset;background:#fff;padding:10px 12px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,0.12);cursor:pointer">Explore</button>
+      <button id="btn-list-float" aria-label="List view" title="List" style="all:unset;background:#fff;padding:10px 12px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,0.12);cursor:pointer">List</button>
+      <button id="btn-search-float" aria-label="Search" title="Search" style="all:unset;background:#000;color:#fff;padding:10px 12px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,0.12);cursor:pointer">Search</button>
+    </div>
+  </div>
   <script src="js/infinite-gallery.js"></script>
+  <script src="js/welcome.js"></script>
 </body>
 </html>

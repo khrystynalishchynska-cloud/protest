@@ -131,13 +131,9 @@
         const a = document.createElement('a'); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
       }catch(e){ console.warn('download failed', e); }
     }
-    (function addExportButton(){
-      const btn = document.createElement('button');
-      btn.textContent = 'Export positions';
-      Object.assign(btn.style,{position:'fixed',right:'12px',bottom:'12px',zIndex:9999,padding:'8px 10px',background:'#222',color:'#fff',border:'none',borderRadius:'6px',opacity:0.9});
-      btn.addEventListener('click', ()=> downloadJSON(overrides));
-      document.body.appendChild(btn);
-    })();
+    // Export button removed: previously added a floating "Export positions" control here.
+    // If you need to re-enable export functionality later, recreate a UI control and
+    // call downloadJSON(overrides) on click.
 
     await loadOverrides();
 

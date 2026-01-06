@@ -319,6 +319,16 @@ body {
     background: transparent;
 }
 
+/* List view cards should not inherit gallery animation styles. The gallery
+   uses generic .card rules for animation (opacity:0, transforms). Ensure
+   list view cards are fully visible and not animated by those rules. */
+#list-view .card,
+.list-card {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+}
+
 /* Responsive adjustments: reduce the column count at narrower breakpoints */
 @media (max-width: 1400px) { .photo-gallery { --gallery-cols: 5; } }
 @media (max-width: 1200px) { .photo-gallery { --gallery-cols: 4; } }

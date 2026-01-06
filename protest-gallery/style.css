@@ -1,0 +1,98 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+main {
+  min-height: 100vh;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+#gallery-sentinel, #gallery-sentinel-top {
+  height: 1px;
+  pointer-events: none;
+}
+
+#infinite-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  align-items: start;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.card-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.card {
+  background: #fff;
+  overflow: hidden;
+  display: block;
+  position: relative;
+  border: 0;
+}
+
+.card img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  display: block;
+  background: #f4f4f4;
+}
+
+.lazy-img {
+  opacity: 0;
+  transition: opacity .28s ease;
+}
+
+.lazy-img.img-loaded {
+  opacity: 1;
+}
+
+@media (max-width: 520px) {
+  .card img {
+    height: 160px;
+  }
+}
+
+.view-toggle {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.view-toggle button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  margin: 0 5px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.view-toggle button:hover {
+  background: #0056b3;
+}
+
+.list-view {
+  display: none;
+}
+
+.list-view.active {
+  display: block;
+}
+
+.grid-view {
+  display: none;
+}
+
+.grid-view.active {
+  display: grid;
+}

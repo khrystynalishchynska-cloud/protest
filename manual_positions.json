@@ -1,0 +1,25 @@
+{
+  "byId": {
+    "object-123": {
+      "col": 4,
+      "colSpan": 2,
+      "row": 1,
+      "offsetX": 0,
+      "offsetY": -8,
+      "locked": true
+    }
+  },
+  "bySrc": {
+    "images/1-264.jpg": {
+      "col": 0,
+      "colSpan": 2,
+      "row": 0
+    }
+  },
+  "meta": {
+    "version": 1,
+    "canvasCols": 36,
+    "gutter": 20,
+    "notes": "Edit entries in byId (preferred) or bySrc. Use col (0-based), colSpan, optional row or offsetX/offsetY. Save to repo to make placements persistent."
+  }
+}

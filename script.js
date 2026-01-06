@@ -5,6 +5,7 @@ let ALL_PROTEST_DATA = [];
 (async () => {
     const descriptionText = document.getElementById('description-text');
     const closePanelBtn = document.getElementById('close-panel-btn');
+    const backBtn = document.getElementById('back-button');
 
     const urlParams = new URLSearchParams(window.location.search);
     const objectId = parseInt(urlParams.get('id')) || 1; 
@@ -27,6 +28,21 @@ let ALL_PROTEST_DATA = [];
             
             // Setup close button listener
             closePanelBtn.addEventListener('click', () => togglePanel(false)); 
+            // Setup global back button: prefer history.back(), fallback to gallery
+            if (backBtn) {
+                backBtn.addEventListener('click', () => {
+                    // If there's a referrer in the session, go back; otherwise go to welcome.html
+                    try {
+                        if (document.referrer && document.referrer !== '') {
+                            history.back();
+                        } else {
+                            window.location.href = 'welcome.html';
+                        }
+                    } catch (e) {
+                        window.location.href = 'welcome.html';
+                    }
+                });
+            }
         } else {
             descriptionText.textContent = `Error: Object not found for ID ${objectId}.`;
         }

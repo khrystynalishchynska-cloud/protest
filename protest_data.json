@@ -366,6 +366,17 @@
     "categories_protest": ["Patisserie Guerrilla", "Biotic Baking Brigade"],
     "categories_timeframe": ["Late 20th Century", "1980s", "21st Century"],
     "description_html": "Throwing cakes and pies at public figures is a long-standing protest tactic used to ridicule, embarrass, or draw attention to the actions of politicians and celebrities. This form of protest gained prominence in the <span class=\"highlight-timeframe\">late 20th century</span>, with activists targeting political and cultural figures to challenge authority through <span class=\"dramatic-emphasis\">humor and spectacle</span>. Belgian anarchist Noël Godin popularized “<span class=\"highlight-protest\">patisserie guerrilla</span>,” turning pie-throwing into an art form. Groups like the <span class=\"highlight-protest\">Biotic Baking Brigade</span> in the <span class=\"highlight-country\">U.S.</span> have used pieing to protest against perceived greed or corruption among “titans of power.” Notable incidents span decades, involving figures from William F. Buckley Jr. and Anita Bryant to Bill Gates, highlighting the endurance of this tactic."
+  },
+  {
+    "id": 21,
+    "name": "Milkshakes",
+    "image_filename": "images/protest_milkshake.webp",
+    "categories_object_type": ["Food/Consumable", "Thrown & Spilled"],
+    "categories_country": ["United Kingdom"],
+    "categories_cause": ["Anti-Brexit", "Anti-Far-Right", "Anti-Racism", "Spectacle"],
+    "categories_protest": ["2019 Brexit Party Protests", "Anti-Far-Right Rallies"],
+    "categories_timeframe": ["2019", "21st Century"],
+    "description_html": "Milkshakes have emerged as a distinctive protest symbol in recent years, particularly in the <span class=\"highlight-country\">United Kingdom</span>, where throwing them at public figures has become a widely recognized act of political dissent. This trend gained prominence during the <span class=\"highlight-timeframe\">2019</span> <span class=\"highlight-protest\">anti-Brexit and anti-far-right demonstrations</span>. Beyond its anti-Brexit roots, milkshaking has also taken on <span class=\"highlight-cause\">anti-racist symbolism</span>. Analysts note that while the alt-right has sometimes used milk as a symbol of white supremacy, the act of throwing milkshakes at far-right figures is seen as a form of <span class=\"dramatic-emphasis\">“political ju-jitsu”</span>—turning the symbolism against them and making them appear foolish. The milkshake thus functions both as a tool of protest and as a visual statement against <span class=\"highlight-cause\">extremism</span>."
   }  
 
 ]

@@ -8,32 +8,37 @@
 </head>
 <body>
 
+    <!-- Global Back button placed above the column layout -->
+    <div id="global-back-wrap">
+        <button id="back-button" type="button" aria-label="Go back">Back</button>
+    </div>
+
     <main id="object-container" class="split-layout"> 
         
-        <section id="metadata-controls" class="metadata-column">
+    <section id="metadata-controls" class="metadata-column" data-column-name="Left — Metadata">
             
             <h1 id="object-title"></h1>
             <div id="object-image-wrapper">
                 <img id="object-image" src="" alt="Photo of the protest symbol">
             </div>
 
-            <div id="filter-buttons-container">
-                </div>
 
             <div id="static-tags">
-                <p><strong>Object Type:</strong> <span id="type-tag"></span></p>
-                <p><strong>Timeframe:</strong> <span id="timeframe-tag"></span></p>
+                <p><span id="type-tag"></span></p>
+                <p><span id="timeframe-tag"></span></p>
                 </div>
             
         </section>
 
-        <section id="content-display" class="content-column">
+    <section id="content-display" class="content-column" data-column-name="Center — Content">
             
             <div id="description-block" class="description-block">
                 <section id="desc-section" class="subsection">
                     <h2 class="subsection-title"><button class="subsection-toggle" aria-expanded="true">Description</button></h2>
                     <div class="divider" aria-hidden="true"></div>
                     <div class="subsection-body">
+                        <!-- moved filter buttons here from the left metadata column -->
+                        <div id="filter-buttons-container" style="margin-bottom:14px;"></div>
                         <article id="description-text"></article>
                     </div>
                 </section>
@@ -82,7 +87,7 @@
                 </div>
             </div>
             
-            <aside id="context-panel" class="hidden-panel">
+            <aside id="context-panel" class="hidden-panel" data-column-name="Right — Context Panel">
                 <button id="close-panel-btn">✕ Close Context</button>
                 <div id="context-panel-content">
                     </div>

@@ -1,0 +1,42 @@
+[
+  {
+    "title": "Protest Image 1",
+    "imageUrl": "images/protest1.jpg",
+    "description": "A powerful image from the protest."
+  },
+  {
+    "title": "Protest Image 2",
+    "imageUrl": "images/protest2.jpg",
+    "description": "Another impactful moment captured."
+  },
+  {
+    "title": "Protest Image 3",
+    "imageUrl": "images/protest3.jpg",
+    "description": "Demonstrators standing for their rights."
+  },
+  {
+    "title": "Protest Image 4",
+    "imageUrl": "images/protest4.jpg",
+    "description": "A sea of voices united."
+  },
+  {
+    "title": "Protest Image 5",
+    "imageUrl": "images/protest5.jpg",
+    "description": "A moment of silence during the protest."
+  },
+  {
+    "title": "Protest Image 6",
+    "imageUrl": "images/protest6.jpg",
+    "description": "Signs of hope and change."
+  },
+  {
+    "title": "Protest Image 7",
+    "imageUrl": "images/protest7.jpg",
+    "description": "Unity in diversity at the protest."
+  },
+  {
+    "title": "Protest Image 8",
+    "imageUrl": "images/protest8.jpg",
+    "description": "Voices raised for justice."
+  }
+]

@@ -12,11 +12,36 @@
 /* --- Global Reset & Minimal Aesthetic --- */
 :root {
     /* site-wide gutter (used for page margins and paddings). Desktop override applied via media query below */
-    --site-gutter: 20px;
+    --site-gutter: 10px;
+    /* metadata column width (used to offset content when split) */
+    --metadata-width: 220px;
+    /* when the page enters split mode (context panel opens) this value will be used
+       to shrink the metadata column — change this to give the left column more room */
+    --metadata-width-collapsed: 160px;
+    /* content gutter used when calculating available content width */
+    --content-gutter: 24px;
+    /* offset to keep fixed global controls (like the Back button) from overlapping content */
+    --global-back-offset: 56px;
 }
 
 @media (min-width: 900px) {
-    :root { --site-gutter: 48px; }
+    :root { --site-gutter: 10px; }
+}
+
+/* Dev helper: show column names when body has .show-column-names */
+.show-column-names [data-column-name] { position: relative; }
+.show-column-names [data-column-name]::before {
+    content: attr(data-column-name);
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: rgba(0,0,0,0.75);
+    color: #fff;
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: 4px;
+    z-index: 99999;
+    pointer-events: none;
 }
 
 body {
@@ -40,6 +65,11 @@ body {
     min-height: 100vh;
     width: 100%;
 }
+
+/* Prevent the global fixed back button from overlapping the page content by
+   adding top padding to the main container. This keeps the columns pushed
+   down while the back button remains fixed above them. */
+#object-container { padding-top: var(--global-back-offset); }
 
 .split-layout.split {
     max-width: 100vw;
@@ -78,19 +108,48 @@ body {
 
 .metadata-column {
     /* Sidebar visually simplified: keep content but present only a thin vertical
-       divider line instead of a boxed panel. Reduce width and remove heavy borders. */
-    flex: 0 0 120px;
-    padding: 20px 12px;
+       divider line instead of a boxed panel. Increase width for clearer visual
+       hierarchy and give more room for the thumbnail + caption. */
+    flex: 0 0 var(--metadata-width);
+    min-width: 140px; /* don't let the sidebar collapse too far */
+    max-width: 320px; /* reasonable upper bound */
+    /* reduce left padding so content sits closer to the viewport edge */
+    padding: 18px 12px 18px 12px;
     border-right: none;
     transition: flex 0.4s, width 0.4s;
     /* Keep the metadata column visible while the middle column scrolls */
     position: -webkit-sticky; /* Safari */
     position: sticky;
-    top: 0;
+    top: var(--global-back-offset);
     align-self: flex-start;
     height: 100vh; /* fill viewport height so it doesn't scroll away */
     overflow: auto; /* allow internal scrolling if metadata content is long */
 }
+
+/* Global back button (positioned above the columns) */
+#global-back-wrap { position: relative; z-index: 1100; }
+#back-button {
+    all: unset; /* reset default button visuals so we can style consistently */
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 6px 10px;
+    color: rgba(0,0,0,0.4); /* black at 40% opacity for text */
+    background: transparent;
+    cursor: pointer;
+    font-family: 'Lekton-Bold', 'Lekton-Regular', sans-serif; /* prefer Bold file if available */
+    font-size: 20px;
+    line-height: 1;
+    text-decoration: none;
+    position: fixed; /* keep above all content */
+    top: 12px;
+    left: 12px;
+    z-index: 1200;
+}
+#back-button:focus {
+    outline: 2px solid rgba(0,0,0,0.12);
+    outline-offset: 2px;
+}
+#back-button:hover { color: rgba(0,0,0,0.65); }
 
 /* Draw a thin vertical line at the right edge of the metadata column instead of a boxed border */
 .metadata-column {
@@ -99,7 +158,7 @@ body {
 .metadata-column::after {
     content: '';
     position: absolute;
-    right: 6px; /* nudge slightly inward from the very edge */
+    right: 6px;  /*nudge slightly inward from the very edge */
     top: 12px;
     bottom: 12px;
     width: 1px;
@@ -112,24 +171,24 @@ body {
     /* Make metadata column completely fixed in the viewport when split layout is active */
     position: fixed;
     left: 0;
-    top: 0;
+    top: var(--global-back-offset);
     bottom: 0;
     z-index: 60;
-    flex: 0 0 100px;
-    width: 100px;
+    flex: 0 0 var(--metadata-width);
+    width: var(--metadata-width);
     overflow: auto; /* allow internal scroll if content is taller than viewport (safer than clipping) */
 }
 
 .split-layout.split #object-image {
-    max-width: 100px;
+    max-width: 160px;
     transition: max-width 0.4s, width 0.4s;
 }
 
 .content-column {
     flex: 1;
     display: flex;
-    padding: 85px;
-    padding-right: 20%;
+    padding: 30px 30px;
+    padding-right: 18%;
     /* Make the content column scroll independently so the left column can remain fixed */
     max-height: 100vh;
     overflow-y: auto;
@@ -138,7 +197,24 @@ body {
 
 /* When the left metadata column is fixed, push the content to the right so it doesn't sit under it */
 .split-layout.split .content-column {
-    margin-left: 100px;
+    /* When metadata column is fixed we make the content column sit to the
+       right of it and take the remaining width. This prevents an awkward
+       centered gap on wide viewports and keeps the content flush next to
+       the left column. */
+    margin-left: var(--metadata-width);
+    box-sizing: border-box;
+    width: calc(100% - var(--metadata-width));
+}
+
+/* When the page is in split mode (context panel open), reduce the left column
+   width so the center content has more room and nothing overlaps. Toggle is
+   driven by the container (#object-container) having class "split". */
+/* When the page is in split mode (context panel open), reduce the left column
+   width so the center content has more room and nothing overlaps. Toggle is
+   driven by the container (#object-container) having class "split". We use
+   --metadata-width-collapsed so this is easy to tune in one place. */
+#object-container.split {
+    --metadata-width: var(--metadata-width-collapsed);
 }
 
 /* When using the split layout (fixed metadata column on the left), avoid making
@@ -152,6 +228,44 @@ body {
     box-sizing: border-box;
 }
 
+/* Also handle split mode when JS toggles the #object-container or #content-display
+   elements to have class "split" (some pages use these IDs instead of .split-layout).
+   This keeps the gallery from going full-bleed and makes the content-column sit
+   flush next to the fixed metadata column. */
+#object-container.split .photo-gallery,
+#content-display.split .photo-gallery {
+    width: auto;
+    margin-left: 0;
+    padding-left: 0;
+    padding-right: 0;
+    box-sizing: border-box;
+}
+
+/* Ensure content column shifts to the right of the fixed metadata column when
+   either the .split-layout or the #object-container/#content-display split
+   classes are used. This prevents the awkward left gap. */
+.split-layout.split .content-column,
+#object-container.split .content-column,
+#content-display.split .content-column {
+    margin-left: var(--metadata-width);
+    box-sizing: border-box;
+    width: calc(100% - var(--metadata-width));
+}
+
+/* Make metadata column fixed when split is active on #object-container or
+   #content-display so behaviour matches .split-layout.split */
+#object-container.split .metadata-column,
+#content-display.split .metadata-column {
+    position: fixed;
+    left: 0;
+    top: var(--global-back-offset);
+    bottom: 0;
+    z-index: 60;
+    flex: 0 0 var(--metadata-width);
+    width: var(--metadata-width);
+    overflow: auto;
+}
+
 /* --- Image & Typography --- */
 #object-image-wrapper {
     margin-bottom: 20px;
@@ -161,6 +275,33 @@ body {
     width: 100%;
     display: block;
     height: auto;
+}
+
+/* Small metadata block under the object image (Object Type / Timeframe) */
+#static-tags {
+    font-size: 0.9rem; /* ~17px when base is 20px */
+    color: #222;
+    margin-top: 6px;
+}
+#static-tags p {
+    margin: 4px 0;
+    line-height: 1.2;
+    font-weight: 400;
+}
+#static-tags p strong {
+    font-weight: 600; /* keep label readable */
+    margin-right: 6px;
+    font-size: 0.9em;
+}
+#static-tags span {
+    color: #111;
+    font-size: 0.9 em;
+}
+
+/* Slightly smaller when the left metadata column collapses */
+#object-container.split #static-tags,
+.split-layout.split #static-tags {
+    font-size: 0.8rem;
 }
 
 /* Photo gallery (thumbnails) styles */
@@ -311,19 +452,65 @@ body {
     flex-direction: column;
     width: 100%;
     flex: 1 1 auto; /* allow it to grow to fill available content-column space */
+    max-width: 900px; /* keep measure comfortable for long-form reading */
+    margin: 0 auto;
 }
 
 /* Subsection titles and dividers inside the description column */
 .subsection { margin-bottom: 28px; }
 .subsection-title {
-    font-family: 'Blur Medium', sans-serif;
-    font-size: 1.3em;
+    font-family: 'Blur Medium', 'FramesPartOne-Bold', sans-serif;
+    font-size: 1.6em;
+    letter-spacing: 0.6px;
     margin: 0 0 8px 0;
+    text-transform: none;
 }
 .divider {
-    height: 2px;
+    height: 3px;
     background: #000;
-    margin: 8px 0 16px 0;
+    /* tightened spacing: reduce bottom gap between divider and content/buttons */
+    margin: 12px 0 8px 0;
+}
+
+#object-title {
+    font-family: 'Blur Light', 'FramesPartOne-Bold', sans-serif;
+    /* responsive title size so it scales but stays bounded */
+    font-size: clamp(20px, 3.5vw, 40px);
+    line-height: 1.05;
+    margin: 8px 0 12px 0;
+    letter-spacing: -1px;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+
+/* Align object title with the Description subsection toggle when the
+   layout shows the left metadata column and the content column side-by-side.
+   The content column uses 30px top padding; the metadata column uses 18px, so
+   increase the title's top margin slightly in split mode so it lines up with
+   the Description button. This only applies when the container has the
+   "split" class (two-column layout). */
+.split-layout.split #object-title,
+#object-container.split #object-title {
+    margin-top: 12px; /* tuned to visually align with .subsection-toggle */
+}
+
+/* Smaller title when left metadata column collapses in split mode */
+#object-container.split .metadata-column #object-title {
+    font-size: clamp(16px, 3.2vw, 28px);
+    line-height: 1.02;
+}
+
+#object-image-wrapper img {
+    display: block;
+    
+}
+
+#description-text {
+    font-size: 18px;
+    line-height: 1.2;
+    color: #111;
+    text-align: left;
 }
 .eyewitness-contents, .sources-contents {
     font-size: 0.95em;
@@ -491,25 +678,39 @@ h1 {
 
 .empasisc {
     font-family: 'Blur Light', sans-serif;
-    font-size: 25px;
+    font-size: 20px;
 }
 /* --- Filter Buttons --- */
 #filter-buttons-container {
-    margin: 20px 0;
+    /* tighten vertical spacing around filter buttons so they sit closer to the divider */
+    margin: 2px 0 12px 0;
 }
 .filter-button {
     background: transparent;
-    border: 2px solid #000;
-    padding: 8px 15px;
+    -webkit-appearance: none;
+    appearance: none;
+    border: none; /* remove visible border */
+    box-shadow: none;
     margin-right: 5px;
     margin-bottom: 5px;
     cursor: pointer;
     font-weight: bold;
+    font-size: 0.56em;
     text-transform: uppercase;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, transform 0.12s;
 }
 .filter-button:hover {
-    background-color: #ddd; /* Subtle hover effect */
+    background-color: rgba(0,0,0,0.04); /* subtle hover */
+    transform: translateY(-1px);
+}
+
+/* Remove Firefox inner focus border */
+.filter-button::-moz-focus-inner { border: 0; padding: 0; }
+
+/* Visible, accessible focus style */
+.filter-button:focus {
+    outline: 3px solid rgba(0,0,0,0.12);
+    outline-offset: 2px;
 }
 
 /* --- Contextual Highlighting (The key CSS for your feature) --- */

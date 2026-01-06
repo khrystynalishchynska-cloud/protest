@@ -133,7 +133,7 @@ function renderResults(list){
   const img = document.createElement('img'); img.alt = obj.name || ''; img.loading = 'lazy'; img.className = 'lazy-img';
   // fade in when loaded to avoid layout shift perception
   img.addEventListener('load', () => { img.classList.add('img-loaded'); });
-  img.src = obj.image_filename || (obj.images && obj.images[0]) || 'images/1-264.jpg';
+  img.src = obj.image_filename || (obj.images && obj.images[0]) || 'images/umbrella.jpg';
       // image only in grid — keep original aspect ratio (width fixed by grid column)
       link.appendChild(img);
       item.appendChild(link);
@@ -157,7 +157,7 @@ function renderResults(list){
   thumb.alt = obj.name || 'thumbnail';
   thumb.loading = 'lazy';
   thumb.addEventListener('load', () => { thumb.classList.add('img-loaded'); });
-  thumb.src = obj.image_filename || (obj.images && obj.images[0]) || 'images/1-264.jpg';
+  thumb.src = obj.image_filename || (obj.images && obj.images[0]) || 'images/umbrella.jpg';
 
     const meta = document.createElement('div');
     meta.className = 'result-meta';

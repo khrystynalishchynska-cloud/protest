@@ -13,6 +13,8 @@
 :root {
     /* site-wide gutter (used for page margins and paddings). Desktop override applied via media query below */
     --site-gutter: 10px;
+    /* site background color used across components */
+    --site-bg: #f0f0f0;
     /* metadata column width (used to offset content when split) */
     --metadata-width: 220px;
     /* when the page enters split mode (context panel opens) this value will be used
@@ -228,6 +230,14 @@ body {
     box-sizing: border-box;
 }
 
+/* Subsection toggle: when a subsection is collapsed (aria-expanded="false")
+   use the lighter display font so it visually differs from the open state. The
+   open state (aria-expanded="true") keeps the existing styling. */
+.subsection-toggle[aria-expanded="false"]{
+    font-family: 'Blur Light', 'Blur Regular', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 400;
+}
+
 /* Also handle split mode when JS toggles the #object-container or #content-display
    elements to have class "split" (some pages use these IDs instead of .split-layout).
    This keeps the gallery from going full-bleed and makes the content-column sit
@@ -279,7 +289,7 @@ body {
 
 /* Small metadata block under the object image (Object Type / Timeframe) */
 #static-tags {
-    font-size: 0.9rem; /* ~17px when base is 20px */
+    font-size: 1rem; /* ~17px when base is 20px */
     color: #222;
     margin-top: 6px;
 }
@@ -467,19 +477,19 @@ body {
 }
 
 /* Subsection titles and dividers inside the description column */
-.subsection { margin-bottom: 28px; }
+.subsection { margin: 0; }
 .subsection-title {
     font-family: 'Blur Medium', 'FramesPartOne-Bold', sans-serif;
     font-size: 1.6em;
     letter-spacing: 0.6px;
-    margin: 0 0 8px 0;
+    margin: 0;
     text-transform: none;
 }
 .divider {
     height: 3px;
     background: #000;
-    /* tightened spacing: reduce bottom gap between divider and content/buttons */
-    margin: 12px 0 8px 0;
+    /* remove extra margins so subsections sit flush */
+    margin: 0;
 }
 
 #object-title {
@@ -503,6 +513,20 @@ body {
 .split-layout.split #object-title,
 #object-container.split #object-title {
     margin-top: 12px; /* tuned to visually align with .subsection-toggle */
+}
+
+/* When the layout shows columns side-by-side, nudge the description column
+   so the first subsection lines up vertically with the object title. This
+   keeps the Description toggle and object title at the same height. */
+.split-layout.split .description-block,
+#object-container.split .description-block,
+#content-display.split .description-block {
+    /* Remove extra top padding so the first subsection lines up with
+       the object title (object title uses its own top margin in split mode).
+       Content column already provides top padding; zero here ensures
+       vertical alignment between columns. */
+    padding-top: 0;
+    box-sizing: border-box;
 }
 
 /* Smaller title when left metadata column collapses in split mode */
@@ -540,6 +564,45 @@ body {
     padding-top: 0;
     padding-bottom: 0;
 }
+
+/* Sticky stacking behaviour: make each .subsection act as a sticky unit
+   (header + body) so later sections scroll over earlier ones. We add
+   increasing z-index in DOM order so the following section covers the
+   previous one. If a subsection body is taller than available viewport
+   space, JS will add .non-sticky to disable sticky positioning so the
+   full contents can be scrolled into view. */
+.description-block .subsection {
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: calc(var(--global-back-offset, 56px));
+    z-index: 10; /* base z-index; increased per-order below */
+    /* use site background so header and body read as one flat plane */
+    background: var(--site-bg);
+    padding-top: 0;
+    padding-bottom: 0;
+}
+.description-block .subsection .subsection-title,
+.description-block .subsection .subsection-toggle {
+    background: var(--site-bg);
+}
+.description-block .subsection .subsection-body {
+    background: var(--site-bg);
+    padding: 0; /* remove internal vertical padding so sections sit flush */
+}
+/* increase stacking order so later sections cover earlier ones */
+.description-block .subsection:nth-of-type(1){ z-index: 10; }
+.description-block .subsection:nth-of-type(2){ z-index: 20; }
+.description-block .subsection:nth-of-type(3){ z-index: 30; }
+.description-block .subsection:nth-of-type(4){ z-index: 40; }
+.description-block .subsection:nth-of-type(5){ z-index: 50; }
+
+/* Non-sticky fallback (applied by JS when subsection body is too tall) */
+.description-block .subsection.non-sticky{
+    position: static !important;
+}
+
+/* Ensure collapsed subsections are not sticky (they should take no space) */
+.description-block .subsection.collapsed{ position: static; }
 
 /* Toggle button inside subsection title */
 .subsection-toggle {
@@ -681,14 +744,15 @@ h1 {
 }
 
 .strong-emphasis {
-    font-weight: bold;
-    font-style: italic;
-    text-decoration: underline;
+    font-family: 'Blur medium', sans-serif;
+    font-size: 20px;
 }
 
 .empasisc {
-    font-family: 'Blur Light', sans-serif;
+    font-family: 'Blur medium', sans-serif;
     font-size: 20px;
+    text-decoration: underline;
+    color: blue;
 }
 /* --- Filter Buttons --- */
 #filter-buttons-container {
@@ -960,6 +1024,22 @@ h1 {
     font-family: 'Lekton-Regular';
     src: url('fonts/Lekton-Regular.ttf') format('truetype');
 }
+
+/* Fixed site brand in top-left */
+.site-brand{
+    position:fixed;
+    top:12px;
+    left:14px;
+    z-index:3000;
+    font-family: 'Blur Light', sans-serif;
+    font-size:50px;
+    line-height:1;
+    color:#000;
+    pointer-events:none; /* non-interactive */
+    text-transform:none;
+    letter-spacing:0.5px;
+}
+@media (max-width:520px){ .site-brand{ font-size:34px; left:10px; top:8px; } }
 
 
 

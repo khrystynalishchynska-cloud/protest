@@ -69,10 +69,65 @@ function renderObjectPage(data) {
     renderExtraSections(data);
     // Initialize collapsible subsections after rendering content
     setupCollapsibles();
+    // Align description column with object title when columns are side-by-side
+    // and ensure sticky calculations run after layout.
+    requestAnimationFrame(() => {
+        alignDescriptionWithTitle();
+        adjustSubsectionStickiness();
+    });
     
-    document.getElementById('type-tag').textContent = data.categories_object_type?.join(', ') || '';
-    document.getElementById('timeframe-tag').textContent = data.categories_timeframe?.join(', ') || '';
+    document.getElementById('type-tag').textContent = (data.categories_object_type && data.categories_object_type.join(', ')) || '';
+    document.getElementById('timeframe-tag').textContent = (data.categories_timeframe && data.categories_timeframe.join(', ')) || '';
 }
+
+// Align the top of the description block with the object title when the
+// layout shows columns side-by-side. This measures the title's position
+// relative to the content column and applies a matching margin-top to the
+// description block. It only runs on wide viewports to avoid interfering
+// with the single-column mobile layout.
+function alignDescriptionWithTitle(){
+    const title = document.getElementById('object-title');
+    const desc = document.getElementById('description-block');
+    const content = document.querySelector('.content-column');
+    const meta = document.querySelector('.metadata-column');
+    if(!title || !desc || !content) return;
+
+    // Only align when metadata column is visible alongside content.
+    const isSideBySide = window.innerWidth >= 900 && meta && getComputedStyle(meta).display !== 'none';
+    if(!isSideBySide){
+        desc.style.marginTop = '';
+        return;
+    }
+
+    // Preferred calculation: use viewport coordinates so fixed/sticky positions
+    // are handled consistently. This is more robust across browsers/layout modes.
+    const titleRect = title.getBoundingClientRect();
+    const contentRect = content.getBoundingClientRect();
+    let desired = Math.round(titleRect.top - contentRect.top);
+    if(desired < 0) desired = 0;
+
+    // Apply as margin-top so it doesn't affect layout flow of other elements
+    desc.style.marginTop = desired + 'px';
+
+    // Re-run after images may have loaded or layout settled (helps on slower devices)
+    setTimeout(() => {
+        const titleRect2 = title.getBoundingClientRect();
+        const contentRect2 = content.getBoundingClientRect();
+        const desired2 = Math.max(0, Math.round(titleRect2.top - contentRect2.top));
+        if (Math.abs(desired2 - desired) > 2) {
+            desc.style.marginTop = desired2 + 'px';
+            if(window.__debugAlign) console.log('alignDescriptionWithTitle: adjusted after timeout', {desired, desired2});
+        }
+    }, 260);
+
+    if(window.__debugAlign){
+        console.log('alignDescriptionWithTitle:', { windowWidth: window.innerWidth, titleRectTop: titleRect.top, contentRectTop: contentRect.top, desired });
+    }
+}
+
+// Re-run alignment on resize/orientation changes with debounce
+window.addEventListener('resize', debounce(() => { alignDescriptionWithTitle(); adjustSubsectionStickiness(); }, 120));
+window.addEventListener('orientationchange', () => setTimeout(() => { alignDescriptionWithTitle(); adjustSubsectionStickiness(); }, 200));
 
 // --- 4. COLLAPSIBLE SUBSECTIONS ---
 function setupCollapsibles() {
@@ -128,6 +183,48 @@ function setupCollapsibles() {
         });
     });
 }
+
+// Measure subsections and disable sticky positioning for any section whose
+// body is taller than the available viewport area. This ensures the full
+// contents can be scrolled into view instead of being clipped by sticky.
+function adjustSubsectionStickiness(){
+    const subs = document.querySelectorAll('.description-block .subsection');
+    if(!subs || subs.length === 0) return;
+
+    // compute a safe top offset matching the CSS top used for sticky
+    const topOffset = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--global-back-offset')) || 56;
+    const safeViewport = window.innerHeight - topOffset - 20; // 20px breathing room
+
+    subs.forEach(s => {
+        s.classList.remove('non-sticky');
+        // collapsed sections are static and take no space
+        if (s.classList.contains('collapsed')) return;
+        const body = s.querySelector('.subsection-body');
+        if(!body) return;
+        const bodyHeight = body.scrollHeight;
+        if(bodyHeight > safeViewport){
+            s.classList.add('non-sticky');
+        }
+    });
+}
+
+// Run the adjustment after content renders and on viewport changes.
+window.addEventListener('resize', debounce(adjustSubsectionStickiness, 120));
+window.addEventListener('orientationchange', () => setTimeout(adjustSubsectionStickiness, 180));
+window.addEventListener('load', adjustSubsectionStickiness);
+
+// small debounce helper
+function debounce(fn, wait){
+    let t;
+    return function(...args){ clearTimeout(t); t = setTimeout(()=> fn.apply(this,args), wait); };
+}
+
+// Re-run after collapsible transitions so measurements are accurate
+document.addEventListener('transitionend', (e) => {
+    if(e.target && e.target.classList && e.target.classList.contains('subsection-body')){
+        adjustSubsectionStickiness();
+    }
+});
 
 function renderExtraSections(data) {
     // Eyewitness stories
@@ -590,17 +687,17 @@ function openLightbox(images, startIndex = 0, baseCaption = '') {
     const onPrev = () => showIndex(lb._state.index - 1);
     const onNext = () => showIndex(lb._state.index + 1);
 
-    lbClose?.addEventListener('click', onClose);
-    lbBackdrop?.addEventListener('click', onClose);
-    lbPrev?.addEventListener('click', onPrev);
-    lbNext?.addEventListener('click', onNext);
+    if (lbClose) lbClose.addEventListener('click', onClose);
+    if (lbBackdrop) lbBackdrop.addEventListener('click', onClose);
+    if (lbPrev) lbPrev.addEventListener('click', onPrev);
+    if (lbNext) lbNext.addEventListener('click', onNext);
     document.addEventListener('keydown', onKey);
 
     // store cleanup references on the element so closeLightbox can remove listeners
     lb._cleanup = { onClose, onKey, onPrev, onNext };
 
     // Accessibility: focus on close button
-    lbClose?.focus();
+    if (lbClose && typeof lbClose.focus === 'function') lbClose.focus();
 }
 
 function closeLightbox() {

@@ -1,13 +1,43 @@
 {
   "byId": {
+    "1": { "col": 1, "row": 1, "colSpan": 1 },
+    "8": { "col": 5, "row": 1, "colSpan": 1 },
+    "9": { "col": 9, "row": 1, "colSpan": 1 },
+
     "object-123": {
-      "col": 4,
+      "col": 3,
+      "row": 2,
       "colSpan": 2,
-      "row": 1,
       "offsetX": 0,
       "offsetY": -8,
       "locked": true
-    }
+    },
+    "13": { "col": 7, "row": 2, "colSpan": 1 },
+
+    "15": { "col": 2, "row": 3, "colSpan": 1 },
+    "18": { "col": 6, "row": 3, "colSpan": 1 },
+
+    "3":  { "col": 0, "row": 4, "colSpan": 1 },
+    "10": { "col": 4, "row": 4, "colSpan": 1 },
+    "17": { "col": 8, "row": 4, "colSpan": 1 },
+
+    "12": { "col": 2, "row": 5, "colSpan": 1 },
+    "4":  { "col": 6, "row": 5, "colSpan": 1 },
+
+    "14": { "col": 1, "row": 6, "colSpan": 1 },
+    "7":  { "col": 5, "row": 6, "colSpan": 1 },
+    "5":  { "col": 9, "row": 6, "colSpan": 1 },
+
+    "16": { "col": 3, "row": 7, "colSpan": 1 },
+    "11": { "col": 7, "row": 7, "colSpan": 1 },
+
+    "21": { "col": 2, "row": 8, "colSpan": 1 },
+    "19": { "col": 6, "row": 8, "colSpan": 1 },
+
+    "6":  { "col": 4, "row": 9, "colSpan": 1 },
+    "20": { "col": 8, "row": 9, "colSpan": 1 },
+    
+    "2":  { "col": 5, "row": 10, "colSpan": 1 }
   },
   "bySrc": {
     "images/1-264.jpg": {
@@ -15,11 +45,5 @@
       "colSpan": 2,
       "row": 0
     }
-  },
-  "meta": {
-    "version": 1,
-    "canvasCols": 36,
-    "gutter": 20,
-    "notes": "Edit entries in byId (preferred) or bySrc. Use col (0-based), colSpan, optional row or offsetX/offsetY. Save to repo to make placements persistent."
   }
 }

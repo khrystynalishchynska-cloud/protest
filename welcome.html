@@ -50,7 +50,7 @@
   .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
   .tag{display:inline-block;padding:4px 8px;border-radius:5px;font-size:22px;color:#000000}
   .tag.name{background:#f8f162}    /* blue */
-  .tag.country{background:#849e15} /* green */
+  .tag.country{background:#b4d32b} /* green */
   .tag.type{background:#f76f54}    /* orange */
   .tag.cause{background:#fbb28b}   /* red */
   .tag.clickable-tag{cursor:pointer;opacity:0.95}
@@ -60,8 +60,24 @@
   #list-controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
   #list-controls .list-search{flex:1;min-width:160px;padding:8px 10px;border-radius:6px;border:1px solid rgba(0,0,0,0.08);font-size:15px}
   .tag-toggles{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-  .tag-toggle{display:inline-flex;align-items:center;gap:8px;background:#fff;padding:6px 10px;border-radius:999px;border:1px solid rgba(0,0,0,0.06);cursor:pointer;font-size:13px}
-  .tag-toggle input{display:none}
+  /* Make the tag-toggle labels minimal (no background or border). The checkbox
+     itself becomes the visible affordance: a black square with a white check when
+     checked. */
+  .tag-toggle{display:inline-flex;align-items:center;gap:8px;background:transparent;padding:6px 10px;border-radius:999px;border:0;cursor:pointer;font-size:13px;color:#000}
+  /* Keep the active state minimal too: transparent background and black text */
+  .tag-toggle.active{background:transparent;color:#000;border-color:transparent;box-shadow:none}
+  .tag-toggle input{
+    -webkit-appearance:none;appearance:none;
+    display:inline-block;width:18px;height:18px;margin-right:8px;vertical-align:middle;cursor:pointer;border-radius:4px;border:0;background:transparent;box-shadow:none;
+    background-repeat:no-repeat;background-position:center;background-size:12px;
+  }
+  /* When checked, render a solid black box with a white checkmark (inline SVG). */
+  .tag-toggle input:checked{
+    
+    background-image:url("data:image/svg+xml;utf8,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2024%2024%22%3E%3Cpath%20fill=%22%23fff%22%20d=%22M20.285%206.708l-11.39%2011.39-5.18-5.18%201.414-1.414%203.766%203.766%209.976-9.976z%22/%3E%3C/svg%3E");
+  }
+  /* keyboard focus visible state */
+  .tag-toggle input:focus{outline:2px solid rgba(0,0,0,0.12);outline-offset:2px}
   .tag-toggle.active{background:#000;color:#fff;border-color:transparent}
   /* Photo results grid used when a tag is clicked */
   .photo-results-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
@@ -71,6 +87,46 @@
   </style>
 </head>
 <body>
+  <div class="site-brand">Index of<br>Dissent</div>
+  <style>
+    /* Site brand fixed top-left with no background; per-letter overlap effect */
+    .site-brand{
+      position:fixed;
+      left:18px;
+      top:12px;
+      z-index:2200;
+      font-family: 'Blur Light', 'Blur Regular', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      font-size:50px;
+      line-height:0.9;
+      padding:6px 0; /* no background, keep small padding */
+      color:#000;
+      transition: color .12s ease, transform .12s ease;
+      pointer-events: none; /* allow clicks to pass through to gallery */
+      white-space: pre-line;
+    }
+    /* When the site is in 'list view' we want the brand to participate in normal
+       document flow so the list can sit below it. Toggle a class on <body>
+       (see js/welcome.js) and this rule will switch the brand to static
+       positioning so it occupies space above the list. */
+    body.list-view .site-brand{
+      position:static;
+      left:auto; top:auto;
+      z-index: auto;
+      pointer-events: auto;
+      display:block;
+      margin-bottom: 12px;
+      /* align with main content padding / search box which uses --site-gutter */
+      margin-left: var(--site-gutter);
+      /* ensure it doesn't overflow on very narrow screens */
+      max-width: calc(100% - (var(--site-gutter) * 1));
+      transform: none;
+    }
+    /* Individual character spans so we can toggle color per-letter */
+  .site-brand .brand-char{ display:inline-block; will-change:transform,color,opacity; transition: color .08s ease, transform .08s cubic-bezier(.2,.8,.2,1), opacity .08s ease; color: #000; transform: translateZ(0); }
+  .site-brand .brand-char.overlap{ color: #fff; text-shadow: 0 0 6px rgba(0,0,0,0.45); transform: translateY(-2px) scale(1.02); opacity: 0.98; }
+    /* smaller on small screens */
+    @media (max-width:520px){ .site-brand{ font-size:36px; left:12px; top:8px; } }
+  </style>
   <main>
     <!-- Controls: view toggle, search, filters -->
     <div class="controls-bar" role="region" aria-label="View and filter controls">
@@ -120,5 +176,73 @@
   </div>
   <script src="js/infinite-gallery.js"></script>
   <script src="js/welcome.js"></script>
+  <script>
+  (function(){
+    const brand = document.querySelector('.site-brand');
+    if(!brand) return;
+
+    // Split brand text into per-character spans (preserve <br> nodes)
+    function splitBrandChars(el){
+      const nodes = Array.from(el.childNodes);
+      el.innerHTML = '';
+      nodes.forEach(n => {
+        if(n.nodeType === Node.ELEMENT_NODE && n.tagName === 'BR'){
+          el.appendChild(document.createElement('br'));
+          return;
+        }
+        const text = n.textContent || '';
+        for(let ch of text){
+          const span = document.createElement('span');
+          span.className = 'brand-char';
+          // convert plain spaces to non-breaking spaces so they keep a visible gap
+          // when each character is wrapped in inline-block spans.
+          if (ch === ' ') span.textContent = '\u00A0'; else span.textContent = ch;
+          el.appendChild(span);
+        }
+      });
+    }
+
+    splitBrandChars(brand);
+
+    const chars = Array.from(brand.querySelectorAll('.brand-char'));
+    const imageSelectors = '#infinite-gallery img, #infinite-gallery .card';
+
+    function rectsOverlap(a,b){ return !(b.left > a.right || b.right < a.left || b.top > a.bottom || b.bottom < a.top); }
+
+    function checkOverlap(){
+      try{
+        const imgs = Array.from(document.querySelectorAll(imageSelectors));
+        // filter to visible images to speed up check
+        const visibleImgs = imgs.filter(img => {
+          const r = img.getBoundingClientRect();
+          return !(r.bottom < 0 || r.top > (window.innerHeight||document.documentElement.clientHeight));
+        }).map(i=>i.getBoundingClientRect());
+
+        if(visibleImgs.length === 0){
+          // no images in viewport -> ensure chars are in default state
+          chars.forEach(c => c.classList.remove('overlap'));
+          return;
+        }
+
+        chars.forEach(c => {
+          const r = c.getBoundingClientRect();
+          let overlapped = false;
+          for(let im of visibleImgs){ if(rectsOverlap(r, im)){ overlapped = true; break; } }
+          c.classList.toggle('overlap', overlapped);
+        });
+      }catch(e){ console.warn('brand overlap check failed', e); }
+    }
+
+  // use requestAnimationFrame to schedule checks for smoother, immediate response
+  let scheduled = false;
+  function scheduleCheck(){ if(scheduled) return; scheduled = true; requestAnimationFrame(()=>{ scheduled = false; checkOverlap(); }); }
+  ['scroll','resize','load','orientationchange'].forEach(ev => window.addEventListener(ev, scheduleCheck, {passive:true}));
+  document.addEventListener('DOMContentLoaded', scheduleCheck);
+  const gallery = document.getElementById('infinite-gallery');
+  if(gallery){ const mo = new MutationObserver(scheduleCheck); mo.observe(gallery, { childList:true, subtree:true, attributes:true }); }
+  // run once after layout
+  requestAnimationFrame(checkOverlap);
+  })();
+  </script>
 </body>
 </html>

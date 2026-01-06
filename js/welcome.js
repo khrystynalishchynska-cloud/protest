@@ -73,15 +73,34 @@
         }, 180);
       });
     }
-    toggles.forEach(lbl=>{
-      lbl.addEventListener('click', ()=>{
-        const kind = lbl.getAttribute('data-kind');
-        if(!kind) return;
-        const enabled = !state.tagKindsEnabled[kind];
-        state.tagKindsEnabled[kind] = enabled;
-        if(enabled) lbl.classList.add('active'); else lbl.classList.remove('active');
-        if(state.listMode === 'index') renderTagIndex();
-      });
+    // For each toggle label, look for an embedded checkbox input and bind it.
+    toggles.forEach(lbl => {
+      const kind = lbl.getAttribute('data-kind') || lbl.dataset.kind;
+      if(!kind) return;
+      const cb = lbl.querySelector('input[type="checkbox"]');
+      // initialize label visual state from model
+      const enabled = !!state.tagKindsEnabled[kind];
+      lbl.classList.toggle('active', enabled);
+      if(cb){
+        cb.checked = enabled;
+        cb.addEventListener('change', function(e){
+          const on = !!e.target.checked;
+          state.tagKindsEnabled[kind] = on;
+          lbl.classList.toggle('active', on);
+          if(state.listMode === 'index') renderTagIndex();
+        });
+        // clicking the label should also focus / toggle the checkbox (native behavior),
+        // but keep a fallback in case input isn't clickable.
+        lbl.addEventListener('keydown', function(e){ if(e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); cb.checked = !cb.checked; cb.dispatchEvent(new Event('change')); } });
+      } else {
+        // fallback to old behavior: clicking the label toggles the kind
+        lbl.addEventListener('click', ()=>{
+          const on = !state.tagKindsEnabled[kind];
+          state.tagKindsEnabled[kind] = on;
+          lbl.classList.toggle('active', on);
+          if(state.listMode === 'index') renderTagIndex();
+        });
+      }
     });
   }
 
@@ -253,6 +272,10 @@
 
   function toggleView(which){
     state.view = which;
+    // Add a body class so CSS can switch the brand out of fixed positioning
+    // when the list view is active. This keeps the brand in the document flow
+    // so the list sits beneath it.
+    try{ document.body.classList.toggle('list-view', which === 'list'); }catch(e){}
     const gallery = $('#infinite-gallery');
     const list = $('#list-view');
     const gbtn = $('#btn-gallery') || $('#btn-gallery-float');

@@ -1,6 +1,38 @@
 // Global variable to hold ALL protest objects, accessible by all functions
 let ALL_PROTEST_DATA = [];
 
+// Utility: parse CSS time (e.g. "700ms" or "0.7s") into milliseconds (number)
+function parseTimeToMs(t) {
+    if (!t) return 0;
+    const s = String(t).trim();
+    if (s.endsWith('ms')) return parseFloat(s);
+    if (s.endsWith('s')) return parseFloat(s) * 1000;
+    return parseFloat(s) || 0;
+}
+
+function getCssVarMs(name, fallbackMs) {
+    try {
+        const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+        const parsed = parseTimeToMs(v);
+        return parsed > 0 ? parsed : (fallbackMs || 0);
+    } catch (e) { return fallbackMs || 0; }
+}
+
+function getCssVarPx(name, fallbackPx) {
+    try {
+        const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+        return parseFloat(v) || fallbackPx || 0;
+    } catch (e) { return fallbackPx || 0; }
+}
+
+// Ensure no hero-mode classes are present by default; keep the standard
+// three-column layout (metadata, content, context) active.
+try {
+    if (typeof document !== 'undefined' && document.getElementById && document.getElementById('object-image')) {
+        document.body.classList.remove('hero-mode', 'compact-hero', 'hero-animating');
+    }
+} catch (e) { /* silent fallback */ }
+
 // --- 1. CORE DATA FETCH AND INITIALIZATION ---
 (async () => {
     const descriptionText = document.getElementById('description-text');
@@ -69,13 +101,33 @@ function renderObjectPage(data) {
     renderExtraSections(data);
     // Initialize collapsible subsections after rendering content
     setupCollapsibles();
-    // Align description column with object title when columns are side-by-side
+    // Align description column with the object image when columns are side-by-side
     // and ensure sticky calculations run after layout.
     requestAnimationFrame(() => {
-        alignDescriptionWithTitle();
+        alignDescriptionWithImage();
         adjustSubsectionStickiness();
     });
     
+    // Default behavior: keep three-column layout (metadata, content, context).
+    try {
+        // Remove any hero-mode related classes if present and ensure the
+        // context panel is closed by default. We keep the left metadata and
+        // center content visible; the right context panel opens only via
+        // user interaction (togglePanel).
+        document.body.classList.remove('hero-mode', 'compact-hero', 'hero-animating');
+        const contentCol = document.querySelector('.content-column');
+        if (contentCol) contentCol.classList.remove('hidden-by-hero');
+        const oc = document.getElementById('object-container'); if (oc) oc.classList.remove('split');
+        const panel = document.getElementById('context-panel');
+        if (panel) {
+            panel.classList.remove('active','compact','expanded');
+            panel.style.display = 'none';
+            panel.setAttribute('aria-hidden','true');
+            // clear any leftover content
+            const panelContent = document.getElementById('context-panel-content'); if (panelContent) panelContent.innerHTML = '';
+        }
+    } catch (e) { console.warn('layout init failed', e); }
+
     document.getElementById('type-tag').textContent = (data.categories_object_type && data.categories_object_type.join(', ')) || '';
     document.getElementById('timeframe-tag').textContent = (data.categories_timeframe && data.categories_timeframe.join(', ')) || '';
 }
@@ -125,9 +177,57 @@ function alignDescriptionWithTitle(){
     }
 }
 
+// Align the top of the description block with the top of the object image
+// when the layout shows the metadata and content columns side-by-side.
+// This is similar to alignDescriptionWithTitle but uses the object's image
+// as the reference baseline (the user asked the Description button to line
+// up with the image top).
+function alignDescriptionWithImage(){
+    const img = document.getElementById('object-image');
+    const desc = document.getElementById('description-block');
+    const content = document.querySelector('.content-column');
+    const meta = document.querySelector('.metadata-column');
+    if(!img || !desc || !content || !meta) return;
+
+    // Only align when metadata column is visible alongside content.
+    const isSideBySide = window.innerWidth >= 900 && getComputedStyle(meta).display !== 'none';
+    if(!isSideBySide){
+        desc.style.marginTop = '';
+        return;
+    }
+
+    // Use viewport coordinates so fixed/sticky positions are handled consistently.
+    const imgRect = img.getBoundingClientRect();
+    const contentRect = content.getBoundingClientRect();
+    let desired = Math.round(imgRect.top - contentRect.top);
+    if(desired < 0) desired = 0;
+
+    desc.style.marginTop = desired + 'px';
+
+    // Re-check after layout settles (images/ fonts/ webfonts may shift things)
+    setTimeout(() => {
+        const imgRect2 = img.getBoundingClientRect();
+        const contentRect2 = content.getBoundingClientRect();
+        const desired2 = Math.max(0, Math.round(imgRect2.top - contentRect2.top));
+        if (Math.abs(desired2 - desired) > 2) {
+            desc.style.marginTop = desired2 + 'px';
+            if(window.__debugAlign) console.log('alignDescriptionWithImage: adjusted after timeout', {desired, desired2});
+        }
+    }, 260);
+
+    if(window.__debugAlign){
+        console.log('alignDescriptionWithImage:', { windowWidth: window.innerWidth, imgRectTop: imgRect.top, contentRectTop: contentRect.top, desired });
+    }
+}
+
+// --- Hero prototype: continuous interpolation — measure hero and compact target then drive CSS variables ---
+// NOTE: Scroll-driven hero animation/controller removed.
+// The previous setupHeroContinuous() implementation has been deleted
+// to disable scrollytelling transforms and continuous per-frame updates.
+
 // Re-run alignment on resize/orientation changes with debounce
-window.addEventListener('resize', debounce(() => { alignDescriptionWithTitle(); adjustSubsectionStickiness(); }, 120));
-window.addEventListener('orientationchange', () => setTimeout(() => { alignDescriptionWithTitle(); adjustSubsectionStickiness(); }, 200));
+window.addEventListener('resize', debounce(() => { alignDescriptionWithImage(); adjustSubsectionStickiness(); }, 120));
+window.addEventListener('orientationchange', () => setTimeout(() => { alignDescriptionWithImage(); adjustSubsectionStickiness(); }, 200));
 
 // --- 4. COLLAPSIBLE SUBSECTIONS ---
 function setupCollapsibles() {
@@ -323,19 +423,16 @@ function setupHighlighting(objectData) {
             const categoryKey = typeClass.replace('highlight-', 'categories_');
             const value = e.target.textContent.trim();
 
-
-            const panelContent = document.getElementById('context-panel-content');
-            document.getElementById('context-panel').classList.add('active');
-            document.getElementById('object-container').classList.add('split');
-
+            // Special-case protest info: show embedded resources or fetch details
             if (categoryKey === 'categories_protest') {
+                // Open the panel first so the layout is correct
+                togglePanel(true);
+                const panelContent = document.getElementById('context-panel-content');
                 if (value === 'Umbrella Revolution') {
-                    // Show the photo essay page in an iframe
                     panelContent.innerHTML = `
                         <iframe src="umbrella-movement.html" style="width:100%;height:600px;border:none;"></iframe>
                     `;
                 } else {
-                    // Fetch protest info from protest_info.json
                     try {
                         const response = await fetch('protest_info.json');
                         if (!response.ok) throw new Error('Could not load protest info');
@@ -356,23 +453,8 @@ function setupHighlighting(objectData) {
                     }
                 }
             } else {
-                // Filter all objects by the clicked tag value
-                const filteredResults = ALL_PROTEST_DATA.filter(obj =>
-                    obj[categoryKey] && obj[categoryKey].map(v => v.trim()).includes(value)
-                );
-                panelContent.innerHTML = `
-                    <h3>Protest objects in: ${value}</h3>
-                    <ul>
-                        ${filteredResults.map(obj => 
-                            `<li>
-                                <a href="object-detail.html?id=${obj.id}" class="context-object-link">
-                                    <strong>${obj.name}</strong>
-                                </a>
-                            </li>`
-                        ).join('')}
-                    </ul>
-                    <p>Showing all objects linked to <strong>${value}</strong>.</p>
-                `;
+                // For normal tags, let the central togglePanel/populateContextPanel handle filtering
+                togglePanel(true, { key: categoryKey, term: value });
             }
         }
     });
@@ -413,23 +495,35 @@ function togglePanel(open, filterData = null) {
     const panel = document.getElementById('context-panel');
     const container = document.getElementById('object-container');
 
+    // Ensure panel is shown/hidden explicitly to avoid visual race conditions
     panel.classList.toggle('active', open);
     container.classList.toggle('split', open);
+    // control content-display split state (right column) separately
+    const contentDisplay = document.getElementById('content-display');
+    if (contentDisplay) contentDisplay.classList.toggle('split', open);
+    // explicit inline display and aria-hidden for robustness
+    if (open) {
+        panel.style.display = '';
+        panel.removeAttribute('aria-hidden');
+    } else {
+        panel.style.display = 'none';
+        panel.setAttribute('aria-hidden', 'true');
+    }
 
     if (open && filterData) {
         populateContextPanel(filterData); 
     } else if (!open) {
         document.getElementById('context-panel-content').innerHTML = '';
-    document.getElementById('context-panel').classList.remove('active');
-    document.getElementById('object-container').classList.remove('split');
-    document.getElementById('content-display').classList.remove('split');
+        document.getElementById('context-panel').classList.remove('active');
+        document.getElementById('object-container').classList.remove('split');
+        if (contentDisplay) contentDisplay.classList.remove('split');
     }
 }
 
 
 function populateContextPanel(filterData) {
     const panelContent = document.getElementById('context-panel-content');
-    console.log('populateContextPanel called with', filterData);
+    if (window.__debug) console.log('populateContextPanel called with', filterData);
     
     // Filter the global data array based on the clicked term (if a specific term was clicked)
     // If a button was clicked, we show ALL terms linked to that category.
@@ -467,7 +561,7 @@ function populateContextPanel(filterData) {
     // Build list of objects that have this category key
         const objectsWithCategory = ALL_PROTEST_DATA.filter(obj => Array.isArray(obj[filterData.key]) && obj[filterData.key].length > 0);
 
-    console.log('objectsWithCategory count:', objectsWithCategory.length);
+    if (window.__debug) console.log('objectsWithCategory count:', objectsWithCategory.length);
 
         if (objectsWithCategory.length === 0) {
             list.innerHTML = '<p>No objects available for this category.</p>';
@@ -481,7 +575,7 @@ function populateContextPanel(filterData) {
 
                 // Click handler: populate detail pane
                 item.addEventListener('click', () => {
-                    console.log('context item clicked:', obj.id, obj.name);
+                    if (window.__debug) console.log('context item clicked:', obj.id, obj.name);
                     // mark active
                     document.querySelectorAll('.context-panel-list .context-item').forEach(i => i.classList.remove('active'));
                     item.classList.add('active');

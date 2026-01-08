@@ -24,6 +24,8 @@
     --content-gutter: 24px;
     /* offset to keep fixed global controls (like the Back button) from overlapping content */
     --global-back-offset: 56px;
+
+    /* (hero variables removed) */
 }
 
 @media (min-width: 900px) {
@@ -118,7 +120,7 @@ body {
     /* reduce left padding so content sits closer to the viewport edge */
     padding: 18px 12px 18px 12px;
     border-right: none;
-    transition: flex 0.4s, width 0.4s;
+    transition: flex 0.4s;
     /* Keep the metadata column visible while the middle column scrolls */
     position: -webkit-sticky; /* Safari */
     position: sticky;
@@ -127,6 +129,8 @@ body {
     height: 100vh; /* fill viewport height so it doesn't scroll away */
     overflow: auto; /* allow internal scrolling if metadata content is long */
 }
+
+/* (previous hero enter/exit animation rules removed) */
 
 /* Global back button (positioned above the columns) */
 #global-back-wrap { position: relative; z-index: 1100; }
@@ -181,10 +185,10 @@ body {
     overflow: auto; /* allow internal scroll if content is taller than viewport (safer than clipping) */
 }
 
-.split-layout.split #object-image {
+/* .split-layout.split #object-image {
     max-width: 160px;
     transition: max-width 0.4s, width 0.4s;
-}
+}*/
 
 .content-column {
     flex: 1;
@@ -194,7 +198,7 @@ body {
     /* Make the content column scroll independently so the left column can remain fixed */
     max-height: 100vh;
     overflow-y: auto;
-    transition: flex 0.4s, width 0.4s;
+    transition: flex 0.4s;
 }
 
 /* When the left metadata column is fixed, push the content to the right so it doesn't sit under it */
@@ -285,6 +289,8 @@ body {
     width: 100%;
     display: block;
     height: auto;
+    /* Image is statically positioned for the simplified hero view. */
+    transform-origin: top left;
 }
 
 /* Small metadata block under the object image (Object Type / Timeframe) */
@@ -459,7 +465,7 @@ body {
 }
 .lightbox-media video {
     width: auto;
-    height: auto;
+        /* transform removed: JS-driven translate/scale is disabled in CSS per user request */
     max-height: 80vh;
 }
 .photo-gallery .thumb.selected {
@@ -503,6 +509,29 @@ body {
     overflow-wrap: break-word;
     white-space: normal;
 }
+
+/* Title styling (scrollytelling transforms removed). Keep transform origin set for
+   any small, safe transform-only effects; avoid advertising layout-related
+   will-change entries here. */
+#object-title {
+    transform-origin: top left;
+    will-change: auto;
+}
+
+/* Ensure image/title don't pick up unexpected transitions elsewhere */
+#object-image,
+#object-title {
+    transition: none !important;
+    will-change: auto !important;
+}
+
+/* Hero-mode removed: keep the layout in the standard three-column state by default.
+   The three columns are: metadata-column (left), content-column (center), and
+   the context panel (right, hidden until activated). */
+
+/* Smooth transition when leaving hero mode: fade in content column */
+.content-column { transition: opacity 360ms ease, transform 360ms ease; }
+.content-column.hidden-by-hero { opacity: 0; pointer-events: none; }
 
 /* Align object title with the Description subsection toggle when the
    layout shows the left metadata column and the content column side-by-side.
@@ -752,7 +781,7 @@ h1 {
     font-family: 'Blur medium', sans-serif;
     font-size: 20px;
     text-decoration: underline;
-    color: blue;
+    color: rgb(192, 14, 136);
 }
 /* --- Filter Buttons --- */
 #filter-buttons-container {
@@ -817,6 +846,10 @@ h1 {
     overflow: hidden; /* Hides content when width is 0 */
     transition: flex 0.4s ease-in-out, width 0.4s ease-in-out;
 }
+
+/* Helper class used in markup to ensure the panel is visually hidden
+   before JS runs. The panel will open via the togglePanel() trigger. */
+#context-panel.hidden-panel { display: none; }
 
 /* Smooth width transition when panel switches between compact (list) and expanded (detail) */
 #context-panel {

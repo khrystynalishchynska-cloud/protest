@@ -497,6 +497,11 @@ function togglePanel(open, filterData = null) {
 
     // Ensure panel is shown/hidden explicitly to avoid visual race conditions
     panel.classList.toggle('active', open);
+    // Also toggle the 'hidden-panel' helper class which may be present in markup
+    // (keeps the panel visually hidden before JS runs). When opening, remove
+    // the class so the panel's CSS transitions can take effect; when closing,
+    // re-add it so the panel is fully hidden for accessibility/fallback.
+    panel.classList.toggle('hidden-panel', !open);
     container.classList.toggle('split', open);
     // control content-display split state (right column) separately
     const contentDisplay = document.getElementById('content-display');

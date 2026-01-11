@@ -644,7 +644,6 @@ body {
 /* Toggle button inside subsection title */
 .subsection-toggle {
     all: unset;
-    cursor:pointer
     font: inherit;
     color: inherit;
     display: inline-block;
@@ -694,12 +693,7 @@ body {
         --section-label-font-size: clamp(0.85rem, 1.6vw, 1.15rem);
     }
 
-    .description-block {
-        position: relative;
-        /* local variables for the section tick and spacing between tick and toggle */
-        --section-tick-height: 3px;
-        --section-tick-gap: 6px; /* space between tick bottom and toggle top */
-    }
+    .description-block { position: relative; }
 
     /* Vertical guide line anchored to the description block (option 2).
        It spans the full height of .description-block so it grows/shrinks
@@ -777,13 +771,10 @@ body {
     }
 
      .description-block .subsection .subsection-toggle {
-          all: unset;
-          /* anchor the toggle absolutely inside the title column so every
-              subsection uses the same reference point (consistent top alignment) */
+         
           position: absolute;
-    left: 50%;                 /* center horizontally within label column */
-    /* place the toggle so it starts below the horizontal tick at section start */
-    top: calc(var(--section-tick-height, 3px) + var(--section-tick-gap, 6px));
+          left: 40%;                 /* center horizontally within label column */
+          top: 1.5em;                  /* small nudge from top; tune (6-12px) to match baseline */
           transform-origin: center top;
           /* translate in normal axes, then rotate so translations are not affected
               by the rotation (keeps placement consistent across subsections) */

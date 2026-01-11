@@ -73,7 +73,10 @@ body {
 /* Prevent the global fixed back button from overlapping the page content by
    adding top padding to the main container. This keeps the columns pushed
    down while the back button remains fixed above them. */
+
 #object-container { padding-top: var(--global-back-offset); }
+ 
+ /* #object-container { padding-top: 18px; }*/
 
 .split-layout.split {
     max-width: 100vw;
@@ -361,7 +364,7 @@ body {
     break-inside: avoid;
     -webkit-column-break-inside: avoid;
     cursor: pointer;
-    border: 2px solid rgba(0,0,0,0.06);
+    border: 1px solid rgba(0,0,0,0.06);
     transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
 }
 
@@ -491,7 +494,7 @@ body {
 .subsection-title {
     font-family: 'Blur Medium', sans-serif;
     font-size: 1.6em;
-    justify-content: top;
+    justify-content: left;
     letter-spacing: 0.6px;
     margin: 0;
     text-transform: none;
@@ -608,7 +611,7 @@ body {
 .description-block .subsection {
     position: -webkit-sticky; /* Safari */
     position: sticky;
-    top: calc(var(--global-back-offset, 56px));
+    /*top: calc(var(--global-back-offset, 56px));*/
     z-index: 10; /* base z-index; increased per-order below */
     /* use site background so header and body read as one flat plane */
     background: var(--site-bg);
@@ -641,7 +644,7 @@ body {
 /* Toggle button inside subsection title */
 .subsection-toggle {
     all: unset;
-    cursor: pointer;
+    cursor:pointer
     font: inherit;
     color: inherit;
     display: inline-block;
@@ -650,19 +653,19 @@ body {
     padding: 4px 2px;
 }
 .subsection-toggle:focus {
-    outline: 2px solid #000;
+    outline: 1px solid #000;
     outline-offset: 2px;
 }
-.subsection-title .subsection-toggle::after {
+ /* .subsection-title .subsection-toggle::after {
     /* Default plus/minus marker (hidden in our rotated-label layout) */
-    content: '−'; /* Unicode minus */
+/*    content: '−';
     float: right;
     font-weight: 700;
-    transition: transform 220ms ease, content 120ms ease;
+    transition: transform 220ms ease, content 120ms ease; 
 }
 .subsection.collapsed .subsection-title .subsection-toggle::after {
     content: '+';
-}
+} */
 
 /* Hide metadata divider (we'll place the line with subsections instead) */
 .metadata-column::after { display: none !important; }
@@ -691,7 +694,12 @@ body {
         --section-label-font-size: clamp(0.85rem, 1.6vw, 1.15rem);
     }
 
-    .description-block { position: relative; }
+    .description-block {
+        position: relative;
+        /* local variables for the section tick and spacing between tick and toggle */
+        --section-tick-height: 3px;
+        --section-tick-gap: 6px; /* space between tick bottom and toggle top */
+    }
 
     /* Vertical guide line anchored to the description block (option 2).
        It spans the full height of .description-block so it grows/shrinks
@@ -711,6 +719,29 @@ body {
         /* raise above subsection backgrounds so the guide is visible */
         z-index: 60;
     }
+ /* short horizontal divider (tick) connecting the left guide to the content */
+    .description-block .subsection::before {
+        content: '';
+        position: absolute;
+        /* align tick start with the vertical guide (same left origin) */
+        left: calc(0px - var(--label-line-offset));
+        /* align vertically with the top of the subsection body/title area */
+        top: 0;
+        height: 3px;                /* thickness of the tick */
+        width: 20px;                /* length (tune to taste) */
+        background: rgba(0,0,0,0.85);
+        z-index: 65;                /* above subsection background but below toggle */
+        pointer-events: none;
+    }
+
+    /* hide tick for collapsed subsections */
+    .description-block .subsection.collapsed::before {
+        display: none;
+    }
+
+    /* if you want the tick to sit a few px lower (matching visual baseline),
+       tweak top (example: top: 6px;) */
+    /* .description-block .subsection::before { top: 6px; } */
 
     .description-block .subsection {
         display: grid;
@@ -721,7 +752,9 @@ body {
         grid-template-rows: 1fr;
         gap: 0;
         align-items: start;
-        padding: 8px 0;
+          /* remove vertical padding so the subsection-body can start at the
+              very top of .description-block */
+          padding: 0;
         background: var(--site-bg);
         position: relative; /* needed so subsection::after positions relative to header block */
     }
@@ -734,35 +767,40 @@ body {
         position: absolute;
         left: 0;
         top: 0;
-        bottom: 0;
+        bottom: auto;
         width: var(--section-label-width);
-        display:flex;
-        align-items:flex-start;
-        justify-content:flex-start;
-        padding: 0 0 0 0;
+        display: flex;
+        align-items: flex-start;
+        /* center rotated label horizontally within the title column */
+        justify-content: center;
+        padding: 0;
     }
 
-    .description-block .subsection .subsection-toggle {
-        all: unset;
-        position: absolute;
-        /* place the rotated label so its leftmost edge aligns with the
-           left edge of the subsection (i.e., the left edge of the label column) */
-        left: 0;
-        top: 50%;
-        writing-mode: horizontal-tb;
-        /* rotate then vertically center via translateY */
-        transform: rotate(90deg) translateY(-50%);
-        transform-origin: left center;
-        white-space: nowrap;
-        cursor: pointer;
-        font-family: 'Blur Medium', 'FramesPartOne-Bold', sans-serif;
-        /* use a responsive variable so it's easy to tweak */
-        font-size: var(--section-label-font-size);
-        letter-spacing: 0.4px;
-        padding: 4px 2px 4px 0;
-        line-height: 1;
-        z-index: 70; /* keep above guide/ticks */
-    }
+     .description-block .subsection .subsection-toggle {
+          all: unset;
+          /* anchor the toggle absolutely inside the title column so every
+              subsection uses the same reference point (consistent top alignment) */
+          position: absolute;
+    left: 50%;                 /* center horizontally within label column */
+    /* place the toggle so it starts below the horizontal tick at section start */
+    top: calc(var(--section-tick-height, 3px) + var(--section-tick-gap, 6px));
+          transform-origin: center top;
+          /* translate in normal axes, then rotate so translations are not affected
+              by the rotation (keeps placement consistent across subsections) */
+          transform: translateX(-50%) rotate(90deg);
+          writing-mode: horizontal-tb;
+          white-space: nowrap;
+          cursor: pointer;
+          font-family: 'Blur Medium', sans-serif;
+          font-size: var(--section-label-font-size);
+          letter-spacing: 0.4px;
+          margin: 0;
+          padding: 0;
+          line-height: 1;
+          z-index: 70; /* keep above guide/ticks */
+          display: inline-block;
+          
+     }
 
     .description-block .subsection .subsection-body {
         /* occupy the primary grid cell at the top so the content begins
@@ -773,22 +811,26 @@ body {
         margin-top: 0;
     }
 
-    /* Small tick that intersects the vertical line at each subsection header. */
+    /* Normalize first-child spacing so different subsection bodies don't
+       start at different vertical offsets (prevents headings/images/etc.
+       from pushing the visual start down). This enforces a consistent
+       baseline across subsections on desktop split layouts. */
+    .description-block .subsection .subsection-body > *:first-child {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+    }
+
+    /* remove horizontal tick connectors at each subsection header */
     .description-block .subsection::after {
-        content: '';
-        position: absolute;
-        /* align tick at the same x-position as the guide (left of label column)
-           and extend it rightwards so it visually connects to the rotated label */
-        left: calc(0px - var(--label-line-offset));
-        top: 50%;
-        transform: translateY(-50%);
-        width: var(--tick-length); /* tick length (extends right from the guide)
-                                     tweak --tick-length if you want longer/shorter connectors */
-        height: 2px;
-        background: rgba(0,0,0,0.85);
-        pointer-events: none;
-        /* make sure ticks sit above the guide line */
-        z-index: 65;
+        display: none !important;
+        content: none !important;
+    }
+
+    /* Move the content column up on desktop split layouts so description
+       aligns with the object title and the top gutter from .content-column
+       doesn't push subsections down. This only affects wide viewports. */
+    .split-layout.split .content-column {
+        padding-top: 0;
     }
 }
 
@@ -820,7 +862,7 @@ body {
     position: relative;
     max-width: 90vw;
     max-height: 90vh;
-    padding: 18px;
+    
     box-sizing: border-box;
     z-index: 1010;
     display: flex;
@@ -1014,15 +1056,18 @@ h1 {
     can use the full remaining width. This allows the #context-panel (flex:1) to expand to the edge. */
 .split-layout.split .content-column { padding-right: 0; }
 
-/* Keep the description block at its previous size (preserve 50% behavior) */
+/* Keep the description block at a smaller size when the context panel opens so
+    the right-hand panel fits in the viewport. Use a flexible split that gives the
+    description comfortable reading width while allowing the context panel to occupy
+    the remaining space. */
 #content-display.split .description-block,
 #content-display.split #description-text {
-    /* Make description wider (90%) when the content area is split with the context panel.
-       This prevents the text from shrinking too much when a context tab/detail is opened. */
-    flex: 0 0 90%;
-    max-width: 90%;
-    padding-right: 20px;
-    box-sizing: border-box;
+     /* Shrink description to the left so the context panel can be fully visible
+         without horizontal scrolling. Adjust this percentage to taste (50-60%). */
+     flex: 0 0 55%;
+     max-width: 55%;
+     padding-right: 20px;
+     box-sizing: border-box;
 }
 
 /* Context panel should take the remaining width of the content area */

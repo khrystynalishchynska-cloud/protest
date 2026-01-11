@@ -227,6 +227,20 @@
           if (e.defaultPrevented) return;
           if (typeof e.button === 'number' && e.button !== 0) return;
           if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+          // Prefer the View Transition API for a smooth shared-element navigation
+          try {
+            const img = a.querySelector('img');
+            if (document.startViewTransition) {
+              // mark the clicked image with a shared transition name; the destination
+              // page should also use the same name on its main image (#object-image)
+              try { if (img) img.style.viewTransitionName = 'shared-object-image'; } catch(err){}
+              e.preventDefault();
+              try{ sessionStorage.setItem('hero-entry', JSON.stringify({ id: a.dataset.id || null, t: Date.now() })); }catch(e){}
+              document.startViewTransition(() => { window.location.href = a.href; });
+              return;
+            }
+          } catch(err) { /* fall through to normal navigation */ }
+          try{ sessionStorage.setItem('hero-entry', JSON.stringify({ id: a.dataset.id || null, t: Date.now() })); }catch(e){}
           window.location.href = a.href;
           e.preventDefault();
         }catch(err){}
@@ -410,9 +424,13 @@
       });
     }
 
-    // Place all items into the gallery. This function is re-runnable on resize.
-    let lastLayoutKey = null;
-    async function placeAll(){
+  // Place all items into the gallery. This function is re-runnable on resize.
+  let lastLayoutKey = null;
+  // latestPlacedSet is exported from placeAll so fallback logic (outside the
+  // function) can inspect which srcs/ids were actually placed. Declared here
+  // to avoid ReferenceError when the fallback runs after placeAll completes.
+  let latestPlacedSet = new Set();
+  async function placeAll(){
       const layout = computeLayout();
       const CANVAS_W = layout.CANVAS_W;
       const CANVAS_H = layout.CANVAS_H;
@@ -686,6 +704,8 @@
         }catch(e){}
         setupAnimations();
       }catch(e){ console.warn('setupAnimations failed', e); }
+      // expose the set of placed keys for the fallback checker
+      try{ latestPlacedSet = placedSet; }catch(e){}
     }
 
   // initial placement (show loading state while we compute layout)
@@ -708,7 +728,7 @@
     // placing all objects that reference that src.
     const placedObjects = new Set();
     const placedSrcs = new Set();
-    placedSet && Array.from(placedSet).forEach(pk => {
+  latestPlacedSet && Array.from(latestPlacedSet).forEach(pk => {
       if (!pk) return;
       if (pk.indexOf('id:') === 0){
         const rest = pk.slice(3);

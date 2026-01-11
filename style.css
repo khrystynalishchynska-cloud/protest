@@ -28,6 +28,56 @@
     /* (hero variables removed) */
 }
 
+/* Hero arrival mode: show only the object's main image + title on first arrival
+   (used with the View Transition API). The rest of the page (description, gallery,
+   context) is hidden until the user scrolls or triggers a reveal. This is a
+   progressive enhancement and respects prefers-reduced-motion. */
+/* body.hero-mode {} (kept as a conceptual group; specific selectors below handle styling) */
+body.hero-mode .content-column,
+body.hero-mode #context-panel {
+    display: none !important;
+    visibility: hidden !important;
+}
+body.hero-mode .metadata-column {
+    position: static !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    padding: 48px 24px !important;
+    height: auto !important;
+    align-items: center;
+    text-align: center;
+    overflow: visible !important;
+}
+body.hero-mode #object-image {
+    max-width: 90vw !important;
+    width: auto !important;
+    height: auto !important;
+    display: block !important;
+    margin: 0 auto 18px !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+    transition: transform 420ms cubic-bezier(.2,.9,.2,1), opacity 320ms ease;
+    will-change: transform, opacity;
+}
+body.hero-mode #object-title {
+    font-size: 28px !important;
+    line-height: 1.1 !important;
+    margin-top: 10px !important;
+    opacity: 1 !important;
+}
+
+/* While animating the reveal we add a helper class; when the content is revealed
+   the body will simply remove .hero-mode and normal layout returns. */
+body.hero-animating #object-image { transform: translateY(-6px) scale(1.01); }
+
+@media (prefers-reduced-motion: reduce) {
+    body.hero-mode #object-image { transition: none !important; }
+}
+
 @media (min-width: 900px) {
     :root { --site-gutter: 10px; }
 }
@@ -327,18 +377,18 @@ body {
     font-size: 0.8rem;
 }
 
-/* Photo gallery (thumbnails) styles */
+/* Photo gallery (thumbnails) styles — CSS Grid based masonry with JS row-span
+   calculation. Grid gives consistent gaps and responsive column control. */
 .photo-gallery {
     margin-top: 30px;
-    /* Column-based masonry: fixed column count on wide viewports; thumbnails
-       preserve their natural height so images maintain original aspect ratios. */
-    --gallery-cols: 6;
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
-    padding: 20px 24px; /* internal gutters so thumbnails don't touch the edge */
-    column-count: var(--gallery-cols);
-    column-gap: 12px;
+    --gallery-cols: 4; /* default: 4 columns on wide/fullscreen */
+    display: grid;
+    grid-template-columns: repeat(var(--gallery-cols), 1fr);
+    grid-auto-rows: auto; /* rows size to content so items do not span multiple rows */
+    gap: 15px; /* consistent gap between images (user requested 15px) */
+    width: 100%;
     box-sizing: border-box;
+    padding: 20px 24px; /* internal gutters so thumbnails don't touch the edge */
     background: transparent;
 }
 
@@ -353,19 +403,42 @@ body {
 }
 
 /* Responsive adjustments: reduce the column count at narrower breakpoints */
-@media (max-width: 1400px) { .photo-gallery { --gallery-cols: 5; } }
+@media (max-width: 1400px) { .photo-gallery { --gallery-cols: 4; } }
 @media (max-width: 1200px) { .photo-gallery { --gallery-cols: 4; } }
 @media (max-width: 980px)  { .photo-gallery { --gallery-cols: 3; } }
 @media (max-width: 700px)  { .photo-gallery { --gallery-cols: 2; } }
+
+/* When a split/context panel is opened we reduce the number of columns */
+.split-layout.split .photo-gallery,
+#content-display.split .photo-gallery,
+#object-container.split .photo-gallery {
+    --gallery-cols: 3;
+    width: auto; /* allow gallery to fit into the content column */
+    margin-left: 0;
+    padding-left: 0;
+    padding-right: 0;
+    box-sizing: border-box;
+}
+
+.photo-gallery .thumb-wrapper {
+    /* Each grid cell; we use flex to bottom-align the image inside the cell */
+    display: flex;
+    align-items: flex-end; /* ensures image bottoms align inside their grid cell */
+    overflow: hidden;
+    border-radius: 2px;
+    box-sizing: border-box;
+    align-self: end; /* anchor the grid item to the bottom of its grid area */
+}
+
 .photo-gallery .thumb {
     width: 100%;
-    display: inline-block;
-    margin: 0 0 12px 0;
-    break-inside: avoid;
-    -webkit-column-break-inside: avoid;
+    height: auto; /* preserve aspect ratio */
+    display: block;
     cursor: pointer;
     border: 1px solid rgba(0,0,0,0.06);
     transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+    object-fit: cover;
+    box-sizing: border-box;
 }
 
 /* Results grid (masonry) — same-width columns, varying heights based on image aspect ratio */
@@ -638,8 +711,50 @@ body {
     position: static !important;
 }
 
-/* Ensure collapsed subsections are not sticky (they should take no space) */
-.description-block .subsection.collapsed{ position: static; }
+/* Ensure collapsed subsections are not sticky (they should take no space).
+    Use position: relative rather than static so the subsection's ::before
+    pseudo-element (the horizontal tick) remains positioned relative to the
+    subsection. Setting to `relative` still disables sticky positioning while
+    preserving the local positioning context for the tick. */
+.description-block .subsection.collapsed{ position: relative; }
+
+/* When a subsection is collapsed, the rotated/absolutely-positioned label
+   must reflow so collapsed labels/toggles stack vertically instead of
+   overlapping other labels. Make the title and the toggle participate in
+   normal flow and remove the rotation/offsets. This keeps collapsed
+   toggles stacked one-after-another in the left label column. */
+.description-block .subsection.collapsed .subsection-title {
+    /* keep the title in-flow (occupies the left label column) so collapsed
+       subsections stack. Use flex centering so rotated toggle aligns nicely. */
+    
+    position: static !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: var(--section-label-width);
+    padding-top: calc(var(--section-label-collapsed-height) / 2);
+    padding-bottom: calc(var(--section-label-collapsed-height) * 2);
+    min-height: var(--section-label-collapsed-height);
+    box-sizing: border-box;
+}
+
+.description-block .subsection.collapsed .subsection-toggle {
+    /* Keep the visual rotation but allow the toggle to participate in
+       normal flow. The transform rotates the label while the container
+       (title) provides the column footprint so multiple collapsed toggles
+       stack without overlapping. */
+    position: static !important;
+    display: inline-block !important;
+    transform: translateX(-40%) rotate(90deg) !important;
+    transform-origin: center center !important;
+    writing-mode: horizontal-tb;
+    white-space: nowrap;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    font-family: 'Blur Light', 'Blur Regular', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 400;
+}
 
 /* Toggle button inside subsection title */
 .subsection-toggle {
@@ -691,6 +806,7 @@ body {
         --tick-length: 16px; /* shorter connector length to match reduced gap */
         /* font size for rotated subsection labels (responsive) */
         --section-label-font-size: clamp(0.85rem, 1.6vw, 1.15rem);
+        --section-label-collapsed-height: 30px;
     }
 
     .description-block { position: relative; }
@@ -711,7 +827,8 @@ body {
         background: rgba(0,0,0,0.85);
         pointer-events: none;
         /* raise above subsection backgrounds so the guide is visible */
-        z-index: 60;
+        /* Increased so the vertical guide sits above rotated labels when collapsed */
+        z-index: 80;
     }
  /* short horizontal divider (tick) connecting the left guide to the content */
     .description-block .subsection::before {
@@ -724,13 +841,15 @@ body {
         height: 3px;                /* thickness of the tick */
         width: 20px;                /* length (tune to taste) */
         background: rgba(0,0,0,0.85);
-        z-index: 65;                /* above subsection background but below toggle */
+        /* raise tick above subsection background and above toggles so it remains visible */
+        z-index: 85;
         pointer-events: none;
     }
 
-    /* hide tick for collapsed subsections */
+    /* keep tick visible for collapsed subsections so the guide/tick remains
+       above stacked rotated toggles (user requested ticks remain visible) */
     .description-block .subsection.collapsed::before {
-        display: none;
+        display: block;
     }
 
     /* if you want the tick to sit a few px lower (matching visual baseline),

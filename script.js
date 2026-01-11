@@ -97,6 +97,7 @@ function renderObjectPage(data) {
     renderFilterButtons(data);
     // Render the photo gallery (uses data.images if present, otherwise falls back to image_filename)
     renderGallery(data);
+    // No JS masonry: let CSS Grid handle rows. Images preserve aspect ratio and won't span rows.
     // Render optional extra sections: eyewitness stories and sources
     renderExtraSections(data);
     // Initialize collapsible subsections after rendering content
@@ -108,23 +109,31 @@ function renderObjectPage(data) {
         adjustSubsectionStickiness();
     });
     
-    // Default behavior: keep three-column layout (metadata, content, context).
+    // Default behavior: decide whether we should enter hero arrival mode
+    // (set by the gallery click). If not, ensure normal three-column layout.
     try {
-        // Remove any hero-mode related classes if present and ensure the
-        // context panel is closed by default. We keep the left metadata and
-        // center content visible; the right context panel opens only via
-        // user interaction (togglePanel).
-        document.body.classList.remove('hero-mode', 'compact-hero', 'hero-animating');
-        const contentCol = document.querySelector('.content-column');
-        if (contentCol) contentCol.classList.remove('hidden-by-hero');
-        const oc = document.getElementById('object-container'); if (oc) oc.classList.remove('split');
-        const panel = document.getElementById('context-panel');
-        if (panel) {
-            panel.classList.remove('active','compact','expanded');
-            panel.style.display = 'none';
-            panel.setAttribute('aria-hidden','true');
-            // clear any leftover content
-            const panelContent = document.getElementById('context-panel-content'); if (panelContent) panelContent.innerHTML = '';
+        const heroActivated = initHeroOnArrival && initHeroOnArrival(data);
+        if (!heroActivated) {
+            // Remove any hero-mode related classes if present and ensure the
+            // context panel is closed by default. We keep the left metadata and
+            // center content visible; the right context panel opens only via
+            // user interaction (togglePanel).
+            document.body.classList.remove('hero-mode', 'compact-hero', 'hero-animating');
+            const contentCol = document.querySelector('.content-column');
+            if (contentCol) contentCol.classList.remove('hidden-by-hero');
+            const oc = document.getElementById('object-container'); if (oc) oc.classList.remove('split');
+            const panel = document.getElementById('context-panel');
+            if (panel) {
+                panel.classList.remove('active','compact','expanded');
+                panel.style.display = 'none';
+                panel.setAttribute('aria-hidden','true');
+                // clear any leftover content
+                const panelContent = document.getElementById('context-panel-content'); if (panelContent) panelContent.innerHTML = '';
+            }
+        } else {
+            // hero mode active: make sure the context panel is hidden
+            const panel = document.getElementById('context-panel');
+            if (panel) { panel.style.display = 'none'; panel.setAttribute('aria-hidden','true'); }
         }
     } catch (e) { console.warn('layout init failed', e); }
 
@@ -175,6 +184,68 @@ function alignDescriptionWithTitle(){
     if(window.__debugAlign){
         console.log('alignDescriptionWithTitle:', { windowWidth: window.innerWidth, titleRectTop: titleRect.top, contentRectTop: contentRect.top, desired });
     }
+}
+
+// --- Hero arrival helpers -------------------------------------------------
+// initHeroOnArrival(data)
+// - Looks for a sessionStorage flag ('hero-entry') set by the gallery click
+//   handler. If present and matching the current object (or empty id), it
+//   activates a compact 'hero-mode' that shows only the main image + title.
+// - Returns true when hero-mode was activated, false otherwise.
+function initHeroOnArrival(data){
+    try{
+        // Allow testing the hero mode via URL param ?hero=1 or by the sessionStorage flag
+        const urlParams = new URLSearchParams(window.location.search);
+        const forced = urlParams.get('hero') === '1';
+        const raw = sessionStorage.getItem('hero-entry');
+        if (!raw && !forced) return false;
+        let payload = null;
+        try { payload = raw ? JSON.parse(raw) : null; } catch(e) { payload = null; }
+        // If payload includes an id and it doesn't match the current object, ignore
+        if (!forced && payload && payload.id && data && String(payload.id) !== String(data.id)){
+            try{ sessionStorage.removeItem('hero-entry'); }catch(e){}
+            return false;
+        }
+        // Respect reduced-motion preference: skip hero if user prefers reduced motion
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+            try{ sessionStorage.removeItem('hero-entry'); }catch(e){}
+            return false;
+        }
+
+    // Activate hero-mode UI
+        document.body.classList.add('hero-mode');
+        const contentCol = document.querySelector('.content-column');
+        if (contentCol) contentCol.classList.add('hidden-by-hero');
+
+        // Reveal triggers: first scroll, wheel, touch, or ArrowDown/PageDown/Space key.
+        let triggered = false;
+        const doReveal = () => { if (triggered) return; triggered = true; revealHero(); };
+        window.addEventListener('scroll', doReveal, { once: true, passive: true });
+        window.addEventListener('wheel', doReveal, { once: true, passive: true });
+        window.addEventListener('touchstart', doReveal, { once: true, passive: true });
+        const onKey = (e) => { if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' '){ doReveal(); window.removeEventListener('keydown', onKey); } };
+        window.addEventListener('keydown', onKey, { passive: true });
+
+        // Auto-reveal after a short timeout so users aren't stuck.
+        document._heroAutoReveal = setTimeout(doReveal, 2400);
+        return true;
+    }catch(e){ console.warn('initHeroOnArrival failed', e); return false; }
+}
+
+function revealHero(){
+    try{
+        if (document._heroAutoReveal){ clearTimeout(document._heroAutoReveal); document._heroAutoReveal = null; }
+        // small animation class to give a subtle lift during reveal
+        document.body.classList.add('hero-animating');
+        // after a short animation, remove hero-mode so normal layout returns
+        const dur = 420;
+        setTimeout(() => {
+            document.body.classList.remove('hero-mode', 'hero-animating');
+            const contentCol = document.querySelector('.content-column');
+            if (contentCol) contentCol.classList.remove('hidden-by-hero');
+            try{ sessionStorage.removeItem('hero-entry'); }catch(e){}
+        }, dur);
+    }catch(e){ console.warn('revealHero failed', e); }
 }
 
 // Align the top of the description block with the top of the object image
@@ -523,6 +594,8 @@ function togglePanel(open, filterData = null) {
         document.getElementById('object-container').classList.remove('split');
         if (contentDisplay) contentDisplay.classList.remove('split');
     }
+
+    // No masonry relayout needed when panel toggles; CSS Grid will reflow automatically
 }
 
 
@@ -832,3 +905,5 @@ function closeLightbox() {
     const firstThumb = document.querySelector('#photo-gallery .thumb');
     if (firstThumb) firstThumb.focus();
 }
+
+/* Masonry helper removed: gallery uses standard CSS Grid flow and images do not set explicit grid-row spans. */

@@ -28,8 +28,38 @@
     /* (hero variables removed) */
 }
 
-/* Hero-mode styles removed: starting fresh. If you reintroduce a hero landing
-   pattern, add its styles here (and keep prefers-reduced-motion in mind). */
+/* Hero-mode styles
+    Minimal rules to support the JS hero lifecycle (hero-init -> hero-active -> hero-revealed).
+    These keep the description/content hidden while the page is in hero mode and
+    animate it in when the hero is revealed. Durations match the JS transitions (1000ms).
+*/
+
+/* Hide the main description column during initial hero states so only the
+    image/title are visible. Also prevent pointer events while hidden. */
+body.hero-init .description-block,
+body.hero-active .description-block {
+     opacity: 0;
+     transform: translateY(12px);
+     pointer-events: none;
+     transition: opacity 360ms ease, transform 360ms ease;
+}
+
+/* When the hero has finished revealing, animate the description into place.
+    Use a slightly longer easing to match the shared-element timing. */
+body.hero-revealed .description-block {
+     opacity: 1;
+     transform: translateY(0);
+     pointer-events: auto;
+     transition: opacity 1000ms cubic-bezier(.2,.9,.2,1), transform 1000ms cubic-bezier(.2,.9,.2,1);
+}
+
+/* Also ensure the content column as a whole remains visually hidden during hero */
+body.hero-init .content-column,
+body.hero-active .content-column {
+     visibility: visible; /* keep scrolling behavior intact, only collapse description */
+}
+
+/* End hero-mode additions */
 
 @media (min-width: 900px) {
     :root { --site-gutter: 10px; }
@@ -49,23 +79,6 @@
     border-radius: 4px;
     z-index: 99999;
     pointer-events: none;
-}
-
-/* View Transitions debugging: slow shared-element animation so it's easier to inspect */
-@supports (view-transition-name: test) {
-    /* Make the image-pair transition slow and smooth for debugging */
-        ::view-transition-image-pair(*) {
-            transition-property: transform, width, height, top, left, opacity;
-            transition-duration: 5000ms !important;
-            transition-timing-function: cubic-bezier(.2,.9,.3,1) !important;
-            transition-delay: 0ms !important;
-        }
-
-    /* Also slow any implicit element transitions for clarity */
-        ::view-transition-old(*), ::view-transition-new(*) {
-            transition-duration: 5000ms !important;
-            transition-timing-function: cubic-bezier(.2,.9,.3,1) !important;
-        }
 }
 
 body {
@@ -569,75 +582,9 @@ body {
     will-change: auto;
 }
 
-/* Ensure the raw image element doesn't pick up unexpected transitions elsewhere */
-#object-image {
-    transition: none !important;
-    will-change: auto !important;
-}
-
-/* Transitions for hero transform approach (real elements are transformed) */
-#object-image-wrapper {
-    transition: transform 520ms cubic-bezier(.2,.9,.2,1);
-    will-change: transform;
-}
+/* Ensure image/title don't pick up unexpected transitions elsewhere */
+#object-image,
 #object-title {
-    transition: transform 520ms cubic-bezier(.2,.9,.2,1);
-    will-change: transform;
-}
-
-/* Initial hero-hidden state (applied in HTML via body.hero-init).
-   Hides the main content and ensures the image+title sit above it so
-   the hero view is the only visible content until reveal. */
-body.hero-init #content-display,
-body.hero-init #context-panel,
-body.hero-init .description-block {
-    opacity: 0;
-    /* start further down so reveal animates as a slide-up */
-    transform: translateY(28px);
-    pointer-events: none;
-}
-
-/* While hero is active (JS-controlled), keep content hidden. */
-body.hero-active #content-display,
-body.hero-active #context-panel,
-body.hero-active .description-block {
-    opacity: 0;
-    transform: translateY(28px);
-    pointer-events: none;
-}
-
-/* Ensure image/title sit above the hidden content while hero is active/init */
-body.hero-init #object-image-wrapper,
-body.hero-init #object-title,
-body.hero-active #object-image-wrapper,
-body.hero-active #object-title {
-    z-index: 1200;
-    position: relative;
-}
-
-/* When hero revealed, restore normal content styles */
-body.hero-revealed #content-display,
-body.hero-revealed #context-panel,
-body.hero-revealed .description-block {
-    opacity: 1;
-    /* slide into place */
-    transform: translateY(0);
-    pointer-events: auto;
-}
-
-/* Smooth slide-up for the description block specifically */
-.description-block {
-    transition: transform 420ms cubic-bezier(.2,.9,.2,1), opacity 420ms ease;
-    will-change: transform, opacity;
-}
-
-/* After the hero is revealed, avoid further top/transform transitions on
-   the metadata elements so subsequent layout changes (like the description
-   sliding up) don't nudge them unexpectedly. This freezes their final
-   visual placement while keeping them in the normal flow. */
-body.hero-revealed .metadata-column #object-image-wrapper,
-body.hero-revealed .metadata-column #object-title,
-body.hero-revealed .metadata-column #static-tags {
     transition: none !important;
     will-change: auto !important;
 }
@@ -1082,31 +1029,20 @@ h1 {
    Uses clamp to scale with viewport while providing sensible min/max sizes.
    Also ensures the title wraps instead of overflowing when the column is narrow. */
 .metadata-column h1 {
-    /* Make the object title visually prominent like the provided mockup.
-       Use a wide clamp so it scales from medium mobile to very large desktop. */
-    font-size: clamp(36px, 8.5vw, 140px);
-    line-height: 0.95;
-    margin: 6px 0 8px 0;
+    /* increased by ~20% from previous values */
+    font-size: clamp(22px, 3.84vw, 33.6px);
+    line-height: 1.05;
+    margin-top: 0;
     word-break: break-word;
     overflow-wrap: break-word;
     hyphens: auto;
-    transition: font-size 0.18s ease, transform 220ms ease;
+    transition: font-size 0.18s ease;
 }
 
 .strong-emphasis {
     font-family: 'Blur medium', sans-serif;
     font-size: 20px;
 }
-
-/* Ensure the small metadata tags sit directly under the object title and
-   have a compact visual style. This places type/timeframe below the title. */
-#static-tags {
-    display: block;
-    margin-top: 6px;
-    font-size: 0.95rem; /* slightly smaller than base */
-    color: #222;
-}
-#static-tags p { margin: 2px 0; }
 
 .empasisc {
     font-family: 'Blur medium', sans-serif;
@@ -1407,60 +1343,6 @@ h1 {
     letter-spacing:0.5px;
 }
 @media (max-width:520px){ .site-brand{ font-size:34px; left:10px; top:8px; } }
-
-
-/* -------------------------------
-   Hero/Pre-scroll overlay styles
-   -------------------------------
-   These styles create a full-viewport overlay that shows a centered
-   image + title before the user scrolls. The JS will clone the real
-   elements into the overlay, animate them to the final positions and
-   then remove the overlay while revealing the page content.
-*/
-.hero-overlay {
-    position: fixed;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 48px;
-    pointer-events: none; /* allow scrolling/clicking through to page if needed */
-    z-index: 2000;
-}
-.hero-overlay .hero-image,
-.hero-overlay .hero-title {
-    position: fixed; /* we'll animate left/top/width/height */
-    transition: transform 520ms cubic-bezier(.2,.9,.2,1),
-                left 520ms cubic-bezier(.2,.9,.2,1),
-                top 520ms cubic-bezier(.2,.9,.2,1),
-                width 520ms cubic-bezier(.2,.9,.2,1),
-                height 520ms cubic-bezier(.2,.9,.2,1),
-                opacity 420ms ease;
-    will-change: left, top, width, height, transform, opacity;
-}
-.hero-overlay .hero-image img{ display:block; width:100%; height:100%; object-fit:contain; }
-.hero-overlay .hero-title { display:flex; align-items:center; justify-content:flex-start; }
-.hero-overlay .hero-title .text { font-family: 'Blur Light', sans-serif; color: #000; }
-
-/* Hidden real content while hero overlay is active */
-body.hero-active .content-column,
-body.hero-active #context-panel {
-    opacity: 0;
-    transform: translateY(18px);
-    pointer-events: none;
-    transition: opacity 420ms ease, transform 420ms ease;
-}
-
-/* When hero is revealed, gently show the content */
-body.hero-revealed .content-column,
-body.hero-revealed #context-panel {
-    opacity: 1;
-    transform: none;
-    pointer-events: auto;
-}
-
-/* A small fade for the overlay when hiding */
-.hero-overlay--hiding { opacity: 0; transition: opacity 420ms ease; }
 
 
 

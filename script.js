@@ -11,59 +11,54 @@ function parseTimeToMs(t) {
 }
 
 function getCssVarMs(name, fallbackMs) {
-        if (fallbackRaw) {
-            try{
-                console.debug('[VT] vt_fallback found, starting FLIP fallback', fallbackRaw);
-                sessionStorage.removeItem('vt_fallback');
-                const fb = JSON.parse(fallbackRaw);
-                // Ensure the target image is present and decoded (renderObjectPage
-                // dispatches object-data-ready after decode, so main image should be ready)
-                const targetImg = document.getElementById('object-image');
-                if (targetImg && fb && fb.rect && fb.src) {
-                    // compute target rect in viewport coords
-                    const targetRect = targetImg.getBoundingClientRect();
-                    const srcRect = fb.rect;
+    try {
+        const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+        const parsed = parseTimeToMs(v);
+        return parsed > 0 ? parsed : (fallbackMs || 0);
+    } catch (e) { return fallbackMs || 0; }
+}
 
-                    console.debug('[VT] FLIP srcRect, targetRect', srcRect, targetRect);
+function getCssVarPx(name, fallbackPx) {
+    try {
+        const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+        return parseFloat(v) || fallbackPx || 0;
+    } catch (e) { return fallbackPx || 0; }
+}
 
-                    // create a floating clone positioned at the source rect
-                    const clone = document.createElement('img');
-                    clone.src = fb.src;
-                    clone.alt = targetImg.alt || '';
-                    clone.style.position = 'fixed';
-                    clone.style.left = srcRect.left + 'px';
-                    clone.style.top = srcRect.top + 'px';
-                    clone.style.width = srcRect.width + 'px';
-                    clone.style.height = srcRect.height + 'px';
-                    clone.style.objectFit = 'cover';
-                    clone.style.zIndex = 120000;
-                    clone.style.borderRadius = '6px';
-                    clone.style.transition = 'none';
-                    clone.style.transformOrigin = '0 0';
-                    document.body.appendChild(clone);
+// Ensure no leftover hero-related classes are present by default; keep the standard
+// three-column layout (metadata, content, context) active.
+try {
+    if (typeof document !== 'undefined' && document.getElementById && document.getElementById('object-image')) {
+        document.body.classList.remove('hero-mode', 'compact-hero', 'hero-animating');
+    }
+} catch (e) { /* silent fallback */ }
 
-                    // compute transform params: translate and scale from source -> target
-                    const dx = Math.round(targetRect.left - srcRect.left);
-                    const dy = Math.round(targetRect.top - srcRect.top);
-                    const scaleX = targetRect.width / srcRect.width;
-                    const scaleY = targetRect.height / srcRect.height;
+/* HERO: use the real page elements (no clones). Apply transforms to the
+   real #object-image-wrapper and #object-title so they visually appear
+   centered and large on load, and then remove those transforms when the
+   user scrolls past the #hero-sentinel so the elements move smoothly into
+   their metadata-column positions. */
+document.addEventListener('object-data-ready', (event) => { (async function(){
+    // If navigation was initiated via startViewTransition on the gallery,
+    // the gallery sets a sessionStorage flag so we can delay heavy hero
+    // initialization until after the browser has painted the target element
+    // and potentially matched it for a View Transition. This avoids racing
+    // with the View Transitions paint/pass where the browser needs the
+    // target element to be in-flow and visible.
+    try{
+        // If the gallery used native View Transitions, we only need a short
+        // double-RAF so the browser can paint the target element for matching.
+        if (sessionStorage.getItem('vt_navigation')){
+            try{ sessionStorage.removeItem('vt_navigation'); }catch(e){}
+            await new Promise(r => requestAnimationFrame(r));
+            await new Promise(r => requestAnimationFrame(r));
+            await new Promise(r => setTimeout(r, 16));
+        }
 
-                    console.debug('[VT] FLIP animate params', { dx, dy, scaleX, scaleY });
-
-                    // animate using Web Animations API for a smooth FLIP
-                    const anim = clone.animate([
-                        { transform: 'translate(0px, 0px) scale(1, 1)', opacity: 1 },
-                        { transform: `translate(${dx}px, ${dy}px) scale(${scaleX}, ${scaleY})`, opacity: 1 }
-                    ], { duration: 1000, easing: 'cubic-bezier(.2,.9,.2,1)', fill: 'forwards' });
-
-                    try { await anim.finished; console.debug('[VT] FLIP animation finished'); } catch(e) { /* ignore */ }
-                    // ensure target image visible (some layouts hide it briefly)
-                    try { targetImg.style.visibility = ''; targetImg.style.opacity = '1'; } catch(e){}
-                    // small delay so layout can settle before removing clone
-                    await new Promise(r => setTimeout(r, 18));
-                    clone.remove();
-                }
-            }catch(e){ console.warn('vt_fallback handling failed', e); }
+        // FLIP fallback: when the gallery couldn't use View Transitions we saved
+        // a small snapshot in sessionStorage. Perform a FLIP animation from the
+        // stored source rect -> the detail image's rect so users still see a
+        // cross-page shared-element effect.
         const fallbackRaw = sessionStorage.getItem('vt_fallback');
         if (fallbackRaw) {
             try{

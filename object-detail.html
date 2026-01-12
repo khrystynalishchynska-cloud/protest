@@ -36,21 +36,16 @@
                                     var el = document.getElementById('object-image');
                                     if (!el) return;
                                     if (id) {
-                                        var name = 'object-' + id;
-                                        el.setAttribute('view-transition-name', name);
-                                        console.debug('[VT] target assigned (id)', name);
+                                        el.setAttribute('view-transition-name', 'object-' + id);
                                         return;
                                     }
                                     if (img) {
                                         // simple hash to match thumbnail naming (same algorithm as gallery)
                                         var s = img || '';
                                         var h = 0; for (var i=0;i<s.length;i++){ h = (h * 31 + s.charCodeAt(i)) >>> 0; }
-                                        var name2 = 'object-src-' + (h).toString(36);
-                                        el.setAttribute('view-transition-name', name2);
-                                        console.debug('[VT] target assigned (img)', name2, { imgParam: img });
+                                        el.setAttribute('view-transition-name', 'object-src-' + (h).toString(36));
                                     }
-                                    try { console.debug('[VT] vt_navigation flag on load:', sessionStorage.getItem('vt_navigation'), 'vt_fallback:', sessionStorage.getItem('vt_fallback')); } catch(e){}
-                                }catch(e){ console.warn('[VT] target assign error', e); }
+                                }catch(e){}
                             })();
                         </script>
             <h1 id="object-title"></h1>

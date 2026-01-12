@@ -89,6 +89,20 @@
     return 'object-detail.html?img=' + encodeURIComponent(item.src);
   }
 
+  // Small stable view-transition-name generator used to tag thumbnails so the
+  // View Transitions API can match them to the target element on the detail
+  // page. Produces names like `object-42` or `object-src-abc123`.
+  function makeViewTransitionName(item){
+    try{
+      if (!item) return '';
+      if (item.id) return 'object-' + String(item.id);
+      const s = item.src || '';
+      // quick non-cryptographic hash -> short base36 string
+      let h = 0; for (let i = 0; i < s.length; i++){ h = (h * 31 + s.charCodeAt(i)) >>> 0; }
+      return 'object-src-' + (h).toString(36);
+    }catch(e){ return '' }
+  }
+
   function createCard(item){
     const a = document.createElement('a');
     a.className = 'card-link';
@@ -104,6 +118,16 @@
   // Use native lazy loading where supported to avoid loading every image at once
   try{ img.loading = 'lazy'; }catch(e){}
     img.setAttribute('data-src', item.src);
+    // tag the thumbnail with a stable view-transition-name so it can be matched
+    // with the detail page image when using the View Transitions API.
+    try{
+      const vname = makeViewTransitionName(item);
+      if (vname) {
+        img.setAttribute('view-transition-name', vname);
+        // debug
+        try{ console.debug('[VT] thumbnail set', { id: item.id || null, src: item.src, vname }); }catch(e){}
+      }
+    }catch(e){}
     img.alt = item.title || '';
     card.appendChild(img);
     a.appendChild(card);
@@ -229,19 +253,34 @@
           if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
           // Prefer the View Transition API for a smooth shared-element navigation
           try {
-            const img = a.querySelector('img');
+            // Navigate to the detail page. Use startViewTransition if available
+            // to allow the browser to create a nicer navigation animation; do not
+            // set sessionStorage or otherwise signal a hero landing here — starting
+            // from scratch.
+            e.preventDefault();
+            try{
+              const imgForDebug = a.querySelector('img');
+              const dbgV = imgForDebug ? (imgForDebug.getAttribute('view-transition-name') || '') : '';
+              console.debug('[VT] click', { href: a.href, dataset: a.dataset || null, viewTransitionName: dbgV, vtSupport: !!document.startViewTransition });
+            }catch(e){}
             if (document.startViewTransition) {
-              // mark the clicked image with a shared transition name; the destination
-              // page should also use the same name on its main image (#object-image)
-              try { if (img) img.style.viewTransitionName = 'shared-object-image'; } catch(err){}
-              e.preventDefault();
-              try{ sessionStorage.setItem('hero-entry', JSON.stringify({ id: a.dataset.id || null, t: Date.now() })); }catch(e){}
-              document.startViewTransition(() => { window.location.href = a.href; });
-              return;
-            }
-          } catch(err) { /* fall through to normal navigation */ }
-          try{ sessionStorage.setItem('hero-entry', JSON.stringify({ id: a.dataset.id || null, t: Date.now() })); }catch(e){}
-          window.location.href = a.href;
+                try{ sessionStorage.setItem('vt_navigation','1'); }catch(e){}
+                document.startViewTransition(() => { window.location.href = a.href; });
+              } else {
+                  // View Transitions unsupported: store a small FLIP snapshot so
+                  // the detail page can perform a cross-page FLIP animation.
+                  try{
+                    const imgEl = a.querySelector('img');
+                    const rect = imgEl ? imgEl.getBoundingClientRect() : null;
+                    const src = imgEl ? (imgEl.currentSrc || imgEl.src || imgEl.getAttribute('data-src') || '') : '';
+                    const payload = { href: a.href, id: a.dataset && a.dataset.id ? a.dataset.id : null, src: src, rect: rect ? { left: Math.round(rect.left), top: Math.round(rect.top), width: Math.round(rect.width), height: Math.round(rect.height) } : null };
+                    try { sessionStorage.setItem('vt_fallback', JSON.stringify(payload)); } catch(e){}
+                    console.debug('[VT] set vt_fallback', payload);
+                  }catch(e){ console.warn('[VT] vt_fallback store failed', e); }
+                  window.location.href = a.href;
+                }
+            return;
+          } catch(err) { /* fallback to direct navigation */ try { window.location.href = a.href; } catch(e){} }
           e.preventDefault();
         }catch(err){}
       }, false);
@@ -728,7 +767,7 @@
     // placing all objects that reference that src.
     const placedObjects = new Set();
     const placedSrcs = new Set();
-  latestPlacedSet && Array.from(latestPlacedSet).forEach(pk => {
+    placedSet && Array.from(placedSet).forEach(pk => {
       if (!pk) return;
       if (pk.indexOf('id:') === 0){
         const rest = pk.slice(3);
@@ -774,7 +813,9 @@
         const a = document.createElement('a'); a.className = 'flat-card card-link';
         a.href = makeLinkForItem(it);
         a.target = '_self';
-        const img = document.createElement('img'); img.loading = 'lazy'; img.alt = it.title || it.name || ''; img.src = it.src || it.image_filename || '';
+        const img = document.createElement('img'); img.loading = 'lazy'; img.alt = it.title || it.name || '';
+        img.src = it.src || it.image_filename || '';
+        try{ const vname = makeViewTransitionName(it); if (vname) img.setAttribute('view-transition-name', vname); }catch(e){}
         const m = document.createElement('div'); m.className = 'meta'; m.textContent = it.title || it.name || (it.id?('id:'+it.id):'Untitled');
         a.appendChild(img); a.appendChild(m); frag.appendChild(a);
       });

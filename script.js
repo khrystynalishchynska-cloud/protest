@@ -11,27 +11,396 @@ function parseTimeToMs(t) {
 }
 
 function getCssVarMs(name, fallbackMs) {
-    try {
-        const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-        const parsed = parseTimeToMs(v);
-        return parsed > 0 ? parsed : (fallbackMs || 0);
-    } catch (e) { return fallbackMs || 0; }
-}
+        if (fallbackRaw) {
+            try{
+                console.debug('[VT] vt_fallback found, starting FLIP fallback', fallbackRaw);
+                sessionStorage.removeItem('vt_fallback');
+                const fb = JSON.parse(fallbackRaw);
+                // Ensure the target image is present and decoded (renderObjectPage
+                // dispatches object-data-ready after decode, so main image should be ready)
+                const targetImg = document.getElementById('object-image');
+                if (targetImg && fb && fb.rect && fb.src) {
+                    // compute target rect in viewport coords
+                    const targetRect = targetImg.getBoundingClientRect();
+                    const srcRect = fb.rect;
 
-function getCssVarPx(name, fallbackPx) {
-    try {
-        const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-        return parseFloat(v) || fallbackPx || 0;
-    } catch (e) { return fallbackPx || 0; }
-}
+                    console.debug('[VT] FLIP srcRect, targetRect', srcRect, targetRect);
 
-// Ensure no hero-mode classes are present by default; keep the standard
-// three-column layout (metadata, content, context) active.
-try {
-    if (typeof document !== 'undefined' && document.getElementById && document.getElementById('object-image')) {
-        document.body.classList.remove('hero-mode', 'compact-hero', 'hero-animating');
-    }
-} catch (e) { /* silent fallback */ }
+                    // create a floating clone positioned at the source rect
+                    const clone = document.createElement('img');
+                    clone.src = fb.src;
+                    clone.alt = targetImg.alt || '';
+                    clone.style.position = 'fixed';
+                    clone.style.left = srcRect.left + 'px';
+                    clone.style.top = srcRect.top + 'px';
+                    clone.style.width = srcRect.width + 'px';
+                    clone.style.height = srcRect.height + 'px';
+                    clone.style.objectFit = 'cover';
+                    clone.style.zIndex = 120000;
+                    clone.style.borderRadius = '6px';
+                    clone.style.transition = 'none';
+                    clone.style.transformOrigin = '0 0';
+                    document.body.appendChild(clone);
+
+                    // compute transform params: translate and scale from source -> target
+                    const dx = Math.round(targetRect.left - srcRect.left);
+                    const dy = Math.round(targetRect.top - srcRect.top);
+                    const scaleX = targetRect.width / srcRect.width;
+                    const scaleY = targetRect.height / srcRect.height;
+
+                    console.debug('[VT] FLIP animate params', { dx, dy, scaleX, scaleY });
+
+                    // animate using Web Animations API for a smooth FLIP
+                    const anim = clone.animate([
+                        { transform: 'translate(0px, 0px) scale(1, 1)', opacity: 1 },
+                        { transform: `translate(${dx}px, ${dy}px) scale(${scaleX}, ${scaleY})`, opacity: 1 }
+                    ], { duration: 1000, easing: 'cubic-bezier(.2,.9,.2,1)', fill: 'forwards' });
+
+                    try { await anim.finished; console.debug('[VT] FLIP animation finished'); } catch(e) { /* ignore */ }
+                    // ensure target image visible (some layouts hide it briefly)
+                    try { targetImg.style.visibility = ''; targetImg.style.opacity = '1'; } catch(e){}
+                    // small delay so layout can settle before removing clone
+                    await new Promise(r => setTimeout(r, 18));
+                    clone.remove();
+                }
+            }catch(e){ console.warn('vt_fallback handling failed', e); }
+        const fallbackRaw = sessionStorage.getItem('vt_fallback');
+        if (fallbackRaw) {
+            try{
+                sessionStorage.removeItem('vt_fallback');
+                const fb = JSON.parse(fallbackRaw);
+                // Ensure the target image is present and decoded (renderObjectPage
+                // dispatches object-data-ready after decode, so main image should be ready)
+                const targetImg = document.getElementById('object-image');
+                if (targetImg && fb && fb.rect && fb.src) {
+                    // compute target rect in viewport coords
+                    const targetRect = targetImg.getBoundingClientRect();
+                    const srcRect = fb.rect;
+
+                    // create a floating clone positioned at the source rect
+                    const clone = document.createElement('img');
+                    clone.src = fb.src;
+                    clone.alt = targetImg.alt || '';
+                    clone.style.position = 'fixed';
+                    clone.style.left = srcRect.left + 'px';
+                    clone.style.top = srcRect.top + 'px';
+                    clone.style.width = srcRect.width + 'px';
+                    clone.style.height = srcRect.height + 'px';
+                    clone.style.objectFit = 'cover';
+                    clone.style.zIndex = 120000;
+                    clone.style.borderRadius = '6px';
+                    clone.style.transition = 'none';
+                    clone.style.transformOrigin = '0 0';
+                    document.body.appendChild(clone);
+
+                    // compute transform params: translate and scale from source -> target
+                    const dx = Math.round(targetRect.left - srcRect.left);
+                    const dy = Math.round(targetRect.top - srcRect.top);
+                    const scaleX = targetRect.width / srcRect.width;
+                    const scaleY = targetRect.height / srcRect.height;
+
+                    // animate using Web Animations API for a smooth FLIP
+                    const anim = clone.animate([
+                        { transform: 'translate(0px, 0px) scale(1, 1)', opacity: 1 },
+                        { transform: `translate(${dx}px, ${dy}px) scale(${scaleX}, ${scaleY})`, opacity: 1 }
+                    ], { duration: 5000, easing: 'cubic-bezier(.2,.9,.2,1)', fill: 'forwards' });
+
+                    try { await anim.finished; } catch(e) { /* ignore */ }
+                    // ensure target image visible (some layouts hide it briefly)
+                    try { targetImg.style.visibility = ''; targetImg.style.opacity = '1'; } catch(e){}
+                    // small delay so layout can settle before removing clone
+                    await new Promise(r => setTimeout(r, 18));
+                    clone.remove();
+                }
+            }catch(e){ console.warn('vt_fallback handling failed', e); }
+        }
+    }catch(e){}
+    try {
+        const body = document.body;
+        const imgWrap = document.getElementById('object-image-wrapper');
+        const img = document.getElementById('object-image');
+        const title = document.getElementById('object-title');
+        const sentinel = document.getElementById('hero-sentinel');
+
+        if (!imgWrap || !img || !title || !sentinel) return;
+        if (window.innerWidth < 700) return; // keep mobile unchanged
+
+        // switch hero-init -> hero-active so CSS hides content immediately
+        if (body.classList.contains('hero-init')) body.classList.remove('hero-init');
+        body.classList.add('hero-active');
+
+        // ensure visible (clear any accidental hiding)
+        try { img.style.visibility = ''; img.style.opacity = '1'; title.style.visibility = ''; title.style.opacity = '1'; } catch (e) {}
+
+        // measure final positions (where elements should end up) BEFORE moving them
+        const finalImgRect = imgWrap.getBoundingClientRect();
+        const finalTitleRect = title.getBoundingClientRect();
+
+        const vw = window.innerWidth, vh = window.innerHeight;
+        const heroImgW = Math.min(420, Math.round(Math.min(0.36 * vw, 520)));
+        const heroImgH = Math.round(heroImgW * (finalImgRect.height / (finalImgRect.width || heroImgW) || 0.9));
+        const heroImgLeft = Math.round((vw - heroImgW) / 2);
+        const heroImgTop = Math.round(vh * 0.22);
+
+        const heroTitleLeft = heroImgLeft + heroImgW + 40;
+        const heroTitleW = Math.round(Math.min(560, vw * 0.38));
+
+        // prepare a top-level portal to avoid any ancestor stacking contexts
+        let portal = document.getElementById('hero-portal');
+        if (!portal) {
+            portal = document.createElement('div');
+            portal.id = 'hero-portal';
+            // pointer-events none so it doesn't block page interaction; z-index very high
+            portal.style.position = 'fixed'; portal.style.left = '0'; portal.style.top = '0'; portal.style.width = '100%'; portal.style.height = '100%'; portal.style.pointerEvents = 'none'; portal.style.zIndex = '99999';
+            document.body.appendChild(portal);
+        }
+
+        // store original place so we can restore nodes later
+        function savePlace(el) {
+            if (!el) return null;
+            return { parent: el.parentNode, next: el.nextSibling };
+        }
+
+    const imgPlace = savePlace(imgWrap);
+    const titlePlace = savePlace(title);
+    const tagEl = document.getElementById('static-tags');
+    const tagPlace = savePlace(tagEl);
+
+        // helper: set element to fixed positioned hero rect and remember original inline styles
+        function setFixedRect(el, rect) {
+            if (!el) return;
+            el.__hero_orig = el.__hero_orig || {
+                position: el.style.position || '', left: el.style.left || '', top: el.style.top || '', width: el.style.width || '', height: el.style.height || '', zIndex: el.style.zIndex || '', transition: el.style.transition || '', margin: el.style.margin || ''
+            };
+            el.style.position = 'fixed';
+            el.style.left = rect.left + 'px';
+            el.style.top = rect.top + 'px';
+            el.style.width = rect.width + 'px';
+            el.style.height = rect.height + 'px';
+            el.style.zIndex = '99999';
+            el.style.margin = '0';
+            el.style.pointerEvents = 'auto';
+            el.style.transition = 'left 1000ms cubic-bezier(.2,.9,.2,1), top 1000ms cubic-bezier(.2,.9,.2,1), width 1000ms cubic-bezier(.2,.9,.2,1), height 1000ms cubic-bezier(.2,.9,.2,1)';
+        }
+
+        function restoreOriginal(el, place) {
+            if (!el || !el.__hero_orig) return;
+            // move back into the original container at the saved insertion point
+            if (place && place.parent) {
+                if (place.next && place.next.parentNode === place.parent) place.parent.insertBefore(el, place.next);
+                else place.parent.appendChild(el);
+            }
+            el.style.position = el.__hero_orig.position || '';
+            el.style.left = el.__hero_orig.left || '';
+            el.style.top = el.__hero_orig.top || '';
+            el.style.width = el.__hero_orig.width || '';
+            el.style.height = el.__hero_orig.height || '';
+            el.style.zIndex = el.__hero_orig.zIndex || '';
+            el.style.transition = el.__hero_orig.transition || '';
+            el.style.margin = el.__hero_orig.margin || '';
+            delete el.__hero_orig;
+        }
+
+    // measure tag final rect (if available)
+    const finalTagRect = tagEl ? tagEl.getBoundingClientRect() : { left: 0, top: 0, width: 0, height: 0 };
+
+    // Create hero rects (relative to viewport)
+    const heroImgRect = { left: heroImgLeft, top: heroImgTop, width: heroImgW, height: heroImgH };
+    const heroTitleRect = { left: heroTitleLeft, top: Math.round(vh * 0.28), width: heroTitleW, height: finalTitleRect.height };
+    // place tags under the title in hero view (small gap)
+    const tagGap = 8;
+    const heroTagRect = tagEl ? { left: heroTitleLeft, top: heroTitleRect.top + heroTitleRect.height + tagGap, width: Math.min(heroTitleW, Math.max(160, finalTagRect.width || 160)), height: finalTagRect.height || 28 } : null;
+
+        // Move the real elements into the portal so they escape stacking-contexts
+        try {
+            // append as children of portal (pointer-events none on portal ensures clicks pass through except elements we set pointer-events for)
+            portal.appendChild(imgWrap);
+            portal.appendChild(title);
+            if (tagEl) portal.appendChild(tagEl);
+        } catch (e) { /* if move fails, continue with original approach */ }
+
+        // Place elements into the fixed hero positions instantly (disable transitions first)
+        imgWrap.style.transition = 'none';
+        title.style.transition = 'none';
+        setFixedRect(imgWrap, heroImgRect);
+        setFixedRect(title, heroTitleRect);
+        if (tagEl && heroTagRect) {
+            tagEl.style.transition = 'none';
+            setFixedRect(tagEl, heroTagRect);
+        }
+        // force layout
+        imgWrap.getBoundingClientRect();
+        title.getBoundingClientRect();
+
+        // Re-enable transitions (so next change will animate)
+        setTimeout(() => {
+            imgWrap.style.transition = 'left 1000ms cubic-bezier(.2,.9,.2,1), top 1000ms cubic-bezier(.2,.9,.2,1), width 1000ms cubic-bezier(.2,.9,.2,1), height 1000ms cubic-bezier(.2,.9,.2,1)';
+            title.style.transition = 'left 1000ms cubic-bezier(.2,.9,.2,1), top 1000ms cubic-bezier(.2,.9,.2,1), width 1000ms cubic-bezier(.2,.9,.2,1), height 1000ms cubic-bezier(.2,.9,.2,1)';
+        }, 30);
+
+        // Reveal: animate fixed elements to their final on-page rects, then restore them into flow
+        const reveal = () => {
+            // recompute final rects in case layout changed (measure where the elements should be inside the document flow)
+            const targetImgRect = finalImgRect; // measured earlier while elements were in-flow
+            const targetTitleRect = finalTitleRect;
+
+            // animate to final positions (viewport coords)
+            setFixedRect(imgWrap, { left: targetImgRect.left, top: targetImgRect.top, width: targetImgRect.width, height: targetImgRect.height });
+            setFixedRect(title, { left: targetTitleRect.left, top: targetTitleRect.top, width: targetTitleRect.width, height: targetTitleRect.height });
+            if (tagEl) {
+                const targetTagRect = finalTagRect;
+                setFixedRect(tagEl, { left: targetTagRect.left, top: targetTagRect.top, width: targetTagRect.width, height: targetTagRect.height });
+            }
+
+            // when animation ends on image, restore to original flow
+            const cleanup = () => {
+                try {
+                    // First, mark the page as revealed so CSS rules (body.hero-revealed)
+                    // that disable metadata transitions take effect. Do this before we
+                    // re-insert the nodes so the CSS rule can apply immediately.
+                    body.classList.add('hero-revealed');
+
+                    // Strong safeguard: ensure any stored original transition won't be
+                    // reapplied and cause a brief animation. Overwrite the saved
+                    // transition to 'none' so restoreOriginal writes a non-animating state.
+                    try {
+                        if (imgWrap && imgWrap.__hero_orig) imgWrap.__hero_orig.transition = 'none';
+                        if (title && title.__hero_orig) title.__hero_orig.transition = 'none';
+                        if (tagEl && tagEl.__hero_orig) tagEl.__hero_orig.transition = 'none';
+                    } catch (e) { /* ignore */ }
+
+                    // Also set inline transition:none right before restoring as an extra
+                    // precaution (some browsers apply styles faster from inline than from
+                    // stylesheet rules).
+                    try { if (imgWrap) imgWrap.style.transition = 'none'; } catch (e) {}
+                    try { if (title) title.style.transition = 'none'; } catch (e) {}
+                    try { if (tagEl) tagEl.style.transition = 'none'; } catch (e) {}
+
+                    // Instead of moving the real nodes back (which can cause stacking
+                    // and transition issues), paint the left metadata column by
+                    // creating fresh elements (clones) that take the original IDs.
+                    // Keep the original hero nodes in the portal (but remove their
+                    // IDs so they don't conflict) and hide the portal visually.
+                    try {
+                        const metaContainer = document.getElementById('metadata-controls') || (imgPlace && imgPlace.parent) || document.querySelector('.metadata-column');
+                        if (metaContainer) {
+                            // remove any existing children to repaint cleanly
+                            metaContainer.innerHTML = '';
+
+                            // build cloned image wrapper + img
+                            const heroImgNode = imgWrap.querySelector('img') || imgWrap;
+                            const newImgWrap = document.createElement('div');
+                            newImgWrap.id = 'object-image-wrapper';
+                            newImgWrap.style.margin = '0 0 20px 0';
+                            const newImg = document.createElement('img');
+                            // copy minimal attributes
+                            try { newImg.src = heroImgNode.src || ''; } catch(e) { newImg.src = ''; }
+                            newImg.alt = heroImgNode.alt || 'Photo of the protest symbol';
+                            newImg.id = 'object-image';
+                            newImg.loading = heroImgNode.loading || 'eager';
+                            newImg.style.width = '100%';
+                            newImg.style.height = 'auto';
+                            newImg.style.display = 'block';
+                            newImgWrap.appendChild(newImg);
+
+                            // build cloned title
+                            const newTitle = document.createElement('h1');
+                            newTitle.id = 'object-title';
+                            newTitle.textContent = (title && title.textContent) || '';
+
+                            // build cloned tags
+                            let newTags = null;
+                            if (tagEl) {
+                                newTags = document.createElement('div');
+                                newTags.id = 'static-tags';
+                                newTags.innerHTML = tagEl.innerHTML || '';
+                            }
+
+                            // ensure clones don't animate
+                            try { newImgWrap.style.transition = 'none'; } catch (e) {}
+                            try { newImg.style.transition = 'none'; } catch (e) {}
+                            try { newTitle.style.transition = 'none'; } catch (e) {}
+                            if (newTags) try { newTags.style.transition = 'none'; } catch (e) {}
+
+                            // append into metadata container
+                            metaContainer.appendChild(newImgWrap);
+                            metaContainer.appendChild(newTitle);
+                            if (newTags) metaContainer.appendChild(newTags);
+                        }
+
+                        // neutralize IDs on portal nodes so we don't have duplicates
+                        try { imgWrap.removeAttribute('id'); } catch (e) {}
+                        try { const portalImg = imgWrap.querySelector('img'); if (portalImg) portalImg.removeAttribute('id'); } catch (e) {}
+                        try { title.removeAttribute('id'); } catch (e) {}
+                        try { if (tagEl) tagEl.removeAttribute('id'); } catch (e) {}
+
+                        // hide the portal visually (keep nodes in DOM in case other code references them)
+                        try { if (portal) portal.style.display = 'none'; } catch (e) {}
+                    } catch (e) {
+                        // fallback: if cloning fails, restore originals
+                        try { restoreOriginal(imgWrap, imgPlace); restoreOriginal(title, titlePlace); if (tagEl) restoreOriginal(tagEl, tagPlace); } catch (err) {}
+                    }
+                } catch (e) { console.warn('hero restore failed', e); }
+
+                // remove portal if empty
+                try { if (portal && portal.childElementCount === 0) portal.parentNode && portal.parentNode.removeChild(portal); } catch (e) {}
+
+                // finally clear the active flag (we keep revealed so layout rules apply)
+                body.classList.remove('hero-active');
+
+                // After restoring, re-run alignment so the description's margin doesn't
+                // inadvertently shift the metadata. Run on next frame to allow styles to settle.
+                requestAnimationFrame(() => {
+                    try { if (typeof alignDescriptionWithImage === 'function') alignDescriptionWithImage(); } catch (e) {}
+                    try { if (typeof adjustSubsectionStickiness === 'function') adjustSubsectionStickiness(); } catch (e) {}
+                });
+
+                imgWrap.removeEventListener('transitionend', cleanup);
+            };
+            imgWrap.addEventListener('transitionend', cleanup);
+        };
+
+        // Prevent accidental exit from hero-active: observe body class changes and re-add if removed
+        let heroObserver = null;
+        let heroLocked = true; // keep hero active until we run reveal()
+        try {
+            heroObserver = new MutationObserver((mutations) => {
+                mutations.forEach(m => {
+                    if (m.attributeName === 'class') {
+                        if (heroLocked && !document.body.classList.contains('hero-active')) {
+                            document.body.classList.add('hero-active');
+                        }
+                    }
+                });
+            });
+            heroObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+        } catch (e) { heroObserver = null; }
+
+        // Wire reveal to sentinel leaving viewport
+        if ('IntersectionObserver' in window) {
+            const io = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) { reveal(); io.disconnect(); }
+                });
+            }, { root: null, threshold: 0 });
+            io.observe(sentinel);
+        } else {
+            const onScroll = () => { reveal(); window.removeEventListener('scroll', onScroll); };
+            window.addEventListener('scroll', onScroll);
+        }
+
+        // Ensure reveal() unlocks and disconnects the observer
+        const originalReveal = reveal;
+        reveal = function() {
+            // unlock and disconnect observer so class changes are allowed
+            heroLocked = false;
+            try { if (heroObserver) heroObserver.disconnect(); } catch (e) {}
+            originalReveal();
+        };
+
+    } catch (err) { console.warn('hero init failed', err); }
+})();
+});
 
 // --- 1. CORE DATA FETCH AND INITIALIZATION ---
 (async () => {
@@ -89,6 +458,7 @@ try {
 // --- 2. DATA RENDERING FUNCTIONS (No changes needed) ---
 
 function renderObjectPage(data) {
+    console.debug('[renderObjectPage] id=', data && data.id, 'image=', data && data.image_filename);
     document.getElementById('object-title').textContent = data.name;
     document.getElementById('object-image').src = data.image_filename || 'placeholder.jpg';
     
@@ -109,36 +479,57 @@ function renderObjectPage(data) {
         adjustSubsectionStickiness();
     });
     
-    // Default behavior: decide whether we should enter hero arrival mode
-    // (set by the gallery click). If not, ensure normal three-column layout.
+    // Ensure any hero-related state is cleared and normal layout is shown.
     try {
-        const heroActivated = initHeroOnArrival && initHeroOnArrival(data);
-        if (!heroActivated) {
-            // Remove any hero-mode related classes if present and ensure the
-            // context panel is closed by default. We keep the left metadata and
-            // center content visible; the right context panel opens only via
-            // user interaction (togglePanel).
-            document.body.classList.remove('hero-mode', 'compact-hero', 'hero-animating');
-            const contentCol = document.querySelector('.content-column');
-            if (contentCol) contentCol.classList.remove('hidden-by-hero');
-            const oc = document.getElementById('object-container'); if (oc) oc.classList.remove('split');
-            const panel = document.getElementById('context-panel');
-            if (panel) {
-                panel.classList.remove('active','compact','expanded');
-                panel.style.display = 'none';
-                panel.setAttribute('aria-hidden','true');
-                // clear any leftover content
-                const panelContent = document.getElementById('context-panel-content'); if (panelContent) panelContent.innerHTML = '';
-            }
-        } else {
-            // hero mode active: make sure the context panel is hidden
-            const panel = document.getElementById('context-panel');
-            if (panel) { panel.style.display = 'none'; panel.setAttribute('aria-hidden','true'); }
+        document.body.classList.remove('hero-mode', 'compact-hero', 'hero-animating');
+        const contentCol = document.querySelector('.content-column');
+        if (contentCol) contentCol.classList.remove('hidden-by-hero');
+        const oc = document.getElementById('object-container'); if (oc) oc.classList.remove('split');
+        const panel = document.getElementById('context-panel');
+        if (panel) {
+            panel.classList.remove('active','compact','expanded');
+            panel.style.display = 'none';
+            panel.setAttribute('aria-hidden','true');
+            const panelContent = document.getElementById('context-panel-content'); if (panelContent) panelContent.innerHTML = '';
         }
     } catch (e) { console.warn('layout init failed', e); }
 
     document.getElementById('type-tag').textContent = (data.categories_object_type && data.categories_object_type.join(', ')) || '';
     document.getElementById('timeframe-tag').textContent = (data.categories_timeframe && data.categories_timeframe.join(', ')) || '';
+
+    // Signal that the object data (and main image) are ready. This allows the
+    // hero overlay to be created only after the image src has been set and the
+    // browser has had a chance to load/decode it to avoid an empty clone.
+    try {
+        const mainImg = document.getElementById('object-image');
+        const dispatchReady = () => {
+            document.dispatchEvent(new CustomEvent('object-data-ready', { detail: { object: data } }));
+        };
+        if (mainImg) {
+            if (!mainImg.complete) {
+                const onLoad = function () {
+                    mainImg.removeEventListener('load', onLoad);
+                    if (typeof mainImg.decode === 'function') {
+                        mainImg.decode().then(dispatchReady).catch(dispatchReady);
+                    } else {
+                        dispatchReady();
+                    }
+                };
+                mainImg.addEventListener('load', onLoad);
+            } else {
+                if (typeof mainImg.decode === 'function') {
+                    mainImg.decode().then(dispatchReady).catch(dispatchReady);
+                } else {
+                    dispatchReady();
+                }
+            }
+        } else {
+            dispatchReady();
+        }
+    } catch (e) {
+        // If anything goes wrong, still dispatch so the hero code doesn't hang.
+        try { document.dispatchEvent(new CustomEvent('object-data-ready', { detail: { object: data } })); } catch (err) {}
+    }
 }
 
 // Align the top of the description block with the object title when the
@@ -186,67 +577,9 @@ function alignDescriptionWithTitle(){
     }
 }
 
-// --- Hero arrival helpers -------------------------------------------------
-// initHeroOnArrival(data)
-// - Looks for a sessionStorage flag ('hero-entry') set by the gallery click
-//   handler. If present and matching the current object (or empty id), it
-//   activates a compact 'hero-mode' that shows only the main image + title.
-// - Returns true when hero-mode was activated, false otherwise.
-function initHeroOnArrival(data){
-    try{
-        // Allow testing the hero mode via URL param ?hero=1 or by the sessionStorage flag
-        const urlParams = new URLSearchParams(window.location.search);
-        const forced = urlParams.get('hero') === '1';
-        const raw = sessionStorage.getItem('hero-entry');
-        if (!raw && !forced) return false;
-        let payload = null;
-        try { payload = raw ? JSON.parse(raw) : null; } catch(e) { payload = null; }
-        // If payload includes an id and it doesn't match the current object, ignore
-        if (!forced && payload && payload.id && data && String(payload.id) !== String(data.id)){
-            try{ sessionStorage.removeItem('hero-entry'); }catch(e){}
-            return false;
-        }
-        // Respect reduced-motion preference: skip hero if user prefers reduced motion
-        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-            try{ sessionStorage.removeItem('hero-entry'); }catch(e){}
-            return false;
-        }
-
-    // Activate hero-mode UI
-        document.body.classList.add('hero-mode');
-        const contentCol = document.querySelector('.content-column');
-        if (contentCol) contentCol.classList.add('hidden-by-hero');
-
-        // Reveal triggers: first scroll, wheel, touch, or ArrowDown/PageDown/Space key.
-        let triggered = false;
-        const doReveal = () => { if (triggered) return; triggered = true; revealHero(); };
-        window.addEventListener('scroll', doReveal, { once: true, passive: true });
-        window.addEventListener('wheel', doReveal, { once: true, passive: true });
-        window.addEventListener('touchstart', doReveal, { once: true, passive: true });
-        const onKey = (e) => { if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' '){ doReveal(); window.removeEventListener('keydown', onKey); } };
-        window.addEventListener('keydown', onKey, { passive: true });
-
-        // Auto-reveal after a short timeout so users aren't stuck.
-        document._heroAutoReveal = setTimeout(doReveal, 2400);
-        return true;
-    }catch(e){ console.warn('initHeroOnArrival failed', e); return false; }
-}
-
-function revealHero(){
-    try{
-        if (document._heroAutoReveal){ clearTimeout(document._heroAutoReveal); document._heroAutoReveal = null; }
-        // small animation class to give a subtle lift during reveal
-        document.body.classList.add('hero-animating');
-        // after a short animation, remove hero-mode so normal layout returns
-        const dur = 420;
-        setTimeout(() => {
-            document.body.classList.remove('hero-mode', 'hero-animating');
-            const contentCol = document.querySelector('.content-column');
-            if (contentCol) contentCol.classList.remove('hidden-by-hero');
-            try{ sessionStorage.removeItem('hero-entry'); }catch(e){}
-        }, dur);
-    }catch(e){ console.warn('revealHero failed', e); }
-}
+// Hero-mode helpers removed — starting fresh. Any hero-related state should be
+// handled by new code when you decide on the approach. For now, keep layout
+// behavior simple and stable.
 
 // Align the top of the description block with the top of the object image
 // when the layout shows the metadata and content columns side-by-side.

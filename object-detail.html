@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Symbol Detail | The Umbrella</title>
     <link rel="stylesheet" href="style.css">
+    
 </head>
 <body class="hero-init">
 
@@ -28,26 +29,33 @@
                                  clicked thumbnail. The name format mirrors the gallery's
                                  thumbnail naming (object-<id> or object-src-<hash>). -->
                         <script>
-                            (function(){
-                                try{
-                                    var q = new URLSearchParams(location.search);
-                                    var id = q.get('id');
-                                    var img = q.get('img');
-                                    var el = document.getElementById('object-image');
-                                    if (!el) return;
-                                    if (id) {
-                                        el.setAttribute('view-transition-name', 'object-' + id);
-                                        return;
-                                    }
-                                    if (img) {
-                                        // simple hash to match thumbnail naming (same algorithm as gallery)
-                                        var s = img || '';
-                                        var h = 0; for (var i=0;i<s.length;i++){ h = (h * 31 + s.charCodeAt(i)) >>> 0; }
-                                        el.setAttribute('view-transition-name', 'object-src-' + (h).toString(36));
-                                    }
-                                }catch(e){}
-                            })();
-                        </script>
+    (function(){
+        try {
+            var q = new URLSearchParams(location.search);
+            var id = q.get('id');
+            var img = q.get('img');
+            var el = document.getElementById('object-image');
+            if (!el) return;
+
+            if (id) {
+                // Sets the name to match the gallery (e.g., object-123)
+                el.style.viewTransitionName = 'object-' + id; // Use .style, not setAttribute
+                return;
+
+            } else if (img) {
+                // Algorithm matches the hashString function in infinite-gallery.js
+                var s = img || '';
+                var h = 0; 
+                for (var i = 0; i < s.length; i++) { 
+                    h = (h * 31 + s.charCodeAt(i)) >>> 0; 
+                }
+                el.style.viewTransitionName = 'object-src-' + (h).toString(36);
+            }
+        } catch(e) {
+            console.error("View Transition naming failed:", e);
+        }
+    })();
+</script>
             <h1 id="object-title"></h1>
 
             <div id="static-tags">

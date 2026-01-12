@@ -107,10 +107,10 @@
     img.setAttribute('data-src', item.src);
     img.alt = item.title || '';
     // assign a stable view-transition-name so native View Transitions can match
-    try{
-      const vtName = item.id ? ('object-' + String(item.id)) : ('object-src-' + hashString(String(item.src || '')));
-      img.setAttribute('view-transition-name', vtName);
-    }catch(e){}
+    // try{
+      //const vtName = item.id ? ('object-' + String(item.id)) : ('object-src-' + hashString(String(item.src || '')));
+      //img.setAttribute('view-transition-name', vtName);
+    //}catch(e){} // ignore
     card.appendChild(img);
     a.appendChild(card);
     return a;
@@ -229,61 +229,47 @@
 
     await loadOverrides();
 
-    // Delegated click handler on the gallery to reliably navigate on plain clicks.
-    // This handles plain left-clicks, respects modifier keys, and lets drag-to-pan suppression (which
-    // may call preventDefault on the click) take precedence.
+   // Delegated click handler updated for View Transitions
     if (!gallery._clickHandlerAdded){
       gallery.addEventListener('click', function(e){
         try{
-          const a = e.target.closest && e.target.closest('a.card-link');
-          if (!a) return;
-          if (e.defaultPrevented) return;
+          const a = e.target.closest('a.card-link');
+          if (!a || e.defaultPrevented) return;
           if (typeof e.button === 'number' && e.button !== 0) return;
           if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
-          // Prefer the View Transition API for a smooth shared-element navigation
-          try {
-            e.preventDefault();
-            // determine the thumbnail image element and a stable name
-            const thumbImg = a.querySelector('img') || a.querySelector('.thumb') || null;
-            let vtName = null;
-            try{
-              const id = a.dataset.id || a.getAttribute('data-id') || (a.href && (new URL(a.href, location.href).searchParams.get('id')));
-              if (id) vtName = 'object-' + id;
-              else if (thumbImg) vtName = 'object-src-' + hashString(thumbImg.getAttribute('data-src') || thumbImg.src || thumbImg.getAttribute('data-src') || '');
-              if (thumbImg && vtName) thumbImg.setAttribute('view-transition-name', vtName);
-            }catch(e){}
 
-            try{ console.log && console.log('[VT DEBUG] gallery click', { href: a.href, id: a.dataset.id || null, datasetSrc: a.dataset.src || null }); }catch(e){}
-            try{ console.log && console.log('[VT DEBUG] computed vtName', vtName); }catch(e){}
-
-            if (document.startViewTransition) {
-              // signal to the detail page that a native VT navigation is in progress
-              try{ sessionStorage.setItem('vt_navigation', '1'); }catch(e){}
-              try{ console.log && console.log('[VT DEBUG] using native View Transitions, vt_navigation set'); }catch(e){}
-              document.startViewTransition(() => { window.location.href = a.href; });
-              return;
-            }
-
-            // Fallback: capture a small snapshot for FLIP animation on the detail page
-            try{
-              const imgEl = thumbImg;
-              const src = (imgEl && (imgEl.currentSrc || imgEl.src || imgEl.getAttribute('data-src'))) || a.dataset.src || '';
-              if (imgEl && src) {
-                const r = imgEl.getBoundingClientRect();
-                const payload = { src, rect: { left: Math.round(r.left), top: Math.round(r.top), width: Math.round(r.width), height: Math.round(r.height) }, id: a.dataset.id || null };
-                try{ sessionStorage.setItem('vt_fallback', JSON.stringify(payload)); }catch(e){}
-                try{ console.log && console.log('[VT DEBUG] vt_fallback set', payload); }catch(e){}
-              }
-            }catch(e){ try{ console.warn && console.warn('[VT DEBUG] vt_fallback store failed', e); }catch(e){} }
-
-            // finally navigate
-            window.location.href = a.href;
-          } catch(err) { /* fallback to direct navigation */ try { window.location.href = a.href; } catch(e){} }
           e.preventDefault();
-        }catch(err){}
+          const thumbImg = a.querySelector('img');
+          
+          if (thumbImg) {
+            // 1. Get the ID from the link data or the URL
+            const urlParams = new URL(a.href, window.location.origin).searchParams;
+            const id = a.dataset.id || urlParams.get('id');
+            
+            // 2. Create the name (Must match object-detail.html exactly)
+            const vtName = id ? `object-${id}` : `object-src-${hashString(thumbImg.getAttribute('data-src') || thumbImg.src)}`;
+            
+            // 3. Apply name to ONLY the clicked image via .style
+            thumbImg.style.viewTransitionName = vtName;
+
+            // 4. Start the transition
+            if (document.startViewTransition) {
+              document.startViewTransition(() => {
+                window.location.href = a.href;
+              });
+            } else {
+              window.location.href = a.href;
+            }
+          } else {
+            window.location.href = a.href;
+          }
+        } catch(err) {
+          window.location.href = a.href;
+        }
       }, false);
       gallery._clickHandlerAdded = true;
     }
+    
 
 
     // responsive layout helper — compute layout params based on viewport width

@@ -1,3 +1,4 @@
+
 @view-transition {
   navigation: auto;
 }
@@ -64,6 +65,7 @@ body.hero-active .content-column {
 }
 
 /* End hero-mode additions */
+
 
 @media (min-width: 900px) {
     :root { --site-gutter: 10px; }

@@ -8,6 +8,7 @@
   let __placeholderCounter = 0;
 
   const gallery = document.getElementById('infinite-gallery');
+  try{ console.log('[gallery] script loaded, looking for #infinite-gallery'); }catch(e){}
   if (!gallery) { console.warn('infinite-gallery: missing #infinite-gallery element'); return; }
 
   async function fetchJson(url){
@@ -105,9 +106,21 @@
   try{ img.loading = 'lazy'; }catch(e){}
     img.setAttribute('data-src', item.src);
     img.alt = item.title || '';
+    // assign a stable view-transition-name so native View Transitions can match
+    // try{
+      //const vtName = item.id ? ('object-' + String(item.id)) : ('object-src-' + hashString(String(item.src || '')));
+      //img.setAttribute('view-transition-name', vtName);
+    //}catch(e){} // ignore
     card.appendChild(img);
     a.appendChild(card);
     return a;
+  }
+
+  // Simple string hash to produce stable short ids for src-based names
+  function hashString(s){
+    let h = 0;
+    for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+    return h.toString(36);
   }
 
   function preload(src, timeout=10000){
@@ -216,23 +229,47 @@
 
     await loadOverrides();
 
-    // Delegated click handler on the gallery to reliably navigate on plain clicks.
-    // This handles plain left-clicks, respects modifier keys, and lets drag-to-pan suppression (which
-    // may call preventDefault on the click) take precedence.
+   // Delegated click handler updated for View Transitions
     if (!gallery._clickHandlerAdded){
       gallery.addEventListener('click', function(e){
         try{
-          const a = e.target.closest && e.target.closest('a.card-link');
-          if (!a) return;
-          if (e.defaultPrevented) return;
+          const a = e.target.closest('a.card-link');
+          if (!a || e.defaultPrevented) return;
           if (typeof e.button === 'number' && e.button !== 0) return;
           if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
-          window.location.href = a.href;
+
           e.preventDefault();
-        }catch(err){}
+          const thumbImg = a.querySelector('img');
+          
+          if (thumbImg) {
+            // 1. Get the ID from the link data or the URL
+            const urlParams = new URL(a.href, window.location.origin).searchParams;
+            const id = a.dataset.id || urlParams.get('id');
+            
+            // 2. Create the name (Must match object-detail.html exactly)
+            const vtName = id ? `object-${id}` : `object-src-${hashString(thumbImg.getAttribute('data-src') || thumbImg.src)}`;
+            
+            // 3. Apply name to ONLY the clicked image via .style
+            thumbImg.style.viewTransitionName = vtName;
+
+            // 4. Start the transition
+            if (document.startViewTransition) {
+              document.startViewTransition(() => {
+                window.location.href = a.href;
+              });
+            } else {
+              window.location.href = a.href;
+            }
+          } else {
+            window.location.href = a.href;
+          }
+        } catch(err) {
+          window.location.href = a.href;
+        }
       }, false);
       gallery._clickHandlerAdded = true;
     }
+    
 
 
     // responsive layout helper — compute layout params based on viewport width
@@ -410,9 +447,13 @@
       });
     }
 
-    // Place all items into the gallery. This function is re-runnable on resize.
-    let lastLayoutKey = null;
-    async function placeAll(){
+  // Place all items into the gallery. This function is re-runnable on resize.
+  let lastLayoutKey = null;
+  // latestPlacedSet is exported from placeAll so fallback logic (outside the
+  // function) can inspect which srcs/ids were actually placed. Declared here
+  // to avoid ReferenceError when the fallback runs after placeAll completes.
+  let latestPlacedSet = new Set();
+  async function placeAll(){
       const layout = computeLayout();
       const CANVAS_W = layout.CANVAS_W;
       const CANVAS_H = layout.CANVAS_H;
@@ -686,6 +727,8 @@
         }catch(e){}
         setupAnimations();
       }catch(e){ console.warn('setupAnimations failed', e); }
+      // expose the set of placed keys for the fallback checker
+      try{ latestPlacedSet = placedSet; }catch(e){}
     }
 
   // initial placement (show loading state while we compute layout)

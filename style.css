@@ -1,3 +1,7 @@
+@view-transition {
+  navigation: auto;
+}
+
 /* Highlight clickable tag spans on hover */
 .highlight-country:hover,
 .highlight-cause:hover,
@@ -27,6 +31,39 @@
 
     /* (hero variables removed) */
 }
+
+/* Hero-mode styles
+    Minimal rules to support the JS hero lifecycle (hero-init -> hero-active -> hero-revealed).
+    These keep the description/content hidden while the page is in hero mode and
+    animate it in when the hero is revealed. Durations match the JS transitions (1000ms).
+*/
+
+/* Hide the main description column during initial hero states so only the
+    image/title are visible. Also prevent pointer events while hidden. */
+body.hero-init .description-block,
+body.hero-active .description-block {
+     opacity: 0;
+     transform: translateY(12px);
+     pointer-events: none;
+     transition: opacity 360ms ease, transform 360ms ease;
+}
+
+/* When the hero has finished revealing, animate the description into place.
+    Use a slightly longer easing to match the shared-element timing. */
+body.hero-revealed .description-block {
+     opacity: 1;
+     transform: translateY(0);
+     pointer-events: auto;
+     transition: opacity 1000ms cubic-bezier(.2,.9,.2,1), transform 1000ms cubic-bezier(.2,.9,.2,1);
+}
+
+/* Also ensure the content column as a whole remains visually hidden during hero */
+body.hero-init .content-column,
+body.hero-active .content-column {
+     visibility: visible; /* keep scrolling behavior intact, only collapse description */
+}
+
+/* End hero-mode additions */
 
 @media (min-width: 900px) {
     :root { --site-gutter: 10px; }
@@ -73,7 +110,10 @@ body {
 /* Prevent the global fixed back button from overlapping the page content by
    adding top padding to the main container. This keeps the columns pushed
    down while the back button remains fixed above them. */
+
 #object-container { padding-top: var(--global-back-offset); }
+ 
+ /* #object-container { padding-top: 18px; }*/
 
 .split-layout.split {
     max-width: 100vw;
@@ -171,6 +211,10 @@ body {
     background: rgba(0,0,0,0.85);
     pointer-events: none;
 }
+
+/* Hide the meta/content divider — we'll rely on the content-side rule for
+   subsection markers instead. */
+.metadata-column::after { display: none !important; }
 
 
 .split-layout.split .metadata-column {
@@ -320,18 +364,18 @@ body {
     font-size: 0.8rem;
 }
 
-/* Photo gallery (thumbnails) styles */
+/* Photo gallery (thumbnails) styles — CSS Grid based masonry with JS row-span
+   calculation. Grid gives consistent gaps and responsive column control. */
 .photo-gallery {
     margin-top: 30px;
-    /* Column-based masonry: fixed column count on wide viewports; thumbnails
-       preserve their natural height so images maintain original aspect ratios. */
-    --gallery-cols: 6;
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
-    padding: 20px 24px; /* internal gutters so thumbnails don't touch the edge */
-    column-count: var(--gallery-cols);
-    column-gap: 12px;
+    --gallery-cols: 4; /* default: 4 columns on wide/fullscreen */
+    display: grid;
+    grid-template-columns: repeat(var(--gallery-cols), 1fr);
+    grid-auto-rows: auto; /* rows size to content so items do not span multiple rows */
+    gap: 15px; /* consistent gap between images (user requested 15px) */
+    width: 100%;
     box-sizing: border-box;
+    padding: 20px 24px; /* internal gutters so thumbnails don't touch the edge */
     background: transparent;
 }
 
@@ -346,19 +390,42 @@ body {
 }
 
 /* Responsive adjustments: reduce the column count at narrower breakpoints */
-@media (max-width: 1400px) { .photo-gallery { --gallery-cols: 5; } }
+@media (max-width: 1400px) { .photo-gallery { --gallery-cols: 4; } }
 @media (max-width: 1200px) { .photo-gallery { --gallery-cols: 4; } }
 @media (max-width: 980px)  { .photo-gallery { --gallery-cols: 3; } }
 @media (max-width: 700px)  { .photo-gallery { --gallery-cols: 2; } }
+
+/* When a split/context panel is opened we reduce the number of columns */
+.split-layout.split .photo-gallery,
+#content-display.split .photo-gallery,
+#object-container.split .photo-gallery {
+    --gallery-cols: 3;
+    width: auto; /* allow gallery to fit into the content column */
+    margin-left: 0;
+    padding-left: 0;
+    padding-right: 0;
+    box-sizing: border-box;
+}
+
+.photo-gallery .thumb-wrapper {
+    /* Each grid cell; we use flex to bottom-align the image inside the cell */
+    display: flex;
+    align-items: flex-end; /* ensures image bottoms align inside their grid cell */
+    overflow: hidden;
+    border-radius: 2px;
+    box-sizing: border-box;
+    align-self: end; /* anchor the grid item to the bottom of its grid area */
+}
+
 .photo-gallery .thumb {
     width: 100%;
-    display: inline-block;
-    margin: 0 0 12px 0;
-    break-inside: avoid;
-    -webkit-column-break-inside: avoid;
+    height: auto; /* preserve aspect ratio */
+    display: block;
     cursor: pointer;
-    border: 2px solid rgba(0,0,0,0.06);
+    border: 1px solid rgba(0,0,0,0.06);
     transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+    object-fit: cover;
+    box-sizing: border-box;
 }
 
 /* Results grid (masonry) — same-width columns, varying heights based on image aspect ratio */
@@ -485,8 +552,9 @@ body {
 /* Subsection titles and dividers inside the description column */
 .subsection { margin: 0; }
 .subsection-title {
-    font-family: 'Blur Medium', 'FramesPartOne-Bold', sans-serif;
+    font-family: 'Blur Medium', sans-serif;
     font-size: 1.6em;
+    justify-content: left;
     letter-spacing: 0.6px;
     margin: 0;
     text-transform: none;
@@ -499,7 +567,7 @@ body {
 }
 
 #object-title {
-    font-family: 'Blur Light', 'FramesPartOne-Bold', sans-serif;
+    font-family: 'Blur Light', sans-serif;
     /* responsive title size so it scales but stays bounded */
     font-size: clamp(20px, 3.5vw, 40px);
     line-height: 1.05;
@@ -603,7 +671,7 @@ body {
 .description-block .subsection {
     position: -webkit-sticky; /* Safari */
     position: sticky;
-    top: calc(var(--global-back-offset, 56px));
+    /*top: calc(var(--global-back-offset, 56px));*/
     z-index: 10; /* base z-index; increased per-order below */
     /* use site background so header and body read as one flat plane */
     background: var(--site-bg);
@@ -630,13 +698,54 @@ body {
     position: static !important;
 }
 
-/* Ensure collapsed subsections are not sticky (they should take no space) */
-.description-block .subsection.collapsed{ position: static; }
+/* Ensure collapsed subsections are not sticky (they should take no space).
+    Use position: relative rather than static so the subsection's ::before
+    pseudo-element (the horizontal tick) remains positioned relative to the
+    subsection. Setting to `relative` still disables sticky positioning while
+    preserving the local positioning context for the tick. */
+.description-block .subsection.collapsed{ position: relative; }
+
+/* When a subsection is collapsed, the rotated/absolutely-positioned label
+   must reflow so collapsed labels/toggles stack vertically instead of
+   overlapping other labels. Make the title and the toggle participate in
+   normal flow and remove the rotation/offsets. This keeps collapsed
+   toggles stacked one-after-another in the left label column. */
+.description-block .subsection.collapsed .subsection-title {
+    /* keep the title in-flow (occupies the left label column) so collapsed
+       subsections stack. Use flex centering so rotated toggle aligns nicely. */
+    
+    position: static !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: var(--section-label-width);
+    padding-top: calc(var(--section-label-collapsed-height) / 2);
+    padding-bottom: calc(var(--section-label-collapsed-height) * 2);
+    min-height: var(--section-label-collapsed-height);
+    box-sizing: border-box;
+}
+
+.description-block .subsection.collapsed .subsection-toggle {
+    /* Keep the visual rotation but allow the toggle to participate in
+       normal flow. The transform rotates the label while the container
+       (title) provides the column footprint so multiple collapsed toggles
+       stack without overlapping. */
+    position: static !important;
+    display: inline-block !important;
+    transform: translateX(-40%) rotate(90deg) !important;
+    transform-origin: center center !important;
+    writing-mode: horizontal-tb;
+    white-space: nowrap;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    font-family: 'Blur Light', 'Blur Regular', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 400;
+}
 
 /* Toggle button inside subsection title */
 .subsection-toggle {
     all: unset;
-    cursor: pointer;
     font: inherit;
     color: inherit;
     display: inline-block;
@@ -645,19 +754,181 @@ body {
     padding: 4px 2px;
 }
 .subsection-toggle:focus {
-    outline: 2px solid #000;
+    outline: 1px solid #000;
     outline-offset: 2px;
 }
-.subsection-title .subsection-toggle::after {
-    /* Show minus when section is expanded (default) */
-    content: '−'; /* Unicode minus */
+ /* .subsection-title .subsection-toggle::after {
+    /* Default plus/minus marker (hidden in our rotated-label layout) */
+/*    content: '−';
     float: right;
     font-weight: 700;
-    transition: transform 220ms ease, content 120ms ease;
+    transition: transform 220ms ease, content 120ms ease; 
 }
 .subsection.collapsed .subsection-title .subsection-toggle::after {
-    /* Show plus when collapsed */
     content: '+';
+} */
+
+/* Hide metadata divider (we'll place the line with subsections instead) */
+.metadata-column::after { display: none !important; }
+
+/* Remove visual plus/minus marker when using rotated labels */
+.subsection-title .subsection-toggle::after,
+.description-block .subsection .subsection-toggle::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* Remove horizontal divider element used previously between subsection headers */
+.divider { display: none !important; }
+
+/* Desktop layout: left label column with rotated horizontal text reading top->bottom */
+@media (min-width: 900px) {
+    /* Width reserved for rotated labels and offset for the guide line */
+    :root {
+        /* Make label column responsive and narrower: min 48px up to 80px depending on viewport.
+           This reduces the horizontal footprint of rotated labels while remaining responsive. */
+        --section-label-width: clamp(20px, 2.34vw, 45px);
+        /* reduce distance from guide to label for a tighter visual relationship */
+        --label-line-offset: 12px; /* ~12px gap (smaller) */
+        --tick-length: 16px; /* shorter connector length to match reduced gap */
+        /* font size for rotated subsection labels (responsive) */
+        --section-label-font-size: clamp(0.85rem, 1.6vw, 1.15rem);
+        --section-label-collapsed-height: 30px;
+    }
+
+    .description-block { position: relative; }
+
+    /* Vertical guide line anchored to the description block (option 2).
+       It spans the full height of .description-block so it grows/shrinks
+       with the content when subsections open/close. */
+    .description-block::before {
+        content: '';
+        position: absolute;
+        /* place the guide to the left of the label column by shifting
+           it left by --label-line-offset (so it sits outside the label column)
+           This keeps the vertical line visually to the left of the subsection buttons. */
+        left: calc(0px - var(--label-line-offset));
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: rgba(0,0,0,0.85);
+        pointer-events: none;
+        /* raise above subsection backgrounds so the guide is visible */
+        /* Increased so the vertical guide sits above rotated labels when collapsed */
+        z-index: 80;
+    }
+ /* short horizontal divider (tick) connecting the left guide to the content */
+    .description-block .subsection::before {
+        content: '';
+        position: absolute;
+        /* align tick start with the vertical guide (same left origin) */
+        left: calc(0px - var(--label-line-offset));
+        /* align vertically with the top of the subsection body/title area */
+        top: 0;
+        height: 3px;                /* thickness of the tick */
+        width: 20px;                /* length (tune to taste) */
+        background: rgba(0,0,0,0.85);
+        /* raise tick above subsection background and above toggles so it remains visible */
+        z-index: 85;
+        pointer-events: none;
+    }
+
+    /* keep tick visible for collapsed subsections so the guide/tick remains
+       above stacked rotated toggles (user requested ticks remain visible) */
+    .description-block .subsection.collapsed::before {
+        display: block;
+    }
+
+    /* if you want the tick to sit a few px lower (matching visual baseline),
+       tweak top (example: top: 6px;) */
+    /* .description-block .subsection::before { top: 6px; } */
+
+    .description-block .subsection {
+        display: grid;
+        grid-template-columns: var(--section-label-width) 1fr;
+        /* single row grid so the body can sit at the top; title will be
+           absolutely positioned into the left column so it doesn't create
+           vertical space above the body */
+        grid-template-rows: 1fr;
+        gap: 0;
+        align-items: start;
+          /* remove vertical padding so the subsection-body can start at the
+              very top of .description-block */
+          padding: 0;
+        background: var(--site-bg);
+        position: relative; /* needed so subsection::after positions relative to header block */
+    }
+
+    .description-block .subsection .subsection-title {
+        /* place the title absolutely in the left column so it doesn't
+           take up vertical space; this allows the subsection-body to
+           start at the very top of the subsection */
+        grid-column: 1 / 2;
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: auto;
+        width: var(--section-label-width);
+        display: flex;
+        align-items: flex-start;
+        /* center rotated label horizontally within the title column */
+        justify-content: center;
+        padding: 0;
+    }
+
+     .description-block .subsection .subsection-toggle {
+         
+          position: absolute;
+          left: 40%;                 /* center horizontally within label column */
+          top: 1.5em;                  /* small nudge from top; tune (6-12px) to match baseline */
+          transform-origin: center top;
+          /* translate in normal axes, then rotate so translations are not affected
+              by the rotation (keeps placement consistent across subsections) */
+          transform: translateX(-50%) rotate(90deg);
+          writing-mode: horizontal-tb;
+          white-space: nowrap;
+          cursor: pointer;
+          font-family: 'Blur Medium', sans-serif;
+          font-size: var(--section-label-font-size);
+          letter-spacing: 0.4px;
+          margin: 0;
+          padding: 0;
+          line-height: 1;
+          z-index: 70; /* keep above guide/ticks */
+          display: inline-block;
+          
+     }
+
+    .description-block .subsection .subsection-body {
+        /* occupy the primary grid cell at the top so the content begins
+           at the top of the description-block */
+        grid-column: 2 / -1;
+        grid-row: 1 / 2;
+        padding-left: 18px;
+        margin-top: 0;
+    }
+
+    /* Normalize first-child spacing so different subsection bodies don't
+       start at different vertical offsets (prevents headings/images/etc.
+       from pushing the visual start down). This enforces a consistent
+       baseline across subsections on desktop split layouts. */
+    .description-block .subsection .subsection-body > *:first-child {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+    }
+
+    /* remove horizontal tick connectors at each subsection header */
+    .description-block .subsection::after {
+        display: none !important;
+        content: none !important;
+    }
+
+    /* Move the content column up on desktop split layouts so description
+       aligns with the object title and the top gutter from .content-column
+       doesn't push subsections down. This only affects wide viewports. */
+    .split-layout.split .content-column {
+        padding-top: 0;
+    }
 }
 
 /* Make sure the gallery sits below the description even when split layout is active */
@@ -688,7 +959,7 @@ body {
     position: relative;
     max-width: 90vw;
     max-height: 90vh;
-    padding: 18px;
+    
     box-sizing: border-box;
     z-index: 1010;
     display: flex;
@@ -882,15 +1153,18 @@ h1 {
     can use the full remaining width. This allows the #context-panel (flex:1) to expand to the edge. */
 .split-layout.split .content-column { padding-right: 0; }
 
-/* Keep the description block at its previous size (preserve 50% behavior) */
+/* Keep the description block at a smaller size when the context panel opens so
+    the right-hand panel fits in the viewport. Use a flexible split that gives the
+    description comfortable reading width while allowing the context panel to occupy
+    the remaining space. */
 #content-display.split .description-block,
 #content-display.split #description-text {
-    /* Make description wider (90%) when the content area is split with the context panel.
-       This prevents the text from shrinking too much when a context tab/detail is opened. */
-    flex: 0 0 90%;
-    max-width: 90%;
-    padding-right: 20px;
-    box-sizing: border-box;
+     /* Shrink description to the left so the context panel can be fully visible
+         without horizontal scrolling. Adjust this percentage to taste (50-60%). */
+     flex: 0 0 55%;
+     max-width: 55%;
+     padding-right: 20px;
+     box-sizing: border-box;
 }
 
 /* Context panel should take the remaining width of the content area */
@@ -1073,6 +1347,38 @@ h1 {
     letter-spacing:0.5px;
 }
 @media (max-width:520px){ .site-brand{ font-size:34px; left:10px; top:8px; } }
+
+/* --- View Transitions Logic --- */
+
+/* Duration of the overall page fade */
+::view-transition-group(root) {
+  animation-duration: 0.5s;
+}
+
+/* Specific timing for the image 'morph' effect */
+::view-transition-group(object-*) {
+  animation-duration: 0.6s;
+  animation-timing-function: cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+/* Ensure the image scales smoothly without distortion */
+::view-transition-old(object-*),
+::view-transition-new(object-*) {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+/* Apply a simple fade to the background content */
+::view-transition-old(root) {
+  animation: 90ms cubic-bezier(0.4, 0, 1, 1) both fade-out;
+}
+::view-transition-new(root) {
+  animation: 210ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in;
+}
+
+@keyframes fade-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
 
 
 

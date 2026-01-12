@@ -5,34 +5,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Symbol Detail | The Umbrella</title>
     <link rel="stylesheet" href="style.css">
+    
 </head>
-<body>
+<body class="hero-init">
 
     <!-- Global Back button placed above the column layout -->
     <div id="global-back-wrap">
         <button id="back-button" type="button" aria-label="Go back">Back</button>
     </div>
-
+    <!-- Hero sentinel: small spacer used to detect when the user scrolls down
+         far enough to reveal the page content. Observed by script.js. -->
+    <div id="hero-sentinel" aria-hidden="true"></div>
     <main id="object-container" class="split-layout"> 
-        
+    <!-- hero-mode removed: place main image + title into the normal page columns -->
+
     <section id="metadata-controls" class="metadata-column" data-column-name="Left — Metadata">
-            
-           
+            <!-- Main image for the object -->
             <div id="object-image-wrapper">
-                <img id="object-image" src="" alt="Photo of the protest symbol">
+                <img id="object-image" src="" alt="Photo of the protest symbol" loading="eager">
             </div>
+                        <!-- Ensure the target image gets a view-transition-name as early as
+                                 possible during parsing so the browser can match it to the
+                                 clicked thumbnail. The name format mirrors the gallery's
+                                 thumbnail naming (object-<id> or object-src-<hash>). -->
+                        <script>
+    (function(){
+        try {
+            var q = new URLSearchParams(location.search);
+            var id = q.get('id');
+            var img = q.get('img');
+            var el = document.getElementById('object-image');
+            if (!el) return;
+
+            if (id) {
+                // Sets the name to match the gallery (e.g., object-123)
+                el.style.viewTransitionName = 'object-' + id; // Use .style, not setAttribute
+                return;
+
+            } else if (img) {
+                // Algorithm matches the hashString function in infinite-gallery.js
+                var s = img || '';
+                var h = 0; 
+                for (var i = 0; i < s.length; i++) { 
+                    h = (h * 31 + s.charCodeAt(i)) >>> 0; 
+                }
+                el.style.viewTransitionName = 'object-src-' + (h).toString(36);
+            }
+        } catch(e) {
+            console.error("View Transition naming failed:", e);
+        }
+    })();
+</script>
             <h1 id="object-title"></h1>
 
             <div id="static-tags">
                 <p><span id="type-tag"></span></p>
                 <p><span id="timeframe-tag"></span></p>
-                </div>
-            
+            </div>
         </section>
 
     <section id="content-display" class="content-column" data-column-name="Center — Content">
+       
+        
             
-            <div id="description-block" class="description-block">
+        <div id="description-block" class="description-block">
                 <section id="desc-section" class="subsection">
                     <h2 class="subsection-title"><button class="subsection-toggle" aria-expanded="true">Description</button></h2>
                     <div class="divider" aria-hidden="true"></div>
@@ -55,7 +91,7 @@
                 </section>
 
                 <section id="eyewitness-section" class="subsection">
-                    <h2 class="subsection-title"><button class="subsection-toggle" aria-expanded="true">Eyewitness stories</button></h2>
+                    <h2 class="subsection-title"><button class="subsection-toggle" aria-expanded="true">Accounts</button></h2>
                     <div class="divider" aria-hidden="true"></div>
                     <div class="subsection-body">
                         <div id="eyewitness-contents" class="eyewitness-contents">

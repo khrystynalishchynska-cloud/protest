@@ -8,6 +8,7 @@
   let __placeholderCounter = 0;
 
   const gallery = document.getElementById('infinite-gallery');
+  try{ console.log('[gallery] script loaded, looking for #infinite-gallery'); }catch(e){}
   if (!gallery) { console.warn('infinite-gallery: missing #infinite-gallery element'); return; }
 
   async function fetchJson(url){
@@ -105,9 +106,21 @@
   try{ img.loading = 'lazy'; }catch(e){}
     img.setAttribute('data-src', item.src);
     img.alt = item.title || '';
+    // assign a stable view-transition-name so native View Transitions can match
+    try{
+      const vtName = item.id ? ('object-' + String(item.id)) : ('object-src-' + hashString(String(item.src || '')));
+      img.setAttribute('view-transition-name', vtName);
+    }catch(e){}
     card.appendChild(img);
     a.appendChild(card);
     return a;
+  }
+
+  // Simple string hash to produce stable short ids for src-based names
+  function hashString(s){
+    let h = 0;
+    for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+    return h.toString(36);
   }
 
   function preload(src, timeout=10000){
@@ -229,17 +242,42 @@
           if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
           // Prefer the View Transition API for a smooth shared-element navigation
           try {
-            // Navigate to the detail page. Use startViewTransition if available
-            // to allow the browser to create a nicer navigation animation; do not
-            // set sessionStorage or otherwise signal a hero landing here — starting
-            // from scratch.
             e.preventDefault();
+            // determine the thumbnail image element and a stable name
+            const thumbImg = a.querySelector('img') || a.querySelector('.thumb') || null;
+            let vtName = null;
+            try{
+              const id = a.dataset.id || a.getAttribute('data-id') || (a.href && (new URL(a.href, location.href).searchParams.get('id')));
+              if (id) vtName = 'object-' + id;
+              else if (thumbImg) vtName = 'object-src-' + hashString(thumbImg.getAttribute('data-src') || thumbImg.src || thumbImg.getAttribute('data-src') || '');
+              if (thumbImg && vtName) thumbImg.setAttribute('view-transition-name', vtName);
+            }catch(e){}
+
+            try{ console.log && console.log('[VT DEBUG] gallery click', { href: a.href, id: a.dataset.id || null, datasetSrc: a.dataset.src || null }); }catch(e){}
+            try{ console.log && console.log('[VT DEBUG] computed vtName', vtName); }catch(e){}
+
             if (document.startViewTransition) {
+              // signal to the detail page that a native VT navigation is in progress
+              try{ sessionStorage.setItem('vt_navigation', '1'); }catch(e){}
+              try{ console.log && console.log('[VT DEBUG] using native View Transitions, vt_navigation set'); }catch(e){}
               document.startViewTransition(() => { window.location.href = a.href; });
-            } else {
-              window.location.href = a.href;
+              return;
             }
-            return;
+
+            // Fallback: capture a small snapshot for FLIP animation on the detail page
+            try{
+              const imgEl = thumbImg;
+              const src = (imgEl && (imgEl.currentSrc || imgEl.src || imgEl.getAttribute('data-src'))) || a.dataset.src || '';
+              if (imgEl && src) {
+                const r = imgEl.getBoundingClientRect();
+                const payload = { src, rect: { left: Math.round(r.left), top: Math.round(r.top), width: Math.round(r.width), height: Math.round(r.height) }, id: a.dataset.id || null };
+                try{ sessionStorage.setItem('vt_fallback', JSON.stringify(payload)); }catch(e){}
+                try{ console.log && console.log('[VT DEBUG] vt_fallback set', payload); }catch(e){}
+              }
+            }catch(e){ try{ console.warn && console.warn('[VT DEBUG] vt_fallback store failed', e); }catch(e){} }
+
+            // finally navigate
+            window.location.href = a.href;
           } catch(err) { /* fallback to direct navigation */ try { window.location.href = a.href; } catch(e){} }
           e.preventDefault();
         }catch(err){}

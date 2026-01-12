@@ -48,22 +48,29 @@ document.addEventListener('object-data-ready', (event) => { (async function(){
     try{
         // If the gallery used native View Transitions, we only need a short
         // double-RAF so the browser can paint the target element for matching.
-        if (sessionStorage.getItem('vt_navigation')){
-            try{ sessionStorage.removeItem('vt_navigation'); }catch(e){}
-            await new Promise(r => requestAnimationFrame(r));
-            await new Promise(r => requestAnimationFrame(r));
-            await new Promise(r => setTimeout(r, 16));
-        }
+        try{
+            const vtNav = sessionStorage.getItem('vt_navigation');
+            if (vtNav){
+            try{ console.log && console.log('[VT DEBUG] vt_navigation present, delaying heavy hero init'); }catch(e){}
+                try{ sessionStorage.removeItem('vt_navigation'); }catch(e){}
+                try{ console.log && console.log('[VT DEBUG] vt_navigation cleared'); }catch(e){}
+                await new Promise(r => requestAnimationFrame(r));
+                await new Promise(r => requestAnimationFrame(r));
+                await new Promise(r => setTimeout(r, 16));
+            }
+        }catch(e){}
 
         // FLIP fallback: when the gallery couldn't use View Transitions we saved
         // a small snapshot in sessionStorage. Perform a FLIP animation from the
         // stored source rect -> the detail image's rect so users still see a
         // cross-page shared-element effect.
         const fallbackRaw = sessionStorage.getItem('vt_fallback');
+    try{ console.log && console.log('[VT DEBUG] vt_fallback raw', fallbackRaw); }catch(e){}
         if (fallbackRaw) {
             try{
-                sessionStorage.removeItem('vt_fallback');
+                try{ sessionStorage.removeItem('vt_fallback'); }catch(e){}
                 const fb = JSON.parse(fallbackRaw);
+                try{ console.log && console.log('[VT DEBUG] running FLIP fallback', fb); }catch(e){}
                 // Ensure the target image is present and decoded (renderObjectPage
                 // dispatches object-data-ready after decode, so main image should be ready)
                 const targetImg = document.getElementById('object-image');
@@ -98,7 +105,7 @@ document.addEventListener('object-data-ready', (event) => { (async function(){
                     const anim = clone.animate([
                         { transform: 'translate(0px, 0px) scale(1, 1)', opacity: 1 },
                         { transform: `translate(${dx}px, ${dy}px) scale(${scaleX}, ${scaleY})`, opacity: 1 }
-                    ], { duration: 5000, easing: 'cubic-bezier(.2,.9,.2,1)', fill: 'forwards' });
+                    ], { duration: 2000, easing: 'cubic-bezier(.2,.9,.2,1)', fill: 'forwards' });
 
                     try { await anim.finished; } catch(e) { /* ignore */ }
                     // ensure target image visible (some layouts hide it briefly)
@@ -175,7 +182,7 @@ document.addEventListener('object-data-ready', (event) => { (async function(){
             el.style.zIndex = '99999';
             el.style.margin = '0';
             el.style.pointerEvents = 'auto';
-            el.style.transition = 'left 1000ms cubic-bezier(.2,.9,.2,1), top 1000ms cubic-bezier(.2,.9,.2,1), width 1000ms cubic-bezier(.2,.9,.2,1), height 1000ms cubic-bezier(.2,.9,.2,1)';
+            el.style.transition = 'left 2000ms cubic-bezier(.2,.9,.2,1), top 2000ms cubic-bezier(.2,.9,.2,1), width 2000ms cubic-bezier(.2,.9,.2,1), height 2000ms cubic-bezier(.2,.9,.2,1)';
         }
 
         function restoreOriginal(el, place) {
@@ -229,8 +236,8 @@ document.addEventListener('object-data-ready', (event) => { (async function(){
 
         // Re-enable transitions (so next change will animate)
         setTimeout(() => {
-            imgWrap.style.transition = 'left 1000ms cubic-bezier(.2,.9,.2,1), top 1000ms cubic-bezier(.2,.9,.2,1), width 1000ms cubic-bezier(.2,.9,.2,1), height 1000ms cubic-bezier(.2,.9,.2,1)';
-            title.style.transition = 'left 1000ms cubic-bezier(.2,.9,.2,1), top 1000ms cubic-bezier(.2,.9,.2,1), width 1000ms cubic-bezier(.2,.9,.2,1), height 1000ms cubic-bezier(.2,.9,.2,1)';
+            imgWrap.style.transition = 'left 2000ms cubic-bezier(.2,.9,.2,1), top 2000ms cubic-bezier(.2,.9,.2,1), width 2000ms cubic-bezier(.2,.9,.2,1), height 2000ms cubic-bezier(.2,.9,.2,1)';
+            title.style.transition = 'left 2000ms cubic-bezier(.2,.9,.2,1), top 2000ms cubic-bezier(.2,.9,.2,1), width 2000ms cubic-bezier(.2,.9,.2,1), height 2000ms cubic-bezier(.2,.9,.2,1)';
         }, 30);
 
         // Reveal: animate fixed elements to their final on-page rects, then restore them into flow
@@ -888,148 +895,19 @@ function handleContextPanel(event) {
     });
 }
 
-// ... togglePanel and populateContextPanel remain the same, but I've updated populateContextPanel to use the new ALL_PROTEST_DATA global variable.
-
-function togglePanel(open, filterData = null) {
-    const panel = document.getElementById('context-panel');
-    const container = document.getElementById('object-container');
-
-    // Ensure panel is shown/hidden explicitly to avoid visual race conditions
-    panel.classList.toggle('active', open);
-    // Also toggle the 'hidden-panel' helper class which may be present in markup
-    // (keeps the panel visually hidden before JS runs). When opening, remove
-    // the class so the panel's CSS transitions can take effect; when closing,
-    // re-add it so the panel is fully hidden for accessibility/fallback.
-    panel.classList.toggle('hidden-panel', !open);
-    container.classList.toggle('split', open);
-    // control content-display split state (right column) separately
-    const contentDisplay = document.getElementById('content-display');
-    if (contentDisplay) contentDisplay.classList.toggle('split', open);
-    // explicit inline display and aria-hidden for robustness
-    if (open) {
-        panel.style.display = '';
-        panel.removeAttribute('aria-hidden');
-    } else {
-        panel.style.display = 'none';
-        panel.setAttribute('aria-hidden', 'true');
-    }
-
-    if (open && filterData) {
-        populateContextPanel(filterData); 
-    } else if (!open) {
-        document.getElementById('context-panel-content').innerHTML = '';
-        document.getElementById('context-panel').classList.remove('active');
-        document.getElementById('object-container').classList.remove('split');
-        if (contentDisplay) contentDisplay.classList.remove('split');
-    }
-
-    // No masonry relayout needed when panel toggles; CSS Grid will reflow automatically
-}
-
-
-function populateContextPanel(filterData) {
-    const panelContent = document.getElementById('context-panel-content');
-    if (window.__debug) console.log('populateContextPanel called with', filterData);
-    
-    // Filter the global data array based on the clicked term (if a specific term was clicked)
-    // If a button was clicked, we show ALL terms linked to that category.
-    const termToFilterBy = filterData.term; // This will only be defined if a span was clicked
-    let filteredResults = [];
-
-    if (termToFilterBy) {
-        // If a specific term (e.g., 'Hong Kong') was clicked, filter to show only those objects
-        filteredResults = ALL_PROTEST_DATA.filter(obj => 
-            obj[filterData.key] && obj[filterData.key].includes(termToFilterBy)
-        );
-    } else {
-        // If a primary button (e.g., 'Country') was clicked, show a narrow list of objects on the left
-        // and a larger detail area on the right. The detail area is collapsed until an item is selected.
-        panelContent.innerHTML = '';
-        const panel = document.getElementById('context-panel');
-        // ensure panel is in compact mode for list-first view
-        if (panel) {
-            panel.classList.remove('expanded');
-            panel.classList.add('compact');
-        }
-
-        const layout = document.createElement('div');
-        layout.className = 'context-panel-layout no-detail';
-
-        const list = document.createElement('div');
-        list.className = 'context-panel-list';
-        list.id = 'context-list';
-
-        const detail = document.createElement('div');
-        detail.className = 'context-panel-detail';
-        detail.id = 'context-detail';
-        detail.innerHTML = '<p>Select an item from the list to see more details.</p>';
-
-    // Build list of objects that have this category key
-        const objectsWithCategory = ALL_PROTEST_DATA.filter(obj => Array.isArray(obj[filterData.key]) && obj[filterData.key].length > 0);
-
-    if (window.__debug) console.log('objectsWithCategory count:', objectsWithCategory.length);
-
-        if (objectsWithCategory.length === 0) {
-            list.innerHTML = '<p>No objects available for this category.</p>';
-        } else {
-            objectsWithCategory.forEach(obj => {
-                const item = document.createElement('div');
-                item.className = 'context-item';
-                item.tabIndex = 0;
-                item.dataset.objId = obj.id;
-                item.innerHTML = `<strong>${obj.name}</strong><div style="font-size:0.85em;color:#666;margin-top:4px">${(obj.categories_country || []).join(', ')}</div>`;
-
-                // Click handler: populate detail pane
-                item.addEventListener('click', () => {
-                    if (window.__debug) console.log('context item clicked:', obj.id, obj.name);
-                    // mark active
-                    document.querySelectorAll('.context-panel-list .context-item').forEach(i => i.classList.remove('active'));
-                    item.classList.add('active');
-
-                    // remove no-detail so detail column becomes visible
-                    layout.classList.remove('no-detail');
-
-                    // expand the outer context panel so the detail area has more room
-                    if (panel) {
-                        panel.classList.remove('compact');
-                        panel.classList.add('expanded');
-                    }
-
-                    // populate detail with larger text about the object
-                    detail.innerHTML = `
-                        <h3>${obj.name}</h3>
-                        <div class="context-detail-body">${obj.description_html || '<p>No description available.</p>'}</div>
-                    `;
-                    // ensure images or other interactive elements (gallery links) still work — no extra wiring here.
-                });
-
-                // keyboard accessibility
-                item.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); item.click(); } });
-
-                list.appendChild(item);
-            });
-        }
-
-        layout.appendChild(list);
-        layout.appendChild(detail);
-        panelContent.appendChild(layout);
-        return;
-    }
-
-    // This section runs ONLY if a specific term (like 'Hong Kong') was clicked.
-    const resultsList = filteredResults.map(obj => 
-        `<div class="context-result"><strong>${obj.name}</strong> (${obj.categories_country[0]})</div>`
-    ).join('');
-
-
-    panelContent.innerHTML = `
-        <h3>Results for: ${termToFilterBy}</h3>
-        <p>Found ${filteredResults.length} object(s) linked to **${termToFilterBy}**:</p>
-        ${resultsList}
-        <hr>
-        <p>This demonstrates real-time filtering based on a term clicked in the description text.</p>
-    `;
-}
+// --- Simplified object-data-ready: remove hero/FLIP/ViewTransition logic and keep it minimal ---
+document.addEventListener('object-data-ready', (event) => {
+    // Revert to simple behavior: clear any hero-related classes and ensure main elements are visible.
+    try {
+        document.body.classList.remove('hero-mode', 'compact-hero', 'hero-animating', 'hero-active', 'hero-init', 'hero-revealed');
+    } catch (e) {}
+    try {
+        const img = document.getElementById('object-image');
+        const title = document.getElementById('object-title');
+        if (img) { img.style.visibility = ''; img.style.opacity = '1'; }
+        if (title) { title.style.visibility = ''; title.style.opacity = '1'; }
+    } catch (e) {}
+});
 
 /* --- PHOTO GALLERY RENDERING --- */
 function renderGallery(data) {

@@ -824,44 +824,47 @@ function setupHighlighting(objectData) {
 
     // Add click event to highlighted spans in description
     document.getElementById('description-text').addEventListener('click', async function(e) {
-        if (e.target.matches('span[class^="highlight-"]')) {
-            const typeClass = Array.from(e.target.classList).find(cls => cls.startsWith('highlight-'));
-            const categoryKey = typeClass.replace('highlight-', 'categories_');
-            const value = e.target.textContent.trim();
+        // Use closest so clicks on inner elements (e.g., <strong>, text nodes) still resolve the highlight span
+        const clicked = e.target && (e.target.closest ? e.target.closest('span[class^="highlight-"]') : null);
+        if (!clicked || !this.contains(clicked)) return;
 
-            // Special-case protest info: show embedded resources or fetch details
-            if (categoryKey === 'categories_protest') {
-                // Open the panel first so the layout is correct
-                togglePanel(true);
-                const panelContent = document.getElementById('context-panel-content');
-                if (value === 'Umbrella Revolution') {
-                    panelContent.innerHTML = `
-                        <iframe src="umbrella-movement.html" style="width:100%;height:600px;border:none;"></iframe>
-                    `;
-                } else {
-                    try {
-                        const response = await fetch('protest_info.json');
-                        if (!response.ok) throw new Error('Could not load protest info');
-                        const protestInfo = await response.json();
-                        const info = protestInfo[value];
-                        if (info) {
-                            panelContent.innerHTML = `
-                                <h3>${value}</h3>
-                                <p><strong>Year:</strong> ${info.year}</p>
-                                <p>${info.summary}</p>
-                                ${info.key_events ? `<ul>${info.key_events.map(event => `<li>${event}</li>`).join('')}</ul>` : ''}
-                            `;
-                        } else {
-                            panelContent.innerHTML = `<p>No information available for ${value}.</p>`;
-                        }
-                    } catch (err) {
-                        panelContent.innerHTML = `<p>Error loading protest info.</p>`;
-                    }
-                }
+        const typeClass = Array.from(clicked.classList).find(cls => cls.startsWith('highlight-'));
+        if (!typeClass) return;
+        const categoryKey = typeClass.replace('highlight-', 'categories_');
+        const value = clicked.textContent.trim();
+
+        // Special-case protest info: show embedded resources or fetch details
+        if (categoryKey === 'categories_protest') {
+            // Open the panel first so the layout is correct
+            togglePanel(true);
+            const panelContent = document.getElementById('context-panel-content');
+            if (value === 'Umbrella Revolution') {
+                panelContent.innerHTML = `
+                    <iframe src="umbrella-movement.html" style="width:100%;height:600px;border:none;"></iframe>
+                `;
             } else {
-                // For normal tags, let the central togglePanel/populateContextPanel handle filtering
-                togglePanel(true, { key: categoryKey, term: value });
+                try {
+                    const response = await fetch('protest_info.json');
+                    if (!response.ok) throw new Error('Could not load protest info');
+                    const protestInfo = await response.json();
+                    const info = protestInfo[value];
+                    if (info) {
+                        panelContent.innerHTML = `
+                            <h3>${value}</h3>
+                            <p><strong>Year:</strong> ${info.year}</p>
+                            <p>${info.summary}</p>
+                            ${info.key_events ? `<ul>${info.key_events.map(event => `<li>${event}</li>`).join('')}</ul>` : ''}
+                        `;
+                    } else {
+                        panelContent.innerHTML = `<p>No information available for ${value}.</p>`;
+                    }
+                } catch (err) {
+                    panelContent.innerHTML = `<p>Error loading protest info.</p>`;
+                }
             }
+        } else {
+            // For normal tags, let the central togglePanel/populateContextPanel handle filtering
+            togglePanel(true, { key: categoryKey, term: value });
         }
     });
 }

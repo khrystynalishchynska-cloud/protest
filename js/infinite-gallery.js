@@ -269,7 +269,44 @@
       }, false);
       gallery._clickHandlerAdded = true;
     }
-    
+    // Updated Click Handler for Shared Element Transition
+     //if (!gallery._clickHandlerAdded){
+      // gallery.addEventListener('click', function(e){
+        // try {
+         //  const a = e.target.closest('a.card-link');
+           //if (!a || e.defaultPrevented) return;
+
+          // 1. Stop the immediate page jump to capture data
+           //e.preventDefault();
+
+          // const thumbImg = a.querySelector('img');
+         //  if (thumbImg) {
+           //  const r = thumbImg.getBoundingClientRect();
+            
+            // 2. Save the starting "First" position for the detail page
+           //  const payload = {
+              // src: thumbImg.src,
+             //  rect: {
+               //  left: Math.round(r.left),
+               //  top: Math.round(r.top),
+               //  width: Math.round(r.width),
+               //  height: Math.round(r.height)
+             //  }
+             //};
+            // Use a unique key to store the data
+            // sessionStorage.setItem('dissent_transition_data', JSON.stringify(payload));
+          // }
+
+          // 3. Proceed to the detail page
+         //  window.location.href = a.href;
+       //  } catch(err) {
+          // Fallback: if script fails, just navigate normally
+         //  const a = e.target.closest('a.card-link');
+          // if (a) window.location.href = a.href;
+       //  }
+      // }, false);
+      // gallery._clickHandlerAdded = true;
+    // }
 
 
     // responsive layout helper — compute layout params based on viewport width

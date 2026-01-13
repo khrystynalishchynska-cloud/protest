@@ -585,14 +585,15 @@ body {
    will-change entries here. */
 #object-title {
     transform-origin: top left;
-    will-change: auto;
+    /*  will-change: auto;*/
 }
 
 /* Ensure image/title don't pick up unexpected transitions elsewhere */
 #object-image,
 #object-title {
-    transition: none !important;
-    will-change: auto !important;
+    *transition: opacity 0.3s ease;
+    /*transition: none !important;*/
+    /* will-change: auto !important;*/
 }
 
 /* Hero-mode removed: keep the layout in the standard three-column state by default.
@@ -1354,7 +1355,7 @@ h1 {
 
 /* Duration of the overall page fade */
 ::view-transition-group(root) {
-  animation-duration: 0.5s;
+  animation-duration: 1s;
 }
 
 /* Specific timing for the image 'morph' effect */

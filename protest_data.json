@@ -21,9 +21,23 @@
   ]
   ,
   "eyewitness": [
-    "I was standing near Admiralty when the students first raised umbrellas — the crowd was calm but determined. (Anonymous eyewitness, 2014)",
-    "Several people I spoke with described how umbrellas were used both to shield from tear gas and to protect identities from cameras."
-  ],
+  {
+    "id": "eyewitness-1",
+    "author": "Anonymous",
+    "date": "2014",
+    "location": "Admiralty",
+    "preview": "I was standing near Admiralty when the students first raised umbrellas...",
+    "full_text": "I was standing near Admiralty when the students first raised umbrellas — the crowd was calm but determined. We didn't expect the tear gas, but the umbrellas suddenly became our only shield.",
+    "type": "text"
+  },
+  {
+    "id": "eyewitness-2",
+    "author": "Journalist",
+    "video_url": "https://www.youtube.com/embed/example",
+    "preview": "Several people described how umbrellas protected identities...",
+    "type": "video"
+  }
+],
   "sources": [
     { "url": "https://www.example-news.org/umbrella-movement-report", "title": "Coverage of the Umbrella Movement", "note": "Example news summary" },
     "Chan, L. (2015). Visual symbols in protest movements. Journal of Social Movements.",
@@ -1112,7 +1126,7 @@
   "categories_cause": ["Democracy", "Transparency", "National Resistance", "Women's Suffrage", "Peace"],
   "categories_protest": ["Sunflower Student Movement", "Ukrainian Resistance to Russian Invasion", "Kansas Suffrage Campaign"],
   "categories_timeframe": ["1867", "2014", "2022", "19th Century", "21st Century"],
-  "description_html": "Sunflowers have served as potent protest symbols across diverse historical contexts. In <span class=\"highlight-country\">Taiwan</span>, the <span class=\"highlight-timeframe\">2014</span> <span class=empasisc><span class=\"highlight-protest\">Sunflower Student Movement</span></span> adopted the flower after a florist donated hundreds to students occupying the Legislative Yuan. Chosen for its heliotropic nature—turning toward the sun—it became a symbol of <span class=\"highlight-cause\">transparency</span> and resistance against a trade agreement with China. As <span class=\"highlight-country\">Ukraine</span>’s national flower, its symbolic power surged in <span class=\"highlight-timeframe\">2022</span> following a viral video of a woman telling soldiers to carry <span class=strong-emphasis>sunflower seeds so blooms would sprout where they died</span>, turning it into a worldwide emblem of <span class=\"highlight-cause\">resilience</span>. Historically, the sunflower also aided the <span class=\"highlight-country\">U.S.</span> <span class=\"highlight-cause\">women’s suffrage</span> movement; in <span class=\"highlight-timeframe\">1867</span>, <span class=empasisc>Elizabeth Cady Stanton</span> and <span class=empasisc>Susan B. Anthony</span> wore sunflower pins in Kansas, establishing <span class=strong-emphasis>yellow</span> as a defining color for the fight for <span class=\"highlight-cause\">equality</span>. <br>"
+  "description_html": "Sunflowers have served as potent protest symbols across diverse historical contexts. In <span class=\"highlight-country\">Taiwan</span>, the <span class=\"highlight-timeframe\">2014</span> <span class=empasisc><span class=\"highlight-protest\">Sunflower Student Movement</span></span> adopted the flower after a florist donated hundreds to students occupying the Legislative Yuan. Chosen for its heliotropic nature—turning toward the sun—it became a symbol of <span class=\"highlight-cause\">transparency</span> and resistance against a trade agreement with China. As <span class=\"highlight-country\">Ukraine</span>’s national flower, its symbolic power surged in <span class=\"highlight-timeframe\">2022</span> following a viral video of a woman telling soldiers to carry <span class=strong-emphasis>sunflower seeds so blooms would sprout where they died</span>, turning it into a worldwide emblem of <span class=\"highlight-cause\">resilience</span>. Historically, the sunflower also aided the <span class=\"highlight-country\">U.S.</span> <span class=\"highlight-cause\">women’s suffrage</span> movement; in <span class=\"highlight-timeframe\">1867</span>, <span class=empasisc>Elizabeth Cady Stanton</span> and <span class=empasisc>Susan B. Anthony</span> wore sunflower pins in Kansas, establishing <span class=strong-emphasis>yellow</span> as a defining color for the fight for <span class=\"highlight-cause\">equality</span>."
  ,
   "images": [
     { "src": "images/sunflower_movement_taiwan_2014.webp", "caption": "Students occupying the Legislative Yuan in Taipei surrounded by sunflowers, 2014" },

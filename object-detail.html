@@ -83,7 +83,7 @@
                 </section>
 
                 <section id="eyewitness-section" class="subsection">
-                    <h2 class="subsection-title"><button class="subsection-toggle" aria-expanded="true">Accounts</button></h2>
+                    <h2 class="subsection-title"><button class="subsection-toggle" aria-expanded="true">POV </button></h2>
                     <div class="divider" aria-hidden="true"></div>
                     <div class="subsection-body">
                         <div id="eyewitness-contents" class="eyewitness-contents">
@@ -91,6 +91,17 @@
                         </div>
                     </div>
                 </section>
+
+                <!-- Eyewitness detail modal -->
+                <div id="eyewitness-modal" class="eyewitness-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Eyewitness detail">
+                    <div class="eyewitness-modal-backdrop" id="eyewitness-modal-backdrop"></div>
+                    <div class="eyewitness-modal-content" role="document">
+                        <button id="eyewitness-modal-close" class="modal-close" aria-label="Close">✕</button>
+                        <h3 id="ew-modal-name"></h3>
+                        <p id="ew-modal-role" class="ew-modal-role"></p>
+                        <div id="ew-modal-body" class="ew-modal-body"></div>
+                    </div>
+                </div>
 
                 <section id="sources-section" class="subsection">
                     <h2 class="subsection-title"><button class="subsection-toggle" aria-expanded="true">Sources &amp; News</button></h2>

@@ -226,6 +226,7 @@ document.addEventListener('object-data-ready', (event) => { (async function(){
         // force layout
         imgWrap.getBoundingClientRect();
         title.getBoundingClientRect();
+        
 
         // Re-enable transitions (so next change will animate)
         setTimeout(() => {
@@ -726,21 +727,79 @@ document.addEventListener('transitionend', (e) => {
 });
 
 function renderExtraSections(data) {
-    // Eyewitness stories
+    // Eyewitness stories (render as clickable cards; open modal for full text)
     const eyewitnessContainer = document.getElementById('eyewitness-contents');
     if (!eyewitnessContainer) return;
     eyewitnessContainer.innerHTML = '';
+
+    // small helper to escape text safely for injection into card previews
+    function escapeHtml(s){ return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
     if (Array.isArray(data.eyewitness) && data.eyewitness.length > 0) {
-        const list = document.createElement('ul');
-        data.eyewitness.forEach(item => {
-            const li = document.createElement('li');
-            li.innerHTML = item; // assume HTML-safe or plain text
-            list.appendChild(li);
+        data.eyewitness.forEach((item, idx) => {
+            // normalize item to object { name, role, text }
+            let ew = { name: '', role: '', text: '' };
+            if (typeof item === 'string') {
+                ew.text = item;
+            } else if (item && typeof item === 'object') {
+                ew.name = item.name || item.author || '';
+                ew.role = item.role || item.affiliation || '';
+                ew.text = item.text || item.body || item.quote || '';
+            }
+
+            const card = document.createElement('article');
+            card.className = 'eyewitness-card';
+            card.tabIndex = 0;
+            card.dataset.ewIndex = idx;
+
+            const nameHtml = `<strong class="ew-name">${escapeHtml(ew.name || 'Eyewitness')}</strong>`;
+            const roleHtml = `<div class="ew-role">${escapeHtml(ew.role || 'Anonymous')}</div>`;
+            const previewText = (ew.text || '').slice(0, 300);
+            const previewHtml = `<div class="ew-preview">${escapeHtml(previewText)}${(ew.text && ew.text.length > 300 ? '…' : '')}</div>`;
+
+            card.innerHTML = `<div class="ew-head">${nameHtml}${roleHtml}</div>${previewHtml}<button class="ew-open" aria-hidden="true" tabindex="-1">↗</button>`;
+
+            const openModal = () => {
+                const modal = document.getElementById('eyewitness-modal');
+                if (!modal) return;
+                document.getElementById('ew-modal-name').textContent = ew.name || '';
+                document.getElementById('ew-modal-role').textContent = ew.role || '';
+                document.getElementById('ew-modal-body').textContent = ew.text || '';
+                modal.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden';
+                const closeBtn = document.getElementById('eyewitness-modal-close');
+                if (closeBtn) closeBtn.focus();
+            };
+
+            card.addEventListener('click', openModal);
+            card.addEventListener('keydown', (ev) => {
+                if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); openModal(); }
+            });
+
+            eyewitnessContainer.appendChild(card);
         });
-        eyewitnessContainer.appendChild(list);
     } else {
         eyewitnessContainer.innerHTML = '<p>No eyewitness accounts available.</p>';
     }
+
+    // Modal close handlers (idempotent)
+    (function(){
+        const modal = document.getElementById('eyewitness-modal');
+        if (!modal) return;
+        const backdrop = document.getElementById('eyewitness-modal-backdrop');
+        const closeBtn = document.getElementById('eyewitness-modal-close');
+
+        function closeModal() {
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        }
+
+        if (backdrop) backdrop.addEventListener('click', closeModal);
+        if (closeBtn) closeBtn.addEventListener('click', closeModal);
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') closeModal();
+        });
+    })();
 
     // Sources & News
     const sourcesContainer = document.getElementById('sources-contents');
@@ -941,6 +1000,47 @@ function populateContextPanel(filterData) {
         filteredResults = ALL_PROTEST_DATA.filter(obj => 
             obj[filterData.key] && obj[filterData.key].includes(termToFilterBy)
         );
+        // Render a single-column list of the filtered results (no inline detail pane)
+        panelContent.innerHTML = '';
+        const panel = document.getElementById('context-panel');
+        if (panel) { panel.classList.remove('expanded'); panel.classList.add('compact'); }
+
+        const list = document.createElement('div');
+        list.className = 'context-panel-list single-column';
+        list.id = 'context-list-term';
+
+        if (filteredResults.length === 0) {
+            list.innerHTML = '<p>No objects found for this term.</p>';
+        } else {
+            filteredResults.forEach(obj => {
+                const item = document.createElement('div');
+                item.className = 'context-item';
+                item.tabIndex = 0;
+                item.dataset.objId = obj.id;
+
+                item.innerHTML = `
+                    <div class="context-item-main" style="flex:1;min-width:0;cursor:pointer">
+                        <a class="context-item-link" href="object-detail.html?id=${encodeURIComponent(obj.id)}"><strong class="context-item-title">${obj.name}</strong></a>
+                        <div style="font-size:0.85em;color:#666;margin-top:4px">${(obj.categories_country || []).join(', ')}</div>
+                    </div>
+                `;
+
+                const main = item.querySelector('.context-item-main');
+                main.addEventListener('click', () => {
+                    if (window.__debug) console.log('term-result clicked (list-only):', obj.id, obj.name);
+                    document.querySelectorAll('.context-panel-list .context-item').forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                    try { item.focus(); } catch (e) {}
+                });
+
+                item.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); main.click(); } });
+
+                list.appendChild(item);
+            });
+        }
+
+        panelContent.appendChild(list);
+        return;
     } else {
         // If a primary button (e.g., 'Country') was clicked, show a narrow list of objects on the left
         // and a larger detail area on the right. The detail area is collapsed until an item is selected.
@@ -952,17 +1052,10 @@ function populateContextPanel(filterData) {
             panel.classList.add('compact');
         }
 
-        const layout = document.createElement('div');
-        layout.className = 'context-panel-layout no-detail';
-
-        const list = document.createElement('div');
-        list.className = 'context-panel-list';
-        list.id = 'context-list';
-
-        const detail = document.createElement('div');
-        detail.className = 'context-panel-detail';
-        detail.id = 'context-detail';
-        detail.innerHTML = '<p>Select an item from the list to see more details.</p>';
+    // Render a single-column list only (no inline detail pane)
+    const list = document.createElement('div');
+    list.className = 'context-panel-list single-column';
+    list.id = 'context-list';
 
     // Build list of objects that have this category key
         const objectsWithCategory = ALL_PROTEST_DATA.filter(obj => Array.isArray(obj[filterData.key]) && obj[filterData.key].length > 0);
@@ -977,58 +1070,44 @@ function populateContextPanel(filterData) {
                 item.className = 'context-item';
                 item.tabIndex = 0;
                 item.dataset.objId = obj.id;
-                item.innerHTML = `<strong>${obj.name}</strong><div style="font-size:0.85em;color:#666;margin-top:4px">${(obj.categories_country || []).join(', ')}</div>`;
 
-                // Click handler: populate detail pane
-                item.addEventListener('click', () => {
-                    if (window.__debug) console.log('context item clicked:', obj.id, obj.name);
+                // Make the item show a selectable preview. The object name itself is
+                // an explicit link to the full detail page while clicking the surrounding
+                // main area still populates the inline detail pane.
+                item.innerHTML = `
+                    <div class="context-item-main" style="flex:1;min-width:0;cursor:pointer">
+                        <a class="context-item-link" href="object-detail.html?id=${encodeURIComponent(obj.id)}"><strong class="context-item-title">${obj.name}</strong></a>
+                        <div style="font-size:0.85em;color:#666;margin-top:4px">${(obj.categories_country || []).join(', ')}</div>
+                    </div>
+                `;
+
+                // Click handler: highlight the selected item. We don't show an inline
+                // detail pane — the object name is the link to the full page.
+                item.querySelector('.context-item-main').addEventListener('click', () => {
+                    if (window.__debug) console.log('context item clicked (list-only):', obj.id, obj.name);
                     // mark active
                     document.querySelectorAll('.context-panel-list .context-item').forEach(i => i.classList.remove('active'));
                     item.classList.add('active');
-
-                    // remove no-detail so detail column becomes visible
-                    layout.classList.remove('no-detail');
-
-                    // expand the outer context panel so the detail area has more room
-                    if (panel) {
-                        panel.classList.remove('compact');
-                        panel.classList.add('expanded');
-                    }
-
-                    // populate detail with larger text about the object
-                    detail.innerHTML = `
-                        <h3>${obj.name}</h3>
-                        <div class="context-detail-body">${obj.description_html || '<p>No description available.</p>'}</div>
-                    `;
-                    // ensure images or other interactive elements (gallery links) still work — no extra wiring here.
+                    // keep focus for accessibility
+                    try { item.focus(); } catch (e) {}
                 });
 
-                // keyboard accessibility
-                item.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); item.click(); } });
+                // The object name is a normal link (keyboard-accessible) so no extra
+                // handler is required. Ensure clicks on the link navigate normally
+                // by not preventing default on the main click handler.
+
+                // keyboard accessibility for selecting (Enter/Space activates selection)
+                item.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); item.querySelector('.context-item-main').click(); } });
 
                 list.appendChild(item);
             });
         }
 
-        layout.appendChild(list);
-        layout.appendChild(detail);
-        panelContent.appendChild(layout);
+        panelContent.appendChild(list);
         return;
     }
 
-    // This section runs ONLY if a specific term (like 'Hong Kong') was clicked.
-    const resultsList = filteredResults.map(obj => 
-        `<div class="context-result"><strong>${obj.name}</strong> (${obj.categories_country[0]})</div>`
-    ).join('');
-
-
-    panelContent.innerHTML = `
-        <h3>Results for: ${termToFilterBy}</h3>
-        <p>Found ${filteredResults.length} object(s) linked to **${termToFilterBy}**:</p>
-        ${resultsList}
-        <hr>
-        <p>This demonstrates real-time filtering based on a term clicked in the description text.</p>
-    `;
+    
 }
 
 /* --- PHOTO GALLERY RENDERING --- */

@@ -61,6 +61,7 @@ body.hero-active .content-column {
 
 /* End hero-mode additions */
 
+
 @media (min-width: 900px) {
     :root { --site-gutter: 10px; }
 }
@@ -108,6 +109,8 @@ body {
    down while the back button remains fixed above them. */
 
 #object-container { padding-top: var(--global-back-offset); }
+
+
  
  /* #object-container { padding-top: 18px; }*/
 
@@ -579,14 +582,15 @@ body {
    will-change entries here. */
 #object-title {
     transform-origin: top left;
-    will-change: auto;
+    /*  will-change: auto;*/
 }
 
 /* Ensure image/title don't pick up unexpected transitions elsewhere */
 #object-image,
 #object-title {
-    transition: none !important;
-    will-change: auto !important;
+    transition: opacity 0.3s ease;
+    /*transition: none !important;*/
+    /* will-change: auto !important;*/
 }
 
 /* Hero-mode removed: keep the layout in the standard three-column state by default.
@@ -642,6 +646,102 @@ body {
 .eyewitness-contents, .sources-contents {
     font-size: 0.95em;
     color: #111;
+}
+
+/* Eyewitness cards (grid + modal) */
+.eyewitness-contents {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.eyewitness-card {
+    position: relative;
+    background: #D9D9D9;
+    padding: 18px 14px 36px 14px; /* reduced padding for compact cards */
+    box-shadow: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 160px; /* smaller card height */
+}
+.eyewitness-card:focus,
+.eyewitness-card:hover { transform: translateY(-4px); transition: transform 180ms ease; outline: none; }
+
+.eyewitness-card .ew-head { display:block; }
+.ew-name {
+    font-family: 'Lekton', monospace;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-size: clamp(14px, 3.2vw, 30px);
+    margin: 0 0 6px 0;
+    display: block; /* ensure underline and role sit on their own lines */
+    border-bottom: 2px solid rgba(0,0,0,0.85);
+    padding-bottom: 6px;
+}
+.ew-role {
+    font-family: 'Lekton', monospace;
+    font-size: 18px;
+    color: #333;
+    margin: 8px 0 0 0;
+    display: block;
+}
+.ew-preview {
+    font-family: 'Lekton', monospace;
+    color: #111;
+    font-size: 16px;
+    line-height: 1.4;
+    max-height: 6.6em; /* ~3 lines at new line-height */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: auto; /* push preview to the bottom */
+    align-self: stretch; /* ensure it fills available width */
+    box-sizing: border-box;
+}
+
+/* small open icon in bottom-right */
+.ew-open {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    width: 36px;
+    height: 36px;
+    border: 2px solid #c81b7a;
+    color: #c81b7a;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    font-size: 20px;
+    box-sizing: border-box;
+}
+
+
+/* modal */
+.eyewitness-modal { display:none; position:fixed; inset:0; z-index:2200; align-items:center; justify-content:center; }
+.eyewitness-modal[aria-hidden="false"] { display:flex; }
+.eyewitness-modal-backdrop { position:fixed; inset:0; background:rgba(0,0,0,0.5); }
+.eyewitness-modal-content {
+    position:relative;
+    max-width:760px;
+    width:calc(100% - 48px);
+    max-height:80vh;
+    overflow:auto;
+    background:#fff;
+    border-radius:10px;
+    padding:20px;
+    box-shadow:0 28px 80px rgba(0,0,0,0.3);
+}
+.modal-close { position:absolute; top:12px; right:12px; border:none; background:transparent; font-size:18px; cursor:pointer; }
+.ew-modal-role { color:#666; margin-top:0; margin-bottom:12px; }
+.ew-modal-body { line-height:1.55; white-space:pre-wrap; }
+
+@media (max-width:600px){
+  .eyewitness-contents { grid-template-columns: 1fr; }
+  .eyewitness-modal-content { width: calc(100% - 24px); padding:16px; }
 }
 
 /* Collapsible subsection body styles */
@@ -1123,10 +1223,10 @@ h1 {
     transition: flex 260ms ease, width 260ms ease;
 }
 
-/* Compact: narrow panel for list view */
+/* Compact: initially narrow panel for list view — increased to give more room */
 #content-display.split #context-panel.compact {
-    flex: 0 0 28%;
-    width: 28%;
+    flex: 0 0 40%;
+    width: 40%;
 }
 
 /* Expanded: larger panel for detailed content */
@@ -1156,9 +1256,9 @@ h1 {
 #content-display.split .description-block,
 #content-display.split #description-text {
      /* Shrink description to the left so the context panel can be fully visible
-         without horizontal scrolling. Adjust this percentage to taste (50-60%). */
-     flex: 0 0 55%;
-     max-width: 55%;
+         without horizontal scrolling. Adjust this percentage to taste (45-60%). */
+     flex: 0 0 50%;
+     max-width: 100%;
      padding-right: 20px;
      box-sizing: border-box;
 }
@@ -1213,6 +1313,18 @@ h1 {
     padding-right: 8px;
     max-height: calc(100vh - 220px);
     overflow: auto;
+}
+.context-panel-list.single-column {
+    border-right: none;
+    padding-right: 0;
+    max-height: calc(100vh - 140px);
+}
+.context-panel-list.single-column .context-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 6px;
+    border-bottom: 1px solid #f0f0f0;
 }
 .context-panel-list .context-item {
     padding: 10px 6px;
@@ -1343,6 +1455,38 @@ h1 {
     letter-spacing:0.5px;
 }
 @media (max-width:520px){ .site-brand{ font-size:34px; left:10px; top:8px; } }
+
+/* --- View Transitions Logic --- */
+
+/* Duration of the overall page fade */
+::view-transition-group(root) {
+  animation-duration: 1s;
+}
+
+/* Specific timing for the image 'morph' effect */
+::view-transition-group(object-*) {
+  animation-duration: 2s;
+  animation-timing-function: cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+/* Ensure the image scales smoothly without distortion */
+::view-transition-old(object-*),
+::view-transition-new(object-*) {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+/* Apply a simple fade to the background content */
+::view-transition-old(root) {
+  animation: 90ms cubic-bezier(0.4, 0, 1, 1) both fade-out;
+}
+::view-transition-new(root) {
+  animation: 210ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in;
+}
+
+@keyframes fade-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
 
 
 

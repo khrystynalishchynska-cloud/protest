@@ -1076,7 +1076,7 @@
 },
 
 {
-  "id": 48,
+  "id": 47,
   "name": "Jeans",
   "image_filename": "images/jeans_protest.webp",
   "categories_object_type": ["Dress to protest"],
@@ -1104,7 +1104,7 @@
   ]
 },
 {
-  "id": 49,
+  "id": 48,
   "name": "Sunflower",
   "image_filename": "images/sunflower_protest.webp",
   "categories_object_type": ["Protest Flowers"],
@@ -1133,7 +1133,7 @@
 },
 
 {
-  "id": 50,
+  "id": 49,
   "name": "Carnation",
   "image_filename": "images/carnation_protest.webp",
   "categories_object_type": ["Protest Flowers"],
@@ -1162,7 +1162,7 @@
 },
 
 {
-  "id": 51,
+  "id": 50,
   "name": "Lily",
   "image_filename": "images/wild_lily.webp",
   "categories_object_type": ["Protest Flowers"],
@@ -1189,7 +1189,7 @@
   ]
 },
 {
-  "id": 53,
+  "id": 51,
   "name": "Red & White Flowers",
   "image_filename": "images/belarus_flowers_protest.webp",
   "categories_object_type": ["Protest Flowers"],

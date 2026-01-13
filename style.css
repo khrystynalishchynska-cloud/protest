@@ -651,21 +651,21 @@ body {
 /* Eyewitness cards (grid + modal) */
 .eyewitness-contents {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 12px;
-    margin-top: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 18px;
+    margin-top: 12px;
 }
 
 .eyewitness-card {
     position: relative;
     background: #D9D9D9;
-    padding: 18px 14px 36px 14px; /* reduced padding for compact cards */
+    padding: 28px 22px 48px 22px; /* extra bottom space for icon */
     box-shadow: none;
     cursor: pointer;
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    min-height: 160px; /* smaller card height */
+    gap: 18px;
+    min-height: 260px;
 }
 .eyewitness-card:focus,
 .eyewitness-card:hover { transform: translateY(-4px); transition: transform 180ms ease; outline: none; }
@@ -675,29 +675,28 @@ body {
     font-family: 'Lekton', monospace;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.8px;
-    font-size: clamp(14px, 3.2vw, 30px);
-    margin: 0 0 6px 0;
-    display: block; /* ensure underline and role sit on their own lines */
+    letter-spacing: 1px;
+    font-size: clamp(10px, 2.6vw, 20px);
+    margin: 0 0 8px 0;
+    display: inline-block;
     border-bottom: 2px solid rgba(0,0,0,0.85);
-    padding-bottom: 6px;
+    padding-bottom: 8px;
 }
 .ew-role {
     font-family: 'Lekton', monospace;
     font-size: 18px;
     color: #333;
     margin: 8px 0 0 0;
-    display: block;
 }
 .ew-preview {
     font-family: 'Lekton', monospace;
     color: #111;
-    font-size: 16px;
-    line-height: 1.4;
-    max-height: 6.6em; /* ~3 lines at new line-height */
+    font-size: 18px;
+    line-height: 1.2;
+    max-height: 10.8em; /* about 3 lines * line-height */
     overflow: hidden;
     text-overflow: ellipsis;
-    margin-top: auto; /* push preview to the bottom */
+    margin-top: auto;
     align-self: stretch; /* ensure it fills available width */
     box-sizing: border-box;
 }
@@ -705,11 +704,11 @@ body {
 /* small open icon in bottom-right */
 .ew-open {
     position: absolute;
-    right: 10px;
-    bottom: 10px;
-    width: 36px;
-    height: 36px;
-    border: 2px solid #c81b7a;
+    right: 12px;
+    bottom: 12px;
+    width: 42px;
+    height: 42px;
+    border: none;
     color: #c81b7a;
     display: inline-flex;
     align-items: center;

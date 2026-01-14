@@ -5,24 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Umbrella Revolution | Hong Kong 2014</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Lekton:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     
     <style>
-        :root {
-            --bg: #d9d9d9; /* Light grey from your screenshot */
-            --text: #000000;
-            --accent: #ffdb00;
-            --font-main: 'Lekton', monospace;
-            /* Placeholder for Blur-Medium style */
-            --font-heading: 'Blur-Medium', sans-serif; 
-        }
+
+@font-face {
+    font-family: 'Blur Medium';
+    src: url('fonts/Blur Medium.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Blur Regular';
+    src: url('fonts/Blur Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Blur Light';
+    src: url('fonts/Blur Light.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Lekton-Regular';
+    src: url('fonts/Lekton-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Lekton-Bold';
+    src: url('fonts/Lekton-Bold.ttf') format('truetype');
+}
+:root {
+    --bg: #d9d9d9;
+    --text: #000000;
+    --accent: #ffdb00;
+    --font-main: 'Lekton-Regular', monospace;
+    --font-heading: 'Blur Medium'; 
+}
 
         body {
             margin: 0;
-            background-color: var(--bg);
+            background-color: f0f0f0;
             color: var(--text);
             font-family: var(--font-main);
             line-height: 1.4;
@@ -31,13 +54,16 @@
 
         /* Typography */
         h1 {
-            font-family: 'Blur-Medium', sans-serif    ;
+            font-family: 'Blur Medium', sans-serif;
             font-weight: 800;
+            ont-size: 2.6rem;
             font-size: clamp(3rem, 8vw, 6rem);
             line-height: 0.9;
             text-transform: uppercase;
             margin: 0;
             letter-spacing: -2px;
+             line-height: 1;
+           
         }
 
         h2 {
@@ -49,10 +75,11 @@
         }
 
         h3 {
-            font-family: var(--font-main);
+            font-family: Blur light, sans-serif;
             font-weight: 700;
             text-transform: uppercase;
-            font-size: 1.2rem;
+            font-size: 2.6rem;
+            line-height: 1;
             margin-top: 0;
         }
 
@@ -62,6 +89,13 @@
             margin-bottom: 1.5rem;
         }
 
+        .intro {
+            font-family: lekton-bold, monospace;
+            font-size: 1.5rem;
+            line-height: 1.2;
+            max-width: 650px;
+            margin-bottom: 1.5rem;
+        }
         /* Layout */
         .container {
             width: 100%;
@@ -74,29 +108,25 @@
             flex-direction: column;
             justify-content: center;
             box-sizing: border-box;
-            border-bottom: 1px solid rgba(0,0,0,0.1);
+            border-bottom: 2px solid black;
         }
 
         .photo-placeholder {
             width: 100%;
-            max-width: 900px;
-            aspect-ratio: 16 / 9;
-            background-color: #ccc;
             margin: 2rem 0;
+            height: auto;      
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            color: #666;
-            border: 1px solid #999;
             position: relative;
             overflow: hidden;
+            
         }
 
         .photo-placeholder::after {
-            content: "IMAGE_PLACEHOLDER";
             font-size: 0.8rem;
         }
+
 
         .caption {
             font-size: 0.8rem;
@@ -146,12 +176,14 @@
     <div class="container">
         
         <section id="hero">
-            <h1>The Umbrella Revolution: <br>Hong Kong's 2014</h1>
-            <h3 style="margin-top: 20px;">Pro-Democracy Movement</h3>
-            <p style="text-transform: uppercase; margin-top: 40px; font-weight: bold;">
-                The Umbrella Revolution, also known as the Umbrella Movement, was a 79-day pro-democracy occupation in Hong Kong demanding genuine universal suffrage.
+            <h1>The Umbrella Revolution:</h1>
+            <h3 style="margin-top: 20px;">Hong Kong's 2014 Pro-Democracy Movement</h3>
+            <p class="intro" style="text-transform: uppercase; margin-top: 40px; font-weight: bold;">
+                The Umbrella Revolution, also known as the Umbrella Movement or Occupy Central, was a series of sit-in street protests that took place in Hong Kong in 2014. Over 79 days, tens of thousands of demonstrators occupied major thoroughfares in the city's commercial and governmental districts, demanding genuine universal suffrage for the election of Hong Kong's leader.
             </p>
-            <div class="photo-placeholder"></div>
+            <div class="photo-placeholder">
+                 <img  src="images/2014_Hong_Kong_Umbrella_Revolution_as_Police_Attacked_Peaceful_Demonstrators_with_Tear_Gas.jpg" alt="Photo of the protest symbol" loading="eager">
+            </div>
             <p class="caption">Protesters shield themselves with umbrellas during a tear gas incident, September 2014.</p>
         </section>
 
@@ -163,10 +195,14 @@
 
         <section>
             <h2>Name & Symbolism</h2>
-            <div class="photo-placeholder"></div>
+        
             <p> The term emerged from protesters using umbrellas to block police pepper spray and tear gas.</p>
             <p> Yellow ribbons and banners reading "I want real universal suffrage" became central visual symbols across Admiralty, Mong Kok, and Causeway Bay.</p>
         </section>
+
+         <div class="photo-placeholder">
+                 <img  src="images/54678853663_73dda1afa6_k johnlsl.webp" alt="Photo of the protest symbol" loading="eager">
+            </div>
 
         <section>
             <h2>Key Timeline</h2>
@@ -208,8 +244,11 @@
             <h2>Outcomes & Legacy</h2>
             <p> The immediate goal of open nominations was not achieved, but the movement fostered a new generation of activists.</p>
             <p> The grievances from 2014 laid the groundwork for the 2019 protests, leading to the subsequent National Security Law.</p>
-            <div class="photo-placeholder" style="aspect-ratio: 21/9;"></div>
         </section>
+
+        <div class="photo-placeholder">
+                 <img  src="images/Hong_Kong_protests_P1190346_(15547120677)-min.webp" alt="Photo of the protest symbol" loading="eager">
+            </div>
 
     </div>
 

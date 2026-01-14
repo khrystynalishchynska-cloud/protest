@@ -127,9 +127,9 @@ body {
 
 /* Use the parent .split flag to size the context panel on desktop */
 .split-layout.split #context-panel {
-    flex: 0 0 65%;
-    width: 65%;
-    border-left: 1px solid #000;
+    flex: 0 0 50%;
+    width: 40%;
+    border-left: 2px solid black;
     padding: 30px;
 }
 
@@ -145,7 +145,7 @@ body {
 .split-layout.split #context-panel {
     flex: 0 0 50%;
     width: 50%;
-    border-left: 1px solid #000;
+    border-left: 2px solid #000;
     padding: 30px;
 }
 
@@ -191,7 +191,6 @@ body {
     z-index: 1200;
 }
 #back-button:focus {
-    outline: 2px solid rgba(0,0,0,0.12);
     outline-offset: 2px;
 }
 #back-button:hover { color: rgba(0,0,0,0.65); }
@@ -206,8 +205,8 @@ body {
     right: 6px;  /*nudge slightly inward from the very edge */
     top: 12px;
     bottom: 12px;
-    width: 1px;
-    background: rgba(0,0,0,0.85);
+    width: 2px;
+    background:black
     pointer-events: none;
 }
 
@@ -239,7 +238,8 @@ body {
     padding: 30px 30px;
     padding-right: 18%;
     /* Make the content column scroll independently so the left column can remain fixed */
-    max-height: 100vh;
+    /* account for fixed global controls (back button) when sizing */
+    max-height: calc(100vh - var(--global-back-offset));
     overflow-y: auto;
     transition: flex 0.4s;
 }
@@ -421,7 +421,6 @@ body {
     height: auto; /* preserve aspect ratio */
     display: block;
     cursor: pointer;
-    border: 1px solid rgba(0,0,0,0.06);
     transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
     object-fit: cover;
     box-sizing: border-box;
@@ -549,7 +548,10 @@ body {
 }
 
 /* Subsection titles and dividers inside the description column */
-.subsection { margin: 0; }
+.subsection { 
+    margin: 0;
+margin-bottom: 30px; }
+
 .subsection-title {
     font-family: 'Blur Medium', sans-serif;
     font-size: 1.6em;
@@ -849,7 +851,7 @@ body {
     padding: 4px 2px;
 }
 .subsection-toggle:focus {
-    outline: 1px solid #000;
+    outline: 2px solid #000;
     outline-offset: 2px;
 }
  /* .subsection-title .subsection-toggle::after {
@@ -1224,8 +1226,8 @@ h1 {
 
 /* Compact: initially narrow panel for list view — increased to give more room */
 #content-display.split #context-panel.compact {
-    flex: 0 0 40%;
-    width: 40%;
+    flex: 0 0 65%;
+    width: 65%;
 }
 
 /* Expanded: larger panel for detailed content */
@@ -1267,7 +1269,7 @@ h1 {
     position: static;
     flex: 1 1 auto;
     width: auto;
-    border-left: 1px solid #000;
+    border-left: 2px solid #000;
     padding: 30px;
     box-sizing: border-box;
     overflow: auto;
@@ -1276,10 +1278,10 @@ h1 {
 /* --- Context Panel specific content --- */
 #close-panel-btn {
     position: absolute;
+    border: 0;
     top: 5px;
     right: 5px;
     background: transparent;
-    border: 1px solid #000;
     cursor: pointer;
     padding: 5px 10px;
     font-size: 0.8em;
@@ -1295,6 +1297,11 @@ h1 {
 }
 #context-panel-content {
     margin-top: 20px; 
+    width: 100%;
+    /* make the panel content scroll independently and fit the viewport
+       subtract the global back-offset so it doesn't overflow under the fixed back button */
+    height: calc(100vh - var(--global-back-offset));
+    overflow-y: auto;
 }
 
 /* Inner layout for context panel: narrow list at left, detail at right */

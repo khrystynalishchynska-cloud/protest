@@ -7,9 +7,9 @@
   <link rel="stylesheet" href="style.css?v=2" />
   <style>
     /* Minimal, focused gallery layout */
-    :root{--site-gutter:24px}
-    html,body{height:100%;margin:0}
-    main{min-height:100vh;padding:var(--site-gutter);box-sizing:border-box}
+  :root{--site-gutter:24px;--bottom-nav-height:64px}
+  html,body{height:100%;margin:0}
+  main{min-height:100vh;padding:var(--site-gutter);box-sizing:border-box;padding-bottom:calc(var(--site-gutter) + var(--bottom-nav-height) + env(safe-area-inset-bottom));}
     #infinite-gallery{
       display:grid;
       grid-template-columns: repeat(auto-fill,minmax(200px,1fr));
@@ -26,8 +26,8 @@
   /* top and bottom sentinels used to detect scroll edges */
   #gallery-sentinel, #gallery-sentinel-top{height:1px;pointer-events:none}
     @media (max-width:520px){ .card img{height:160px} }
-    /* Controls bar and list view styles. The controls bar is hidden by default
-       and is shown when the Search toggle is activated. */
+   /* Controls bar and list view styles. The controls bar is hidden by default
+     and is shown when the Search toggle is activated. */
     .controls-bar{
       display:none; /* hidden until Search is pressed */
       gap:12px;align-items:center;flex-wrap:wrap;justify-content:flex-start;padding:10px;border-radius:8px;background:#fff;box-shadow:0 8px 24px rgba(0,0,0,0.12);width:320px;box-sizing:border-box}
@@ -40,35 +40,77 @@
     #list-view{max-width:1400px;margin:0 auto;display:none;padding:0  var(--site-gutter);box-sizing:border-box}
     .list-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
   /* List view: tags-only rows (no photos). */
-  #list-grid{display:block}
-  .list-row{background:#fff;padding:10px 14px;border-radius:8px;margin-bottom:10px;box-shadow:0 6px 14px rgba(0,0,0,0.06);display:block;text-decoration:none;color:inherit}
+  /* Make the list area horizontally scrollable and prevent vertical scrolling
+     when the site is in list view. Children will be laid out in a single
+     horizontal row so the user can scroll sideways through results. */
+  #list-grid{
+    display:flex;
+    flex-wrap:nowrap;
+    gap:16px;
+    overflow-x:auto;
+    overflow-y:hidden;
+    padding-bottom: calc(var(--bottom-nav-height) + 12px);
+    -webkit-overflow-scrolling: touch;
+  }
+  .list-row{background:#fff;padding:10px 14px;border-radius:8px;margin-bottom:10px;box-shadow:0 6px 14px rgba(0,0,0,0.06);display:block;text-decoration:none;color:inherit;min-width:260px;flex:0 0 auto}
   .list-row h3{margin:0 0 6px 0;font-size:18px}
   .list-row .tags{margin-top:6px}
   .list-card{display:none}
     @media (max-width:520px){ .list-card img{height:120px} }
    /* Tag chips for list view: four kinds with distinct colors */
-  .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-  .tag{display:inline-block;padding:4px 8px;border-radius:5px;font-size:22px;color:#000000}
-  .tag.name{background:#f8f162}    /* blue */
-  .tag.country{background:#b4d32b} /* green */
+  /* Tags: arrange into 8 rows and scroll horizontally across columns */
+  .tags{
+    --tag-row-height:44px;
+    display:grid;
+    grid-auto-flow: column; /* fill rows first, then create new columns */
+    grid-template-rows: repeat(8, var(--tag-row-height)); /* 8 rows */
+    grid-auto-columns: max-content; /* columns sized to their content */
+    gap:16px 20px; /* row-gap then column-gap */
+    margin:12px 0;
+    /* include padding in height calculations so scroll height is correct */
+    box-sizing: border-box;
+    padding:12px 8px  calc(var(--bottom-nav-height) + 12px); /* keep extra bottom padding to clear fixed nav */
+    /* limit visible area to 8 rows but subtract bottom-nav so last row isn't hidden */
+    max-height: calc(var(--tag-row-height) * 8 + 24px - var(--bottom-nav-height) - env(safe-area-inset-bottom));
+    overflow-x:auto; /* horizontal scroll */
+    overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;
+  }
+  /* Make tag tiles larger with more padding */
+  .tag{display:inline-block;padding:10px 16px;font-size:18px;color:#000000;align-self:center}
+  /* Give a playful 'scattered' look by rotating some tags a little */
+  .tags .tag:nth-child(5n+1){transform:rotate(-6deg) translateY(-2px)}
+  .tags .tag:nth-child(5n+2){transform:rotate(4deg) translateY(0)}
+  .tags .tag:nth-child(5n+3){transform:rotate(-3deg) translateY(2px)}
+  .tags .tag:nth-child(5n+4){transform:rotate(2deg) translateY(-1px)}
+  .tags .tag:nth-child(5n+5){transform:rotate(0deg)}
+  /* Smooth transform on hover/focus */
+  .tags .tag{transition:transform .18s ease}
+  .tags .tag:focus, .tags .tag:hover{transform:translateY(-4px) scale(1.02)}
+  /* horizontal scrollbar styling */
+  .tags::-webkit-scrollbar{height:10px}
+  .tags::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.12);border-radius:6px}
+  .tag.name{background:#fdf217}    /* blue */
+  .tag.country{background:#599b55} /* green */
   .tag.type{background:#f76f54}    /* orange */
-  .tag.cause{background:#fbb28b}   /* red */
+  .tag.cause{background:#3e75b3}   /* red */
   .tag.clickable-tag{cursor:pointer;opacity:0.95}
   .tag.clickable-tag:hover{filter:brightness(0.95);transform:translateY(-1px)}
   .tag.active{box-shadow:0 0 0 3px rgba(0,0,0,0.06) inset}
   /* List controls: search + kind toggles (appears at top of #list-view) */
   #list-controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
-  #list-controls .list-search{flex:1;min-width:160px;padding:8px 10px;border-radius:6px;border:1px solid rgba(0,0,0,0.08);font-size:15px}
+  #list-controls .list-search{flex:1;min-width:160px;padding:8px 10px;;background:transparent;border:2px solid #000;font-size:15px}
+  #list-controls .list-search::placeholder{color:rgba(0,0,0,0.45)}
   .tag-toggles{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   /* Make the tag-toggle labels minimal (no background or border). The checkbox
      itself becomes the visible affordance: a black square with a white check when
      checked. */
-  .tag-toggle{display:inline-flex;align-items:center;gap:8px;background:transparent;padding:6px 10px;border-radius:999px;border:0;cursor:pointer;font-size:13px;color:#000}
+  .tag-toggle{display:inline-flex;align-items:center;gap:8px;background:transparent;padding:6px 10px;;border:0;cursor:pointer;font-size:13px;color:#000}
   /* Keep the active state minimal too: transparent background and black text */
   .tag-toggle.active{background:transparent;color:#000;border-color:transparent;box-shadow:none}
   .tag-toggle input{
     -webkit-appearance:none;appearance:none;
-    display:inline-block;width:18px;height:18px;margin-right:8px;vertical-align:middle;cursor:pointer;border-radius:4px;border:0;background:transparent;box-shadow:none;
+    display:inline-block;width:18px;height:18px;margin-right:8px;vertical-align:middle;cursor:pointer;border:0;background:transparent;box-shadow:none;
     background-repeat:no-repeat;background-position:center;background-size:12px;
   }
   /* When checked, render a solid black box with a white checkmark (inline SVG). */
@@ -80,10 +122,40 @@
   .tag-toggle input:focus{outline:2px solid rgba(0,0,0,0.12);outline-offset:2px}
   .tag-toggle.active{background:#000;color:#fff;border-color:transparent}
   /* Photo results grid used when a tag is clicked */
-  .photo-results-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+  /* Photo results flow horizontally in list view */
+  .photo-results-grid{display:flex;flex-wrap:nowrap;gap:10px}
+  .photo-result{min-width:160px;flex:0 0 auto}
   .photo-result img{width:100%;height:140px;object-fit:cover;border-radius:6px;display:block}
   @media (max-width:520px){ .photo-result img{height:110px} }
-    
+  /* Scattered list view: absolutely-positioned card tiles inside the list area */
+  .scatter-results{position:relative;min-height:480px;padding:12px;border-radius:8px}
+  .scatter-results .scatter-item{position:absolute;width:200px;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 8px 20px rgba(0,0,0,0.08);text-decoration:none;color:inherit;display:block}
+  .scatter-results .scatter-item img{width:100%;height:140px;object-fit:cover;display:block;background:#f4f4f4}
+  @media (max-width:520px){ .scatter-results .scatter-item{width:140px} .scatter-results .scatter-item img{height:100px} }
+  /* Masonry layout for tag-search results */
+  .masonry{column-width:240px;column-gap:16px;padding:8px}
+  .masonry-item{display:inline-block;width:100%;margin:0 0 16px;break-inside:avoid;box-sizing:border-box;overflow:hidden;text-decoration:none;color:inherit}
+  .masonry-item img{width:100%;height:auto;display:block;object-fit:cover}
+  @media (max-width:520px){ .masonry{column-width:140px} }
+  /* Main horizontal navigation (Explore / Search / List / About) */
+  .main-nav{display:flex;align-items:center;box-sizing:border-box;width:100%;background:var(--site-bg, #f0f0f0);position:fixed;left:0;right:0;bottom:0;z-index:2400;height:var(--bottom-nav-height);padding-bottom:env(safe-area-inset-bottom);backdrop-filter:blur(4px);}
+  /* inner container holds the nav items and renders the horizontal line at 90% viewport width */
+  .main-nav .nav-inner{width: 95vw;max-width:1500px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;box-sizing:border-box;position:relative;height:100%;border-top:2px solid #000}
+  .main-nav .nav-inner .nav-item{flex:1 1 0;text-align:center;padding:8px 10px 6px;position:relative;text-decoration:none;color:inherit;font-family:'Blur Light',system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:30px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+  /* vertical dividers between items (not after last) */
+  /* Position divider so it begins at the same height as the horizontal line on .nav-inner
+    nav-inner has padding-top:6px, so setting top:-6px pulls the divider up to the line. */
+  .main-nav .nav-inner .nav-item:not(:last-child)::after{content:'';position:absolute;right:0;top:-7px;bottom:6px;width:2px;background:#000}
+  /* Active nav item uses Blur Bold */
+  .main-nav .nav-inner .nav-item.active{font-family:'Blur Bold','Blur Medium',sans-serif;font-weight:700}
+    /* About sliding panel (hidden off-canvas bottom -> slides up) */
+    .about-panel{
+      position:fixed;left:0;right:0;bottom:var(--bottom-nav-height);z-index:2500;transform:translateY(110%);transition:transform .45s cubic-bezier(.2,.9,.2,1);background:transparent;box-shadow:0 -8px 30px rgba(0,0,0,0.06);border-top:2px solid rgba(0,0,0,0.02);max-height:82vh;overflow:auto;padding:36px 24px 48px;box-sizing:border-box;pointer-events:auto}
+    .about-panel.open{transform:translateY(0%)}
+    .about-panel .about-inner{max-width:1100px;margin:0 auto}
+  .about-panel .about-text{font-family:'Lekton-Bold','Lekton-Regular',sans-serif;font-weight:700;font-size:40px;line-height:1.04;color:#000;margin:0;text-transform:uppercase}
+    .about-panel .about-close{position:absolute;right:12px;top:8px;border:0;background:transparent;font-size:36px;line-height:1;padding:6px 10px;cursor:pointer}
+    @media (max-width:520px){ .about-panel{padding:18px 14px 28px} .about-panel .about-text{font-size:22px} }
   </style>
 </head>
 <body>
@@ -128,6 +200,15 @@
     @media (max-width:520px){ .site-brand{ font-size:36px; left:12px; top:8px; } }
   </style>
   <main>
+    <!-- Main navigation: Explore / Search / List / About -->
+    <nav class="main-nav" role="navigation" aria-label="Main navigation">
+      <div class="nav-inner">
+        <a href="#" class="nav-item active" data-action="explore">Explore</a>
+        <a href="#" class="nav-item" data-action="search">Search</a>
+        <a href="#" class="nav-item" data-action="list">List</a>
+        <a href="about.html" class="nav-item" data-action="about">About</a>
+      </div>
+    </nav>
     <!-- Controls: view toggle, search, filters -->
     <div class="controls-bar" role="region" aria-label="View and filter controls">
       <div class="view-toggle" role="tablist" aria-label="View toggle">
@@ -166,16 +247,68 @@
     </noscript>
   </main>
 
-  <!-- Floating toggle in bottom-right: Explore / List / Search -->
-  <div id="floating-toggle" style="position:fixed;right:14px;bottom:14px;z-index:1500;">
-    <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end;">
-      <button id="btn-gallery-float" aria-label="Explore (gallery)" title="Explore" style="all:unset;background:#fff;padding:10px 12px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,0.12);cursor:pointer">Explore</button>
-      <button id="btn-list-float" aria-label="List view" title="List" style="all:unset;background:#fff;padding:10px 12px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,0.12);cursor:pointer">List</button>
-      <button id="btn-search-float" aria-label="Search" title="Search" style="all:unset;background:#000;color:#fff;padding:10px 12px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,0.12);cursor:pointer">Search</button>
+  <!-- About sliding panel -->
+  <div id="about-panel" class="about-panel" aria-hidden="true" role="dialog" aria-label="About this catalogue">
+    <button class="about-close" aria-label="Close About">×</button>
+    <div class="about-inner">
+      <p class="about-text">THIS CATALOGUE DOCUMENTS COMMON, EVERYDAY OBJECTS—RIBBONS, SHIELDS, BLANK PAGES—THAT HAVE BEEN REPU RPOSED AS SYMBOLS OF PROTEST. EACH ITEM GAINS POLITICAL POWER ONLY THROUGH USE, TRANSFORMING INTO A TOOL FOR NOISE, VISIBILITY, OR DEFIANCE.</p>
     </div>
   </div>
+
+  <!-- Floating toggle removed in favor of the main horizontal nav -->
   <script src="js/infinite-gallery.js"></script>
   <script src="js/welcome.js"></script>
+  <script>
+    // Wire the main-nav to existing controls: explore -> gallery, search -> focus search, list -> list view
+    (function(){
+      const nav = document.querySelector('.main-nav');
+      if(!nav) return;
+      const items = nav.querySelectorAll('.nav-item');
+      function setActive(action){ items.forEach(i=> i.classList.toggle('active', i.dataset.action===action)); }
+      nav.addEventListener('click', (e)=>{
+        const a = e.target.closest('.nav-item'); if(!a) return; e.preventDefault();
+        const action = a.dataset.action; setActive(action);
+        if(action === 'explore'){
+          const btn = document.getElementById('btn-gallery'); if(btn) btn.click();
+          document.getElementById('infinite-gallery').style.display='grid';
+          document.getElementById('list-view').style.display='none';
+        } else if(action === 'search'){
+          const controls = document.querySelector('.controls-bar'); if(controls) controls.classList.add('visible');
+          const input = document.getElementById('search-input'); if(input) input.focus();
+        } else if(action === 'list'){
+          const btn = document.getElementById('btn-list'); if(btn) btn.click();
+        } else if(action === 'about'){
+          // Open the in-page About sliding panel instead of navigating away
+          const panel = document.getElementById('about-panel');
+          if(panel){
+            panel.classList.add('open');
+            panel.setAttribute('aria-hidden','false');
+            // move focus to close button for accessibility
+            const closeBtn = panel.querySelector('.about-close');
+            if(closeBtn) closeBtn.focus();
+            document.body.classList.add('about-open');
+          }
+        }
+      });
+    })();
+  </script>
+  <script>
+    // About panel open/close behavior
+    (function(){
+      const panel = document.getElementById('about-panel');
+      if(!panel) return;
+      const closeBtn = panel.querySelector('.about-close');
+      function closeAbout(){ panel.classList.remove('open'); panel.setAttribute('aria-hidden','true'); document.body.classList.remove('about-open'); }
+      closeBtn && closeBtn.addEventListener('click', (e)=>{ e.preventDefault(); closeAbout(); });
+      // click on backdrop (panel but outside inner) closes
+      panel.addEventListener('click', (e)=>{ if(e.target === panel) closeAbout(); });
+      // Escape key to close
+      window.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && panel.classList.contains('open')) closeAbout(); });
+      // also close when switching away via nav: if nav sets other active state, hide panel
+      const nav = document.querySelector('.main-nav');
+      if(nav){ nav.addEventListener('click', (ev)=>{ const a = ev.target.closest('.nav-item'); if(!a) return; const action = a.dataset.action; if(action !== 'about' && panel.classList.contains('open')) closeAbout(); }); }
+    })();
+  </script>
   <script>
   (function(){
     const brand = document.querySelector('.site-brand');
@@ -204,8 +337,8 @@
 
     splitBrandChars(brand);
 
-    const chars = Array.from(brand.querySelectorAll('.brand-char'));
-    const imageSelectors = '#infinite-gallery img, #infinite-gallery .card';
+  const chars = Array.from(brand.querySelectorAll('.brand-char'));
+  const imageSelectors = '#infinite-gallery img, #infinite-gallery .card';
 
     function rectsOverlap(a,b){ return !(b.left > a.right || b.right < a.left || b.top > a.bottom || b.bottom < a.top); }
 

@@ -8,6 +8,8 @@
     filters: { type: '', country: '', cause: '' },
     // listMode: 'index' shows aggregated tags; 'items' shows objects matching filters
     listMode: 'index',
+    // whether item results should render as masonry (set when user clicks a tag)
+    preferMasonry: false,
     debounceTimer: null
   };
 
@@ -149,19 +151,38 @@
     const frag = document.createDocumentFragment();
     // If listMode === 'items' render a photos-only grid (no text). Otherwise render rows.
     if(state.listMode === 'items'){
-      const grid = document.createElement('div'); grid.className = 'photo-results-grid';
-      cards.forEach(item=>{
-        const a = document.createElement('a');
-        a.href = `object-detail.html?id=${encodeURIComponent(item.id)}`;
-        a.className = 'photo-result card-link';
-        const img = document.createElement('img');
-        img.alt = item.name || '';
-        img.loading = 'lazy';
-        img.src = item.image_filename || (item.images && item.images[0] && (item.images[0].src || item.images[0].image)) || '';
-        a.appendChild(img);
-        grid.appendChild(a);
-      });
-      frag.appendChild(grid);
+      if(state.preferMasonry){
+        // Render as a masonry gallery using CSS columns
+        const m = document.createElement('div'); m.className = 'masonry';
+        cards.forEach(item=>{
+          const a = document.createElement('a');
+          a.href = `object-detail.html?id=${encodeURIComponent(item.id)}`;
+          a.className = 'masonry-item card-link';
+          const img = document.createElement('img');
+          img.alt = item.name || '';
+          img.loading = 'lazy';
+          img.src = item.image_filename || (item.images && item.images[0] && (item.images[0].src || item.images[0].image)) || '';
+          a.appendChild(img);
+          const cap = document.createElement('div'); cap.className = 'meta'; cap.style.padding = '8px'; cap.textContent = item.name || '';
+          a.appendChild(cap);
+          m.appendChild(a);
+        });
+        frag.appendChild(m);
+      } else {
+        const grid = document.createElement('div'); grid.className = 'photo-results-grid';
+        cards.forEach(item=>{
+          const a = document.createElement('a');
+          a.href = `object-detail.html?id=${encodeURIComponent(item.id)}`;
+          a.className = 'photo-result card-link';
+          const img = document.createElement('img');
+          img.alt = item.name || '';
+          img.loading = 'lazy';
+          img.src = item.image_filename || (item.images && item.images[0] && (item.images[0].src || item.images[0].image)) || '';
+          a.appendChild(img);
+          grid.appendChild(a);
+        });
+        frag.appendChild(grid);
+      }
     } else {
       // Render simplified rows: no images, only title + tags.
       cards.forEach(item=>{
@@ -193,6 +214,8 @@
   }
 
   function applyFilters(){
+    // If filters/search are applied directly (not via tag-click), prefer normal grid
+    state.preferMasonry = state.preferMasonry === true ? state.preferMasonry : false;
     const term = state.searchTerm.trim().toLowerCase();
     const { type, country, cause } = state.filters;
     state.filtered = state.data.filter(item=>{
@@ -262,13 +285,40 @@
           if(state.filters[key] === value){ state.filters[key] = ''; const sel = (key==='type'? $('#filter-type') : key==='country'? $('#filter-country') : $('#filter-cause')); if(sel) sel.value = ''; }
           else { state.filters[key] = value; const sel = (key==='type'? $('#filter-type') : key==='country'? $('#filter-country') : $('#filter-cause')); if(sel) sel.value = value; }
         }
-        // Now show objects matching the chosen tag
+        // Now show objects matching the chosen tag. Prefer a masonry gallery view
+        // for tag-originated searches so results appear in a tiled masonry layout.
+        state.preferMasonry = true;
         state.listMode = 'items';
         toggleView('list');
         applyFilters();
       }, false);
     }
   }
+
+  // Adjust tag rows to fit the space between the list controls and bottom nav.
+  function adjustTagRows(){
+    try{
+      const tags = document.querySelector('.tags'); if(!tags) return;
+      const controls = document.getElementById('list-controls');
+      const nav = document.querySelector('.main-nav');
+      const controlsBottom = controls ? controls.getBoundingClientRect().bottom : 0;
+      const navHeight = nav ? nav.getBoundingClientRect().height : (parseInt(getComputedStyle(document.documentElement).getPropertyValue('--bottom-nav-height')) || 64);
+      // small buffer so tags don't touch edges
+      const buffer = 12;
+      const available = Math.max(0, (window.innerHeight - controlsBottom) - navHeight - buffer);
+      // read row height from CSS variable or fallback
+      const cs = getComputedStyle(tags);
+      const rowH = parseInt(cs.getPropertyValue('--tag-row-height')) || 44;
+      const rows = Math.max(1, Math.floor(available / rowH));
+      // apply to the grid: set explicit template rows and max-height
+      tags.style.gridTemplateRows = `repeat(${rows}, ${rowH}px)`;
+      tags.style.maxHeight = `${rows * rowH + 24}px`;
+    }catch(e){ console.warn('adjustTagRows failed', e); }
+  }
+
+  // keep tag rows in sync on resize/orientation changes
+  window.addEventListener('resize', adjustTagRows, {passive:true});
+  window.addEventListener('orientationchange', adjustTagRows);
 
   function toggleView(which){
     state.view = which;
@@ -293,9 +343,13 @@
       // render either the aggregated tag index or the object list depending on mode
       if(state.listMode === 'index'){
         renderTagIndex();
+        // recalc rows after rendering
+        try{ adjustTagRows(); }catch(e){}
       }else{
         console.log('toggleView -> list; filtered:', state.filtered.length, 'data:', state.data.length);
         renderList(state.filtered.length ? state.filtered : state.data);
+        // recalc rows after rendering
+        try{ adjustTagRows(); }catch(e){}
       }
     }
   }
@@ -327,6 +381,7 @@
     populateFilters();
     setupEventHandlers();
     try{ initListControls(); }catch(e){ /* ignore if controls not present */ }
+    try{ adjustTagRows(); }catch(e){}
     // default view remains gallery
     toggleView('gallery');
   }

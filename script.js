@@ -982,6 +982,15 @@ function togglePanel(open, filterData = null) {
         if (contentDisplay) contentDisplay.classList.remove('split');
     }
 
+    // Prevent the main page from scrolling while the context panel is open so
+    // users can scroll the panel independently. Restore scrolling when closed.
+    try {
+        document.body.style.overflow = open ? 'hidden' : '';
+        document.documentElement.style.overflow = open ? 'hidden' : '';
+    } catch (e) {
+        // ignore in non-browser environments
+    }
+
     // No masonry relayout needed when panel toggles; CSS Grid will reflow automatically
 }
 

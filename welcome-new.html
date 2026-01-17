@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Index of Dissent — Explore</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    :root{--site-gutter:px;--bottom-nav-height:64px}
+    html,body{height:100%;margin:0;font-family: 'Lekton-Regular', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif}
+    body{background:#f6f6f6;color:#000}
+    main{min-height:100vh;padding:var(--site-gutter);box-sizing:border-box;padding-bottom:calc(var(--site-gutter) + var(--bottom-nav-height) + env(safe-area-inset-bottom));}
+
+    /* site brand */
+    .site-brand{position:fixed;left:18px;top:12px;z-index:2200;font-size:48px;line-height:0.9;padding:6px;color:#000;pointer-events:none}
+    .site-brand .brand-char{display:inline-block}
+    .site-brand .brand-char.overlap{color:#fff;text-shadow:0 0 6px rgba(0,0,0,0.45);transform:translateY(-2px)}
+
+    /* bottom nav */
+    .main-nav{display:flex;align-items:center;box-sizing:border-box;width:100%;position:fixed;left:0;right:0;bottom:0;z-index:2400;height:var(--bottom-nav-height);padding-bottom:env(safe-area-inset-bottom);background:rgba(248,248,248,0.95);border-top:2px solid #000}
+    .main-nav .nav-inner{width:95vw;max-width:1500px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+    .nav-item{flex:1;text-align:center;padding:8px 10px;cursor:pointer;font-size:22px}
+    .nav-item.active{font-weight:700}
+
+    /* header controls shown in Search view (permanent header) */
+    .search-header{display:none;position:sticky;top:0;background:rgba(255,255,255,0.95);padding:12px;border-bottom:1px solid rgba(0,0,0,0.06);z-index:2100}
+    .search-row{display:flex;gap:12px;align-items:center}
+    .list-search{flex:1;padding:8px 10px;border:1px solid rgba(0,0,0,0.12);border-radius:6px}
+    .view-toggle{display:inline-flex;border:1px solid rgba(0,0,0,0.08);border-radius:6px;overflow:hidden}
+    .view-toggle button{all:unset;padding:8px 12px;cursor:pointer}
+    .view-toggle button[aria-pressed="true"]{background:#000;color:#fff}
+
+    .filter-row{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+    .filter-btn{padding:8px 12px;border-radius:0;border:0;cursor:pointer;color:#fff}
+    .filter-names{background:#111}
+    .filter-country{background:#2e7d32}
+    .filter-type{background:#d84315}
+    .filter-cause{background:#1565c0}
+
+    /* tags list */
+    .tags-wrap{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+    .tag-chip{padding:6px 10px;border-radius:6px;background:#fff;border:1px solid rgba(0,0,0,0.06);cursor:pointer}
+
+    /* canvas / scatter area */
+   /* allow panning in all directions: canvas is centered absolutely inside the scrollable wrapper
+     removed visible "box" styling so canvas is unobstructed */
+   .canvas-wrap{width:100%;height:100vh;overflow:auto;border-radius:0;background:transparent;box-shadow:none;position:relative;padding:0}
+  .canvas{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:400vw;height:400vh}
+      /* photo wrapper dimensions are set dynamically to preserve image aspect ratio */
+      .photo{ position:absolute;
+      transform-origin:50% 50%;
+      transform: scale(0.65); /* smaller before in-view */
+      transition: transform 360ms cubic-bezier(.2,.9,.2,1), box-shadow 360ms ease, opacity 20ms ease;
+      will-change: transform, opacity;
+      pointer-events:auto;
+      z-index: 100;}
+      .photo img{width:100%;height:auto;object-fit:cover;display:block}
+  .photo.inview{transform:scale(2)}
+    .photo.dimmed{opacity:.12;pointer-events:none}
+
+    /* list view area */
+    .list-results{display:none;padding:12px;margin-top:12px}
+    .list-item{padding:10px;border-radius:6px;background:#fff;margin-bottom:8px;display:flex;gap:12px;align-items:center}
+    .list-item img{width:80px;height:60px;object-fit:cover;border-radius:4px}
+
+    /* about panel */
+    .about-panel{position:fixed;left:0;right:0;bottom:var(--bottom-nav-height);z-index:2500;transform:translateY(110%);transition:transform .4s cubic-bezier(.2,.9,.2,1);background:#fff;padding:28px;box-sizing:border-box;border-top:2px solid rgba(0,0,0,0.04)}
+    .about-panel.open{transform:translateY(0%)}
+    .about-text{font-family:'Lekton-Bold','Lekton-Regular',sans-serif;font-weight:700;font-size:40px;line-height:1.04;color:#000;text-transform:uppercase}
+    @media(max-width:520px){ .canvas{width:1500px;height:1200px}.photo{width:140px;height:100px}.about-text{font-size:20px} }
+
+  </style>
+</head>
+<body>
+  <div class="site-brand" id="site-brand">Index of<br>Dissent</div>
+
+  <main>
+    <div class="search-header" id="search-header">
+      <div class="search-row">
+        <div class="view-toggle" role="tablist" aria-label="View toggle">
+          <button id="toggle-images" aria-pressed="true">Images</button>
+          <button id="toggle-list" aria-pressed="false">List</button>
+        </div>
+        <input id="search-input" class="list-search" placeholder="Search by name, country, type, cause" />
+        <button id="clear-btn" style="display:none">Clear</button>
+      </div>
+      <div class="filter-row" id="filter-row">
+        <button class="filter-btn filter-names" data-kind="name">Names</button>
+        <button class="filter-btn filter-country" data-kind="country">Countries</button>
+        <button class="filter-btn filter-type" data-kind="type">Types</button>
+        <button class="filter-btn filter-cause" data-kind="cause">Causes</button>
+      </div>
+      <div class="tags-wrap" id="tags-wrap"></div>
+    </div>
+
+    <section class="canvas-wrap" id="canvas-wrap">
+      <div class="canvas" id="canvas"></div>
+    </section>
+
+    <section class="list-results" id="list-results"></section>
+
+    <noscript><p>Please enable JavaScript to use this page.</p></noscript>
+  </main>
+
+  <nav class="main-nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <div class="nav-item active" data-action="explore">Explore</div>
+      <div class="nav-item" data-action="search">Search</div>
+      <div class="nav-item" data-action="about">About</div>
+    </div>
+  </nav>
+
+  <div class="about-panel" id="about-panel" aria-hidden="true">
+    <button id="about-close" style="position:absolute;right:12px;top:6px">×</button>
+    <div class="about-text">THIS CATALOGUE DOCUMENTS COMMON, EVERYDAY OBJECTS—RIBBONS, SHIELDS, BLANK PAGES—THAT HAVE BEEN REPU RPOSED AS SYMBOLS OF PROTEST.</div>
+  </div>
+
+  <script src="js/welcome-new.js"></script>
+</body>
+</html>

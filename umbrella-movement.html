@@ -3,445 +3,294 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Umbrella Revolution: Hong Kong's 2014 Pro-Democracy Movement </title>
-    <link rel="stylesheet" href="style.css">
+    <title>The Umbrella Revolution | Hong Kong 2014</title>
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
     <style>
-        .photo-essay-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            background: transparent;
-            box-shadow: none;
-            text-align: left;
+
+@font-face {
+    font-family: 'Blur Medium';
+    src: url('fonts/Blur Medium.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Blur Regular';
+    src: url('fonts/Blur Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Blur Light';
+    src: url('fonts/Blur Light.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Lekton-Regular';
+    src: url('fonts/Lekton-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Lekton-Bold';
+    src: url('fonts/Lekton-Bold.ttf') format('truetype');
+}
+:root {
+    --bg: #d9d9d9;
+    --text: #000000;
+    --accent: #ffdb00;
+    --font-main: 'Lekton-Regular', monospace;
+    --font-heading: 'Blur Medium'; 
+}
+
+        body {
+            margin: 0;
+            background-color: f0f0f0;
+            color: var(--text);
+            font-family: var(--font-main);
+            line-height: 1.4;
+            overflow-x: hidden;
         }
-        .essay-title {
-            font-family: 'Blur Light', sans-serif;
-            font-size: 3em;
-            margin-bottom: 0.5em;
-             line-height: 90%;
-            text-align: left;
-        }
-        .essay-lead {
-            font-size: 2em;
-            color: #444;
-            margin-bottom: 1em;
-            margin-right: 0;
-            font-weight: 900;
+
+        /* Typography */
+        h1 {
+            font-family: 'Blur Medium', sans-serif;
+            font-weight: 800;
+            ont-size: 2.6rem;
+            font-size: clamp(3rem, 8vw, 6rem);
+            line-height: 0.9;
             text-transform: uppercase;
-            letter-spacing: 0.02em;
-            line-height: 90%;
-            text-align: left;
-        }
-        .essay-photo {
-            width: 100%;
-            border-radius: 10px;
-            margin: 2em 0 1em 0;
-            box-shadow: none; /* removed shadows from photos */
-        }
-        /* full-bleed variant: remove rounding and let image span the full viewport width */
-        .essay-photo.full-bleed {
-            width: 100vw;
-            max-width: none;
-            border-radius: 0;
-            margin-left: calc(50% - 50vw);
-            margin-right: calc(50% - 50vw);
-            margin-top: 0.5em;
-            margin-bottom: 1em;
-            box-shadow: none;
-            display: block;
-        }
-        .essay-caption {
-            font-size: 0.95em;
-            color: #888;
-            margin-bottom: 2em;
-            text-align: left;
-        }
-        .essay-section {
-            margin-bottom: 2.5em;
-        }
-        /* tighten spacing between section headings and their following text */
-        .essay-section h2 {
-            margin-top: 0.8em;
-            margin-bottom: 0.4em;
-            line-height: 1.15;
-        }
-        /* side-by-side text + image (responsive) */
-        .text-with-aside {
-            display: grid;
-            grid-template-columns: 1fr 320px;
-            gap: 12px; /* reduced gap */
-            align-items: start;
-            padding: 0; /* reduce padding */
-            margin: 0; /* reduce margins in the section */
-        }
-        .aside-figure {
             margin: 0;
+            letter-spacing: -2px;
+             line-height: 1;
+           
         }
-        /* reduce paragraph spacing specifically inside the Historical & Political Context block */
-        .section-heading-with-aside + .text-with-aside .aside-text p {
-            margin: 0 0 0.6em 0; /* smaller bottom margin */
-            padding: 0;
-        }
-        .aside-photo {
-            width: 100%;
-            height: auto;
-            display: block;
-            border-radius: 0; /* no rounded corners as requested */
-            box-shadow: none; /* removed shadows from photos */
-            /* display in grayscale by default, switch to color on hover/focus */
-            filter: grayscale(100%);
-            transition: filter 220ms ease;
-        }
-        /* reveal color on pointer hover or keyboard focus */
-        .aside-figure:hover .aside-photo,
-        .aside-figure:focus-within .aside-photo,
-        .aside-figure:focus .aside-photo {
-            filter: none;
-        }
-        /* visible focus ring for keyboard users */
-        .aside-figure:focus-visible {
-            outline: 3px solid rgba(102,170,255,0.9);
-            outline-offset: 6px;
-        }
-        @media (max-width: 800px) {
-            .text-with-aside {
-                grid-template-columns: 1fr;
-            }
-            .aside-figure {
-                margin-top: 1em;
-            }
-        }
-        @media (max-width: 600px) {
-            .photo-essay-container {
-                padding: 10px;
-            }
-            .essay-title {
-                font-size: 2em;
-            }
-        }
-        /* heading + aside layout: place a figure next to the H2 on wide screens */
-        .section-heading-with-aside {
-            display: flex;
-            align-items: flex-start; /* align top of photo with top of title */
-            gap: 12px;
-            margin-bottom: 8px;
-        }
-        .section-heading-with-aside h2 {
-            margin: 0;
-            flex: 1 1 auto;
-            min-width: 0;
-            line-height: 1.05;
-            font-size: 1.6rem;
-            word-break: break-word;
-        }
-        .heading-aside {
-            width: 320px;
-            flex: 0 0 320px;
-            margin: 0;
-        }
-        .heading-aside .aside-photo {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            display: block;
-            filter: grayscale(100%);
-        }
-        @media (max-width: 600px) {
-            .section-heading-with-aside { flex-direction: column; align-items: stretch; }
-            .heading-aside { width: 100%; flex: 0 0 auto; }
-            .heading-aside .aside-photo { height: auto; }
-            .section-heading-with-aside h2 { font-size: 1.25rem; }
-        }
-        /* timeline styles */
-        .timeline-container {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            padding: 12px 6px 40px;
-            min-height: 380px; /* make the section taller */
-            position: relative;
-            /* hide scrollbar visually but keep scrolling enabled */
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none; /* IE 10+ */
-        }
-        .timeline-container::-webkit-scrollbar { /* WebKit browsers */
-            display: none;
-        }
-        .timeline-track {
-            position: relative;
-            display: flex;
-            gap: 40px;
-            align-items: flex-end;
-            padding: 18px 12px 36px;
-            min-width: max-content; /* allow items to overflow horizontally */
-            scroll-behavior: smooth;
-            scroll-snap-type: x mandatory;
-        }
-        .timeline-item {
-            flex: 0 0 auto;
-            width: 320px; /* wider to accommodate bigger images */
-            scroll-snap-align: center;
-            text-align: center;
-            position: relative;
-            z-index: 2;
-            padding-bottom: 56px; /* space for the baseline and pin */
-        }
-        /* media inside timeline items */
-        .timeline-media {
-            margin: 6px 0 8px;
-        }
-        .timeline-media img {
-            width: 100%;
-            height: 200px; /* larger image */
-            object-fit: cover;
-            display: block;
-            border-radius: 0; /* square corners as requested */
-            box-shadow: none; /* removed shadows from photos */
-        }
-        .timeline-title {
+
+        h2 {
+            font-family: var(--font-heading);
             font-weight: 700;
-            margin-bottom: 6px;
-            font-size: 1.02em;
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
         }
-        .timeline-date {
+
+        h3 {
+            font-family: Blur light, sans-serif;
             font-weight: 700;
-            margin-bottom: 8px;
+            text-transform: uppercase;
+            font-size: 2.6rem;
+            line-height: 1;
+            margin-top: 0;
         }
-        .timeline-label {
+
+        p {
+            font-size: 1.1rem;
+            max-width: 650px;
+            margin-bottom: 1.5rem;
+        }
+
+        .intro {
+            font-family: lekton-bold, monospace;
+            font-size: 1.5rem;
+            line-height: 1.2;
+            max-width: 650px;
+            margin-bottom: 1.5rem;
+        }
+        /* Layout */
+        .container {
+            width: 100%;
+        }
+
+        section {
+            min-height: 100vh;
+            padding: 10vh 10%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-sizing: border-box;
+            border-bottom: 2px solid black;
+        }
+
+        .photo-placeholder {
+            width: 100%;
+            margin: 2rem 0;
+            height: auto;      
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            
+        }
+
+        .photo-placeholder::after {
+            font-size: 0.8rem;
+        }
+
+
+        .caption {
+            font-size: 0.8rem;
             color: #444;
-            font-size: 0.95em;
+            margin-top: -1.5rem;
+            margin-bottom: 2rem;
         }
-        .timeline-pin {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            /* top will be set by script so the pin center aligns with the baseline */
-            width: 14px;
-            height: 14px;
-            background: #111;
-            border-radius: 50%;
-            box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset;
-            z-index: 3;
+
+        /* Specific Sections */
+        #hero {
+            justify-content: flex-start;
+            padding-top: 15vh;
         }
-        /* baseline across the section */
-        .timeline-line {
-            position: absolute;
+
+        .timeline-item {
+            margin-bottom: 4rem;
+            padding-left: 20px;
+            border-left: 3px solid var(--text);
+            opacity: 0;
+        }
+
+        .quote-card {
+            background: #fff;
+            padding: 2rem;
+            margin: 1rem 0;
+            border-left: 10px solid var(--accent);
+            font-style: italic;
+        }
+
+        /* Scroll Progress */
+        .progress {
+            position: fixed;
+            top: 0;
             left: 0;
-            right: 0;
-            /* top will be set by script to align with pins */
-            top: auto;
-            bottom: auto;
-            height: 2px; /* baseline thickness */
-            background: #111; /* black line */
-            z-index: 1;
+            height: 4px;
+            background: var(--text);
+            width: 0%;
+            z-index: 1000;
         }
-        /* small screens: reduce item width and gap */
-        @media (max-width: 640px) {
-            .timeline-item { width: 240px; }
-            .timeline-track { gap: 20px; }
-            .timeline-media img { height: 150px; }
-        }
+
     </style>
 </head>
 <body>
-    <div class="photo-essay-container">
-        <h1 class="essay-title">The Umbrella Revolution: <br>Hong Kong's 2014 Pro-Democracy Movement</h1>
-        <p class="essay-lead">The Umbrella Revolution, also known as the Umbrella Movement or Occupy Central, was a series of sit-in street protests that took place in Hong Kong in 2014. Over 79 days, tens of thousands of demonstrators occupied major thoroughfares in the city's  commercial and governmental districts, demanding genuine universal suffrage for the election of Hong Kong's leader.</p>
-        <div class="essay-section">
-            <img src="images/2014_Hong_Kong_Umbrella_Revolution_as_Police_Attacked_Peaceful_Demonstrators_with_Tear_Gas.jpg" alt="Protesters with umbrellas" class="essay-photo full-bleed">   
-            <div class="essay-caption">Protesters shield themselves with umbrellas during a tear gas incident, September 2014.</div>
-        </div>
-      
-        <div class="essay-section">
-                <div class="section-heading-with-aside">
-                    <h2>Historical and Political Context</h2>
-                    <figure class="aside-figure heading-aside" tabindex="0">
-                        <img src="images/1country2systems.jpg" alt="Diagram: One Country, Two Systems" class="aside-photo" loading="lazy">
-                        <figcaption class="essay-caption">Sign in Xiamen reading "一国两制统一中国" (Yīguó liǎngzhì tǒngyī Zhōngguó, transl. One country, two systems unites China)</figcaption>
-                    </figure>
-                </div>
-                <div class="text-with-aside">
-                    <div class="aside-text">
-                        <p>Hong Kong’s political tension is rooted in its 1997 handover from Britain to China. Under the "One Country, Two Systems" principle, Hong Kong was promised eventual democracy (universal suffrage) via the Basic Law. However, on 31 August 2014, Beijing shattered these expectations. While allowing a public vote for the 2017 Chief Executive, the ruling required all candidates to be pre-approved by a committee dominated by Beijing loyalists. Critics condemned this as "fake democracy," sparking the massive civil disobedience campaign known as the Umbrella Movement.</p>
-                    </div>
-                </div>
-        </div>
-       
 
-        <div class="essay-section" id="origins-key-figures">
-            <h2>Origins and Key Figures</h2>
-            <p>Placeholder: describe the main organizers, student groups, and civic leaders who played central roles. Add short bios or links to profiles for major participants.</p>
-        </div>
+    <div class="progress"></div>
 
-        <div class="essay-section" id="timeline-major-events">
-            <h2>Timeline of Major Events</h2>
-            <div class="timeline-container" role="region" aria-label="Timeline of major events" tabindex="0">
-                <div class="timeline-track">
-                    <div class="timeline-item">
-                        <div class="timeline-date">28 Sep 2014</div>
-                        <div class="timeline-title">Student sit-ins begin</div>
-                        <div class="timeline-media">
-                            <img src="images/umbrella.jpg" alt="Students sit-in" loading="lazy">
-                        </div>
-                        <div class="timeline-label">First major confrontations between students and police; occupations begin.</div>
-                        <div class="timeline-pin" aria-hidden="true"></div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-date">Early Oct 2014</div>
-                        <div class="timeline-title">Occupations expand</div>
-                        <div class="timeline-media">
-                            <img src="images/1-396.jpg" alt="Occupations expand" loading="lazy">
-                        </div>
-                        <div class="timeline-label">Protest sites spread to Admiralty, Causeway Bay and Mong Kok.</div>
-                        <div class="timeline-pin" aria-hidden="true"></div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-date">Nov 2014</div>
-                        <div class="timeline-title">Clearing of sites</div>
-                        <div class="timeline-media">
-                            <img src="images/1-397.jpg" alt="Police clearing sites" loading="lazy">
-                        </div>
-                        <div class="timeline-label">Police begin clearing major occupation sites; movement activity subsides.</div>
-                        <div class="timeline-pin" aria-hidden="true"></div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-date">2016–2018</div>
-                        <div class="timeline-title">Legal aftermath</div>
-                        <div class="timeline-media">
-                            <img src="images/1-398.jpg" alt="Court cases" loading="lazy">
-                        </div>
-                        <div class="timeline-label">Prosecutions and legal cases against participants continue in subsequent years.</div>
-                        <div class="timeline-pin" aria-hidden="true"></div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-date">2019</div>
-                        <div class="timeline-title">Legacy and 2019 protests</div>
-                        <div class="timeline-media">
-                            <img src="images/1-399.jpg" alt="2019 protests legacy" loading="lazy">
-                        </div>
-                        <div class="timeline-label">Tactics, symbols and networks from the Umbrella Movement reappear during the 2019 protest wave.</div>
-                        <div class="timeline-pin" aria-hidden="true"></div>
-                    </div>
-                    <div class="timeline-line" aria-hidden="true"></div>
-                </div>
+    <div class="container">
+        
+        <section id="hero">
+            <h1>The Umbrella Revolution:</h1>
+            <h3 style="margin-top: 20px;">Hong Kong's 2014 Pro-Democracy Movement</h3>
+            <p class="intro" style="text-transform: uppercase; margin-top: 40px; font-weight: bold;">
+                The Umbrella Revolution, also known as the Umbrella Movement or Occupy Central, was a series of sit-in street protests that took place in Hong Kong in 2014. Over 79 days, tens of thousands of demonstrators occupied major thoroughfares in the city's commercial and governmental districts, demanding genuine universal suffrage for the election of Hong Kong's leader.
+            </p>
+            <div class="photo-placeholder">
+                 <img  src="images/2014_Hong_Kong_Umbrella_Revolution_as_Police_Attacked_Peaceful_Demonstrators_with_Tear_Gas.jpg" alt="Photo of the protest symbol" loading="eager">
             </div>
-            <p class="essay-caption">Use left/right scroll to move along the timeline. On desktop you can also focus the timeline container and use the arrow keys.</p>
-        </div>
+            <p class="caption">Protesters shield themselves with umbrellas during a tear gas incident, September 2014.</p>
+        </section>
 
-        <div class="essay-section" id="demands-outcomes">
-            <h2>Demands and Outcomes</h2>
-            <p>Placeholder: list the movement's official demands (e.g., universal suffrage, open nominations) and summarize any concessions, policy responses, or long-term outcomes.</p>
-        </div>
+        <section>
+            <h2>Background & Causes</h2>
+            <p> Residents were promised eventual universal suffrage under Hong Kong's Basic Law, but leaders continued to be chosen by a small, pro-Beijing committee.</p>
+            <p> On 31 August 2014, the NPCSC issued the "8.31 decision," requiring candidates to be vetted by a committee, which many viewed as "fake" democracy.</p>
+        </section>
 
-        <div class="essay-section" id="casualties-arrests-legal">
-            <h2>Casualties, Arrests, and Legal Aftermath</h2>
-            <p>Placeholder: document arrests, prosecutions, and any reported injuries; outline subsequent legal cases and their significance.</p>
-        </div>
+        <section>
+            <h2>Name & Symbolism</h2>
+        
+            <p> The term emerged from protesters using umbrellas to block police pepper spray and tear gas.</p>
+            <p> Yellow ribbons and banners reading "I want real universal suffrage" became central visual symbols across Admiralty, Mong Kok, and Causeway Bay.</p>
+        </section>
 
-        <div class="essay-section" id="legacy-connection-2019">
-            <h2>Legacy and Connection to 2019 Protests</h2>
-            <p>Placeholder: explain how the Umbrella Movement influenced the 2019 protests in Hong Kong, including tactics, symbols, and movement networks.</p>
-        </div>
+         <div class="photo-placeholder">
+                 <img  src="images/54678853663_73dda1afa6_k johnlsl.webp" alt="Photo of the protest symbol" loading="eager">
+            </div>
+
+        <section>
+            <h2>Key Timeline</h2>
+            
+            <div class="timeline-item">
+                <h3>22–26 Sept 2014</h3>
+                <p> Students launch class boycotts and enter Civic Square, prompting arrests and concern over police tactics.</p>
+            </div>
+
+            <div class="timeline-item">
+                <h3>28 Sept 2014</h3>
+                <p> Police fire dozens of tear gas canisters; tens of thousands occupy major roads in response.</p>
+            </div>
+
+            <div class="timeline-item">
+                <h3>Oct–Nov 2014</h3>
+                <p> Camps become semi-permanent "cities" with study areas and democracy walls.</p>
+            </div>
+
+            <div class="timeline-item">
+                <h3>11–15 Dec 2014</h3>
+                <p> Authorities clear the final camps, officially ending the 79-day occupation.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Eyewitness Stories</h2>
+            <div class="quote-card">
+                "We weren't just blocking a road; we were building a community. I remember students doing homework under umbrellas while police stood meters away."
+                <br><small>— Student Participant, Admiralty Site</small>
+            </div>
+            <div class="quote-card">
+                "The smell of tear gas stayed in the air for days. But so did the sense of hope. For the first time, we felt the city was truly ours."
+                <br><small>— Volunteer Medic</small>
+            </div>
+        </section>
+
+        <section>
+            <h2>Outcomes & Legacy</h2>
+            <p> The immediate goal of open nominations was not achieved, but the movement fostered a new generation of activists.</p>
+            <p> The grievances from 2014 laid the groundwork for the 2019 protests, leading to the subsequent National Security Law.</p>
+        </section>
+
+        <div class="photo-placeholder">
+                 <img  src="images/Hong_Kong_protests_P1190346_(15547120677)-min.webp" alt="Photo of the protest symbol" loading="eager">
+            </div>
+
     </div>
+
     <script>
-        // Timeline interactions and robust pin/line positioning.
-        (function(){
-            const container = document.querySelector('.timeline-container');
-            if (!container) return;
+        gsap.registerPlugin(ScrollTrigger);
 
-            // Map vertical wheel to horizontal scroll but only while the track can move.
-            container.addEventListener('wheel', function(e){
-                if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
-                const deltaY = e.deltaY;
-                const atLeft = container.scrollLeft <= 0;
-                const atRight = container.scrollLeft + container.clientWidth >= container.scrollWidth - 1;
-                if ((deltaY < 0 && atLeft) || (deltaY > 0 && atRight)) return;
-                e.preventDefault();
-                const multiplier = 1;
-                container.scrollLeft += deltaY * multiplier;
-            }, { passive: false });
+        // Progress bar
+        gsap.to(".progress", {
+            width: "100%",
+            ease: "none",
+            scrollTrigger: { scrub: 0.3 }
+        });
 
-            // Arrow key support when the container is focused
-            container.addEventListener('keydown', function(e){
-                if (e.key === 'ArrowRight') { container.scrollBy({ left: 220, behavior: 'smooth' }); e.preventDefault(); }
-                if (e.key === 'ArrowLeft') { container.scrollBy({ left: -220, behavior: 'smooth' }); e.preventDefault(); }
+        // Fade in timeline items
+        const timelineItems = document.querySelectorAll(".timeline-item");
+        timelineItems.forEach((item) => {
+            gsap.to(item, {
+                opacity: 1,
+                x: 20,
+                duration: 1,
+                scrollTrigger: {
+                    trigger: item,
+                    start: "top 85%",
+                    toggleActions: "play none none none"
+                }
             });
+        });
 
-            const track = document.querySelector('.timeline-track');
-            if (!track) return;
-
-            // debounce helper
-            function debounce(fn, wait){
-                let t;
-                return function(...args){
-                    clearTimeout(t);
-                    t = setTimeout(() => fn.apply(this, args), wait);
-                };
-            }
-
-            function positionPins(){
-                if (!track) return;
-                const line = track.querySelector('.timeline-line');
-                if (!line) return;
-
-                // Ensure track has positioning context
-                const trackRect = track.getBoundingClientRect();
-
-                // Compute baseline center relative to track's content box.
-                // Use a visual offset (30px from bottom) to place the baseline where the design expects.
-                const desiredBaselineFromBottom = 30; // px
-                const lineCenterRelative = track.clientHeight - desiredBaselineFromBottom;
-
-                // Position the line (top) so its middle sits on the computed baseline
-                const lineHalf = (line.offsetHeight || 2) / 2;
-                line.style.top = (lineCenterRelative - lineHalf) + 'px';
-
-                const items = Array.from(track.querySelectorAll('.timeline-item'));
-                items.forEach(item => {
-                    const pin = item.querySelector('.timeline-pin');
-                    if (!pin) return;
-                    if (pin.parentElement !== track) track.appendChild(pin);
-                    pin.style.position = 'absolute';
-
-                    // horizontal center relative to track
-                    const itemRect = item.getBoundingClientRect();
-                    const left = (itemRect.left - trackRect.left) + (itemRect.width / 2);
-                    pin.style.left = left + 'px';
-
-                    // unset bottom and set top so center of pin matches baseline center
-                    pin.style.bottom = 'auto';
-                    const pinCenterOffset = (pin.offsetHeight || 14) / 2;
-                    pin.style.top = (lineCenterRelative - pinCenterOffset) + 'px';
-                    pin.style.transform = 'translateX(-50%)';
-                });
-            }
-
-            const schedulePosition = debounce(() => { requestAnimationFrame(positionPins); }, 60);
-
-            // Recompute when the window resizes
-            window.addEventListener('resize', schedulePosition);
-
-            // Recompute on load (fonts/images)
-            window.addEventListener('load', schedulePosition);
-
-            // Observe track size changes (useful when images load or layout shifts)
-            if (window.ResizeObserver) {
-                const ro = new ResizeObserver(schedulePosition);
-                ro.observe(track);
-                ro.observe(document.querySelector('.timeline-container'));
-            }
-
-            // Recompute when each timeline image finishes loading (handles lazy-loading)
-            const imgs = Array.from(track.querySelectorAll('img'));
-            imgs.forEach(img => {
-                if (img.complete) return; // already loaded
-                img.addEventListener('load', schedulePosition);
-                img.addEventListener('error', schedulePosition);
+        // Reveal sections
+        const sections = document.querySelectorAll("section");
+        sections.forEach((section) => {
+            gsap.from(section.querySelectorAll("h2, p, .photo-placeholder"), {
+                opacity: 0,
+                y: 30,
+                stagger: 0.2,
+                duration: 1,
+                scrollTrigger: {
+                    trigger: section,
+                    start: "top 70%",
+                }
             });
-
-            // Initial run (after a tiny delay to allow initial layout) and one more after images finish
-            schedulePosition();
-            setTimeout(schedulePosition, 200);
-        })();
+        });
     </script>
 </body>
 </html>

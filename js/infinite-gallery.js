@@ -227,7 +227,20 @@
           if (e.defaultPrevented) return;
           if (typeof e.button === 'number' && e.button !== 0) return;
           if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
-          window.location.href = a.href;
+          // Prefer the View Transition API for a smooth shared-element navigation
+          try {
+            // Navigate to the detail page. Use startViewTransition if available
+            // to allow the browser to create a nicer navigation animation; do not
+            // set sessionStorage or otherwise signal a hero landing here — starting
+            // from scratch.
+            e.preventDefault();
+            if (document.startViewTransition) {
+              document.startViewTransition(() => { window.location.href = a.href; });
+            } else {
+              window.location.href = a.href;
+            }
+            return;
+          } catch(err) { /* fallback to direct navigation */ try { window.location.href = a.href; } catch(e){} }
           e.preventDefault();
         }catch(err){}
       }, false);
@@ -410,9 +423,13 @@
       });
     }
 
-    // Place all items into the gallery. This function is re-runnable on resize.
-    let lastLayoutKey = null;
-    async function placeAll(){
+  // Place all items into the gallery. This function is re-runnable on resize.
+  let lastLayoutKey = null;
+  // latestPlacedSet is exported from placeAll so fallback logic (outside the
+  // function) can inspect which srcs/ids were actually placed. Declared here
+  // to avoid ReferenceError when the fallback runs after placeAll completes.
+  let latestPlacedSet = new Set();
+  async function placeAll(){
       const layout = computeLayout();
       const CANVAS_W = layout.CANVAS_W;
       const CANVAS_H = layout.CANVAS_H;
@@ -686,6 +703,8 @@
         }catch(e){}
         setupAnimations();
       }catch(e){ console.warn('setupAnimations failed', e); }
+      // expose the set of placed keys for the fallback checker
+      try{ latestPlacedSet = placedSet; }catch(e){}
     }
 
   // initial placement (show loading state while we compute layout)

@@ -76,17 +76,25 @@
     overflow-y:hidden;
     -webkit-overflow-scrolling:touch;
   }
-  /* Make tag tiles larger with more padding */
-  .tag{display:inline-block;padding:10px 16px;font-size:18px;color:#000000;align-self:center}
-  /* Give a playful 'scattered' look by rotating some tags a little */
-  .tags .tag:nth-child(5n+1){transform:rotate(-6deg) translateY(-2px)}
-  .tags .tag:nth-child(5n+2){transform:rotate(4deg) translateY(0)}
-  .tags .tag:nth-child(5n+3){transform:rotate(-3deg) translateY(2px)}
-  .tags .tag:nth-child(5n+4){transform:rotate(2deg) translateY(-1px)}
-  .tags .tag:nth-child(5n+5){transform:rotate(0deg)}
-  /* Smooth transform on hover/focus */
-  .tags .tag{transition:transform .18s ease}
-  .tags .tag:focus, .tags .tag:hover{transform:translateY(-4px) scale(1.02)}
+  /* Compact, straight tag tiles (no rotation / panning) */
+  .tags{
+    --tag-row-height:40px;
+    display:grid;
+    grid-auto-flow: row; /* natural row flow */
+    grid-template-columns: repeat(auto-fill, minmax(80px, max-content));
+    gap:8px; /* small inter-tag gap */
+    margin:6px 0;
+    box-sizing: border-box;
+    padding:6px 0; /* remove large padding around tag area */
+    max-height: none; /* allow normal flow */
+    overflow-x:auto;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+  .tag{display:inline-block;padding:6px 8px;font-size:16px;color:#000000;align-self:center;border-radius:6px}
+  /* Remove all playful rotations/transforms and disable hover movement */
+  .tags .tag, .tags .tag:focus, .tags .tag:hover{transform:none !important; transition:none !important}
+  .tags .tag{transition:none}
   /* horizontal scrollbar styling */
   .tags::-webkit-scrollbar{height:10px}
   .tags::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.12);border-radius:6px}
@@ -137,6 +145,16 @@
   .masonry-item{display:inline-block;width:100%;margin:0 0 16px;break-inside:avoid;box-sizing:border-box;overflow:hidden;text-decoration:none;color:inherit}
   .masonry-item img{width:100%;height:auto;display:block;object-fit:cover}
   @media (max-width:520px){ .masonry{column-width:140px} }
+  /* Clickable names list shown when tag-originated list is displayed */
+  .names-list{display:block;background:transparent;padding:8px 12px;margin-bottom:8px}
+  .names-list-item{display:block;padding:8px 10px;border-radius:6px;color:inherit;text-decoration:none;border:1px solid rgba(0,0,0,0.04);margin-bottom:6px;background:#fff}
+  .names-list-item:hover{background:#000;color:#fff}
+  /* Result mode toggle and search helper */
+  .result-mode-toggle{display:inline-flex;border:1px solid rgba(0,0,0,0.08);border-radius:6px;overflow:hidden}
+  .result-mode-toggle button{all:unset;padding:8px 12px;cursor:pointer;font-weight:700;font-size:14px;display:inline-flex;align-items:center;justify-content:center}
+  .result-mode-toggle button[aria-pressed="true"]{background:#000;color:#fff}
+  #clear-search{background:#fff}
+  #match-count{padding-left:6px}
   /* Main horizontal navigation (Explore / Search / List / About) */
   .main-nav{display:flex;align-items:center;box-sizing:border-box;width:100%;background:var(--site-bg, #f0f0f0);position:fixed;left:0;right:0;bottom:0;z-index:2400;height:var(--bottom-nav-height);padding-bottom:env(safe-area-inset-bottom);backdrop-filter:blur(4px);}
   /* inner container holds the nav items and renders the horizontal line at 90% viewport width */
@@ -150,7 +168,7 @@
   .main-nav .nav-inner .nav-item.active{font-family:'Blur Bold','Blur Medium',sans-serif;font-weight:700}
     /* About sliding panel (hidden off-canvas bottom -> slides up) */
     .about-panel{
-      position:fixed;left:0;right:0;bottom:var(--bottom-nav-height);z-index:2500;transform:translateY(110%);transition:transform .45s cubic-bezier(.2,.9,.2,1);background:transparent;box-shadow:0 -8px 30px rgba(0,0,0,0.06);border-top:2px solid rgba(0,0,0,0.02);max-height:82vh;overflow:auto;padding:36px 24px 48px;box-sizing:border-box;pointer-events:auto}
+      position:fixed;left:0;right:0;bottom:var(--bottom-nav-height);z-index:2500;transform:translateY(120%);transition:transform .45s cubic-bezier(.2,.9,.2,1);background:transparent;border-top:2px solid rgba(0,0,0,0.02);max-height:82vh;overflow:auto;padding:36px 24px 48px;box-sizing:border-box;pointer-events:auto}
     .about-panel.open{transform:translateY(0%)}
     .about-panel .about-inner{max-width:1100px;margin:0 auto}
   .about-panel .about-text{font-family:'Lekton-Bold','Lekton-Regular',sans-serif;font-weight:700;font-size:40px;line-height:1.04;color:#000;margin:0;text-transform:uppercase}
@@ -204,8 +222,8 @@
     <nav class="main-nav" role="navigation" aria-label="Main navigation">
       <div class="nav-inner">
         <a href="#" class="nav-item active" data-action="explore">Explore</a>
+        <!-- Removed the old Search button; renamed List -> Search and keep it opening the List view -->
         <a href="#" class="nav-item" data-action="search">Search</a>
-        <a href="#" class="nav-item" data-action="list">List</a>
         <a href="about.html" class="nav-item" data-action="about">About</a>
       </div>
     </nav>
@@ -232,6 +250,14 @@
       <!-- list-level filters: search tags and toggle kinds -->
       <div id="list-controls" aria-hidden="false">
         <input id="list-search" class="list-search" type="search" placeholder="Search tags..." aria-label="Search tags" />
+        <div class="result-mode-wrap" style="display:inline-flex;align-items:center;gap:8px;margin-left:8px">
+          <div class="result-mode-toggle" role="tablist" aria-label="Result mode">
+            <button id="mode-images" type="button" aria-pressed="true">Images</button>
+            <button id="mode-list" type="button" aria-pressed="false">List</button>
+          </div>
+          <button id="clear-search" type="button" title="Clear search" style="display:none;padding:6px 10px;border-radius:6px;border:1px solid rgba(0,0,0,0.06);background:#fff;cursor:pointer">Clear</button>
+          <span id="match-count" style="font-size:13px;color:#333;min-width:64px;display:none"></span>
+        </div>
         <div class="tag-toggles" role="toolbar" aria-label="Tag kinds">
           <label class="tag-toggle active" data-kind="name"><input type="checkbox" data-kind="name" checked />Names</label>
           <label class="tag-toggle active" data-kind="country"><input type="checkbox" data-kind="country" checked />Countries</label>
@@ -259,6 +285,176 @@
   <script src="js/infinite-gallery.js"></script>
   <script src="js/welcome.js"></script>
   <script>
+  (function(){
+  const btnImages = document.getElementById('mode-images');
+  const btnList = document.getElementById('mode-list');
+  const clearBtn = document.getElementById('clear-search');
+  const matchCount = document.getElementById('match-count');
+  const searchInput = document.getElementById('list-search');
+  // list-controls element (original, kept inside #list-view)
+  const listControls = document.getElementById('list-controls');
+  const galleryContainer = document.getElementById('infinite-gallery');
+
+  // helper to update all match-count and clear buttons (original + any clones)
+  function updateMatchUI(count){
+    const clears = Array.from(document.querySelectorAll('#clear-search'));
+    const matches = Array.from(document.querySelectorAll('#match-count'));
+    if(count > 0){ clears.forEach(c=> c.style.display='inline-block'); matches.forEach(m => { m.style.display='inline-block'; m.textContent = count + ' matches'; }); }
+    else { matches.forEach(m => { m.style.display='inline-block'; m.textContent = '0 matches'; }); }
+  }
+
+  function clearAllSearchInputs(){
+    const inputs = Array.from(document.querySelectorAll('.list-search'));
+    inputs.forEach(i=> i.value = '');
+  }
+
+  function removeControlsClone(){
+    const existing = document.getElementById('list-controls-clone');
+    if(existing && existing.parentNode) existing.parentNode.removeChild(existing);
+  }
+
+  function createControlsClone(){
+    if(!listControls || document.getElementById('list-controls-clone')) return null;
+    // deep clone markup
+    const clone = listControls.cloneNode(true);
+    // remove top-level id to avoid duplicate id collisions; keep inner ids so UI selectors still work
+    clone.id = 'list-controls-clone';
+    // insert before gallery so it appears above
+    document.body.insertBefore(clone, galleryContainer);
+    clone.style.display = 'flex';
+
+    // wire clone's inner controls to trigger image searches
+    const cloneSearch = clone.querySelector('.list-search');
+    const cloneKindToggles = Array.from(clone.querySelectorAll('.tag-toggle')) || [];
+    const cloneClear = clone.querySelector('button[title="Clear search"]') || clone.querySelector('#clear-search');
+
+    // debounce re-use (single timer for whole page)
+    let localTimer = null;
+    if(cloneSearch){
+      cloneSearch.addEventListener('input', function(e){
+        const q = e.target.value || '';
+        clearTimeout(localTimer);
+        localTimer = setTimeout(async ()=>{
+          await doImageSearch(q);
+        }, 220);
+      });
+    }
+
+    cloneKindToggles.forEach(t => {
+      t.addEventListener('click', async ()=>{ await doImageSearch((cloneSearch && cloneSearch.value) || (searchInput && searchInput.value) || ''); });
+      const cb = t.querySelector('input[type="checkbox"]');
+      if(cb) cb.addEventListener('change', async ()=>{ await doImageSearch((cloneSearch && cloneSearch.value) || (searchInput && searchInput.value) || ''); });
+    });
+
+    if(cloneClear){
+      cloneClear.addEventListener('click', async ()=>{
+        if(window.infiniteGallery && typeof window.infiniteGallery.clearFilter === 'function') await window.infiniteGallery.clearFilter();
+        // clear UI everywhere
+        removeControlsClone();
+        clearAllSearchInputs();
+        updateMatchUI(0);
+      });
+    }
+
+    return clone;
+  }
+
+    async function doImageSearch(q){
+      // compute which tag kinds are currently enabled (name, country, type, cause)
+      const toggles = Array.from(document.querySelectorAll('#list-controls .tag-toggle')) || [];
+      const allowedKinds = toggles.filter(t => t.classList.contains('active')).map(t => t.dataset.kind).filter(Boolean);
+      if(!window.infiniteGallery || typeof window.infiniteGallery.filterByQuery !== 'function'){
+        // fallback: show/hide existing cards by alt text
+        const gallery = document.getElementById('infinite-gallery'); if(!gallery) return;
+        const cards = Array.from(gallery.querySelectorAll('a.card-link'));
+        const qq = (q||'').trim().toLowerCase(); let matched = 0;
+        cards.forEach(a=>{
+          const img = a.querySelector('img');
+          const txt = (img && (img.alt||'')) + ' ' + (a.dataset && (Object.values(a.dataset)||[]).join(' '));
+          const ok = !qq || (txt||'').toLowerCase().includes(qq);
+          a.style.display = ok ? '' : 'none'; if(ok) matched++;
+        });
+        updateMatchUI(matched);
+        return matched;
+      }
+      const count = await window.infiniteGallery.filterByQuery(q, allowedKinds);
+      updateMatchUI(count);
+      return count;
+    }
+
+    // wire UI: view toggle buttons
+    btnImages && btnImages.addEventListener('click', ()=> setMode('images'));
+    btnList && btnList.addEventListener('click', ()=> setMode('list'));
+
+    // updated setMode to duplicate controls instead of moving them
+    function setMode(m){
+      document.body.dataset.resultMode = m;
+      if(btnImages) btnImages.setAttribute('aria-pressed', m==='images');
+      if(btnList) btnList.setAttribute('aria-pressed', m==='list');
+      // show/hide UI
+      if(m === 'images'){
+        try{ galleryContainer.style.display='block'; document.getElementById('list-view').style.display='none'; }catch(e){}
+        try{
+          // create a clone of the list-controls and insert above the gallery
+          createControlsClone();
+        }catch(e){ console.warn('createControlsClone failed', e); }
+      } else {
+        try{ galleryContainer.style.display='none'; document.getElementById('list-view').style.display='block'; }catch(e){}
+        // remove any clone so original layout remains intact
+        try{ removeControlsClone(); }catch(e){}
+      }
+    }
+
+    // Clear button behavior: affect both modes
+    const allClearButtons = Array.from(document.querySelectorAll('#clear-search'));
+    allClearButtons.forEach(cb => cb.addEventListener('click', async ()=>{
+      if(document.body.dataset.resultMode === 'images'){
+        if(window.infiniteGallery && typeof window.infiniteGallery.clearFilter === 'function') await window.infiniteGallery.clearFilter();
+        // clear UI everywhere
+        clearAllSearchInputs();
+        updateMatchUI(0);
+      } else {
+        // let list handlers clear
+        clearAllSearchInputs();
+        const ev = new Event('input', {bubbles:true});
+        // dispatch to the original search input so welcome.js handlers pick it up
+        if(searchInput) searchInput.dispatchEvent(ev);
+      }
+    }));
+
+    // wire input on the original list-search as well (keeps list handlers working)
+    let searchTimer = null;
+    if(searchInput){
+      searchInput.addEventListener('input', function(e){
+        const q = e.target.value || '';
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(async ()=>{
+          if(document.body.dataset.resultMode === 'images'){
+            await doImageSearch(q);
+          } else {
+            // Let existing welcome.js handle tag index search; dispatch input event so its debounced handler runs
+            const ev = new Event('input', { bubbles: true });
+            e.target.dispatchEvent(ev);
+          }
+        }, 220);
+      });
+    }
+
+    // initialize default
+    setMode('images');
+
+    // When a tag-kind toggle inside the original controls changes, re-run image search when active
+    try{
+      const kindToggles = Array.from(document.querySelectorAll('#list-controls .tag-toggle'));
+      kindToggles.forEach(t => {
+        t.addEventListener('click', async ()=>{ if(document.body.dataset.resultMode === 'images'){ await doImageSearch(searchInput ? searchInput.value : ''); } });
+        const cb = t.querySelector('input[type="checkbox"]');
+        if(cb) cb.addEventListener('change', async ()=>{ if(document.body.dataset.resultMode === 'images'){ await doImageSearch(searchInput ? searchInput.value : ''); } });
+      });
+    }catch(e){}
+  })();
+  </script>
+  <script>
     // Wire the main-nav to existing controls: explore -> gallery, search -> focus search, list -> list view
     (function(){
       const nav = document.querySelector('.main-nav');
@@ -273,9 +469,7 @@
           document.getElementById('infinite-gallery').style.display='grid';
           document.getElementById('list-view').style.display='none';
         } else if(action === 'search'){
-          const controls = document.querySelector('.controls-bar'); if(controls) controls.classList.add('visible');
-          const input = document.getElementById('search-input'); if(input) input.focus();
-        } else if(action === 'list'){
+          // The nav's Search now opens the List view (was previously the List button)
           const btn = document.getElementById('btn-list'); if(btn) btn.click();
         } else if(action === 'about'){
           // Open the in-page About sliding panel instead of navigating away

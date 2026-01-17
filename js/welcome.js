@@ -10,6 +10,8 @@
     listMode: 'index',
     // whether item results should render as masonry (set when user clicks a tag)
     preferMasonry: false,
+    // when true (set by clicking a tag), also render a clickable names list
+    listNamesClickable: false,
     debounceTimer: null
   };
 
@@ -68,6 +70,8 @@
       search.value = state.tagSearch || '';
       let tId = null;
       search.addEventListener('input', function(e){
+        // If the page is currently set to images-result mode, let the gallery handle searches
+        if(document.body && document.body.dataset && document.body.dataset.resultMode === 'images') return;
         clearTimeout(tId);
         tId = setTimeout(()=>{
           state.tagSearch = e.target.value || '';
@@ -154,6 +158,15 @@
       if(state.preferMasonry){
         // Render as a masonry gallery using CSS columns
         const m = document.createElement('div'); m.className = 'masonry';
+        // If requested, render a clickable names list above the masonry grid
+        if(state.listNamesClickable){
+          const namesWrap = document.createElement('div'); namesWrap.className = 'names-list';
+          cards.forEach(item=>{
+            const na = document.createElement('a'); na.href = `object-detail.html?id=${encodeURIComponent(item.id)}`; na.className = 'names-list-item'; na.textContent = item.name || 'Untitled';
+            namesWrap.appendChild(na);
+          });
+          frag.appendChild(namesWrap);
+        }
         cards.forEach(item=>{
           const a = document.createElement('a');
           a.href = `object-detail.html?id=${encodeURIComponent(item.id)}`;
@@ -169,6 +182,15 @@
         });
         frag.appendChild(m);
       } else {
+        // If requested, render a clickable names list above the photo grid
+        if(state.listNamesClickable){
+          const namesWrap = document.createElement('div'); namesWrap.className = 'names-list';
+          cards.forEach(item=>{
+            const na = document.createElement('a'); na.href = `object-detail.html?id=${encodeURIComponent(item.id)}`; na.className = 'names-list-item'; na.textContent = item.name || 'Untitled';
+            namesWrap.appendChild(na);
+          });
+          frag.appendChild(namesWrap);
+        }
         const grid = document.createElement('div'); grid.className = 'photo-results-grid';
         cards.forEach(item=>{
           const a = document.createElement('a');
@@ -289,6 +311,9 @@
         // for tag-originated searches so results appear in a tiled masonry layout.
         state.preferMasonry = true;
         state.listMode = 'items';
+        // render a names list (clickable) alongside the image/grid so users can
+        // open objects by name after a tag search.
+        state.listNamesClickable = true;
         toggleView('list');
         applyFilters();
       }, false);

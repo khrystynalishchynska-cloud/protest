@@ -32,11 +32,7 @@
     const list = Array.isArray(d) ? d : (d.objects || d.items || []);
     if (!Array.isArray(list)) return out;
     list.forEach(obj => {
-      // Preserve original object properties (type, country, cause, etc.) so
-      // we can later filter the gallery without losing metadata.
-      const base = Object.assign({}, obj);
-      base.id = obj.id || obj._id || obj.slug || base.id || null;
-      base.title = obj.title || obj.name || base.title || '';
+      const base = { id: obj.id || obj._id || obj.slug || null, title: obj.title || obj.name || '' };
   let found = false;
       // Prefer the explicit `image_filename` (object-specific image) if present.
       // Many entries include a shared `images` array filled with generic photos
@@ -74,12 +70,9 @@
     list.forEach(it => {
       var src = (Array.isArray(it.photos) && it.photos[0]) || it.photo || it.image || it.image_filename;
       if (!src && Array.isArray(it.images) && it.images.length){ src = (it.images[0] && (it.images[0].src || it.images[0].image)) || it.images[0]; }
-      // Preserve original info fields so filtering by metadata works.
-      const base = Object.assign({}, it);
-      base.id = it.id || it.slug || base.id || null;
-      base.title = it.title || it.name || base.title || '';
-      if (src) out.push(Object.assign({}, base, { src, source: 'info' }));
-      else { const ph = makePlaceholderDataURL(base.title || ('Object ' + (base.id || '')), 640, 360, ++__placeholderCounter); out.push(Object.assign({}, base, { src: ph, source: 'info', placeholder: true })); }
+      const base = { id: it.id || it.slug || null, title: it.title || it.name || '' };
+  if (src) out.push(Object.assign({}, base, { src, source: 'info' }));
+  else { const ph = makePlaceholderDataURL(base.title || ('Object ' + (base.id || '')), 640, 360, ++__placeholderCounter); out.push(Object.assign({}, base, { src: ph, source: 'info', placeholder: true })); }
     });
     return out;
   }
@@ -164,46 +157,6 @@
     // isGallery is true when all items for this src are from an object's
     // `images[]` gallery (we'll render those slightly smaller).
     const groups = Array.from(groupsBySrc.values()).map(arr => ({ src: arr[0].src, items: arr, title: arr[0].title || '', count: arr.length, isGallery: arr.every(it => it.gallery === true) }));
-
-    // Build a lookup map from src -> group so filtering can quickly find the
-    // group's metadata (we attach this to the gallery element for later access
-    // by the filter UI code).
-    try{
-      const gb = new Map();
-      groups.forEach(g => {
-        try{ if (g && g.src) gb.set(g.src, g); }catch(e){}
-        try{ // also map the resolved absolute URL so lookups using img.src work
-          if (g && g.src && typeof g.src === 'string' && !g.src.startsWith('data:')){
-            const abs = (new URL(g.src, window.location.href)).href; gb.set(abs, g);
-          }
-        }catch(e){}
-      });
-      gallery._groupsBySrc = gb;
-    }catch(e){}
-
-    // Populate search/filter selects (type, country, cause) from available
-    // metadata found in items so the user can filter the scattered gallery.
-    (function populateFilters(){
-      try{
-        const types = new Set(); const countries = new Set(); const causes = new Set();
-        items.forEach(it => {
-          if (!it) return;
-          if (it.type) types.add(String(it.type));
-          if (it.country) countries.add(String(it.country));
-          if (it.cause) causes.add(String(it.cause));
-        });
-        function addOptions(selId, set){
-          const sel = document.getElementById(selId); if(!sel) return;
-          // preserve existing value if present
-          const cur = sel.value || '';
-          sel.innerHTML = '<option value="">(all)</option>' + Array.from(set).sort().map(v => `<option value="${v}">${v}</option>`).join('');
-          if (cur) try{ sel.value = cur; }catch(e){}
-        }
-        addOptions('filter-type', types);
-        addOptions('filter-country', countries);
-        addOptions('filter-cause', causes);
-      }catch(e){/* ignore */}
-    })();
 
     // DEBUG: log groups summary and check for umbrella src presence to help
     // diagnose missing-umbrella issues. Remove or disable these logs after
@@ -476,10 +429,7 @@
   // function) can inspect which srcs/ids were actually placed. Declared here
   // to avoid ReferenceError when the fallback runs after placeAll completes.
   let latestPlacedSet = new Set();
-  // placeAll can optionally accept a filteredGroups array to reflow only a
-  // subset of groups (used when the user applies search/filters). When
-  // filteredGroups is provided we use it instead of the global `groups`.
-  async function placeAll(filteredGroups){
+  async function placeAll(){
       const layout = computeLayout();
       const CANVAS_W = layout.CANVAS_W;
       const CANVAS_H = layout.CANVAS_H;
@@ -490,27 +440,10 @@
       const JITTER = layout.JITTER;
       const SPAWN_CHANCE = layout.SPAWN_CHANCE;
 
-    // Use the provided filteredGroups when present; otherwise fall back to
-    // the full `groups` array computed earlier. This allows re-running the
-    // placement for a filtered subset and producing a tight packed layout.
-    const effectiveGroups = Array.isArray(filteredGroups) ? filteredGroups : groups;
-
-    const layoutKey = [layout.CANVAS_W, layout.CELL_SIZE, effectiveGroups.length].join('-');
+      const layoutKey = [layout.CANVAS_W, layout.CELL_SIZE].join('-');
       // avoid rerunning if nothing significant changed
       if (lastLayoutKey === layoutKey) return;
       lastLayoutKey = layoutKey;
-
-      // Capture current positions of anchors so we can animate from old -> new
-      const oldRects = new Map();
-      try{
-        const oldAnchors = Array.from(gallery.querySelectorAll('a.card-link'));
-        oldAnchors.forEach(a => {
-          try{
-            const src = a.dataset.groupSrc || a.dataset.src || ((a.querySelector && a.querySelector('img')) ? a.querySelector('img').src : '') || '';
-            oldRects.set(src, a.getBoundingClientRect());
-          }catch(e){}
-        });
-      }catch(e){}
 
       gallery.innerHTML = '';
       gallery.style.display = 'block';
@@ -519,7 +452,7 @@
       gallery.style.position = 'relative';
       gallery.style.margin = '0 auto';
 
-  const cols = Math.max(1, Math.floor(CANVAS_W / CELL_SIZE));
+      const cols = Math.max(1, Math.floor(CANVAS_W / CELL_SIZE));
       const rows = Math.max(1, Math.floor(CANVAS_H / CELL_SIZE));
   const placed = [];
       // helper to produce a stable key for a group (by src)
@@ -529,8 +462,8 @@
       // Pre-place overrides (grid or absolute)
       const placedSet = new Set();
       // Pre-place overrides (grid or absolute) for groups
-      for (let gi = 0; gi < effectiveGroups.length; gi++){
-        const group = effectiveGroups[gi];
+      for (let gi = 0; gi < groups.length; gi++){
+        const group = groups[gi];
         const ov = getOverrideForGroup(group);
         if (!ov) continue;
         try{
@@ -601,7 +534,7 @@
         }catch(e){ /* ignore preload errors for overrides */ }
       }
 
-    // Progressive/batched jittered placement: prioritize center cells, then fill out in batches
+      // Progressive/batched jittered placement: prioritize center cells, then fill out in batches
       const cells = [];
       for (let r = 0; r < rows; r++){ for (let c = 0; c < cols; c++){ cells.push({r,c}); } }
       const centerC = Math.floor(cols/2), centerR = Math.floor(rows/2);
@@ -612,11 +545,11 @@
         const {r,c} = cell;
         if (Math.random() > SPAWN_CHANCE) return;
   // pick next group that hasn't been pre-placed via overrides
-      let tries = 0;
-      let group = effectiveGroups[groupIdx % effectiveGroups.length];
-      while (placedSet.has(groupKey(group)) && tries < effectiveGroups.length){ groupIdx++; tries++; group = effectiveGroups[groupIdx % effectiveGroups.length]; }
-      if (placedSet.has(groupKey(group))) { groupIdx++; return; }
-      groupIdx++;
+    let tries = 0;
+    let group = groups[groupIdx % groups.length];
+    while (placedSet.has(groupKey(group)) && tries < groups.length){ groupIdx++; tries++; group = groups[groupIdx % groups.length]; }
+    if (placedSet.has(groupKey(group))) { groupIdx++; return; }
+    groupIdx++;
     const infoImg = await preload(group.src);
     const naturalW = infoImg ? infoImg.w : 200;
     const naturalH = infoImg ? infoImg.h : 200;
@@ -714,7 +647,7 @@
       // jittered placement above. Operating at the group level keeps behavior
       // consistent with the grouping-by-src strategy used earlier.
       try{
-        const unplacedGroups = effectiveGroups.filter(g => !placedSet.has(groupKey(g)));
+        const unplacedGroups = groups.filter(g => !placedSet.has(groupKey(g)));
         if (unplacedGroups.length){
           const MAX_ATTEMPTS = 200;
           for (let group of unplacedGroups){
@@ -768,44 +701,7 @@
           if (placedSrcs.indexOf(umbrellaKey) >= 0) console.info('[gallery] umbrella placed (key)', umbrellaKey);
           else console.info('[gallery] umbrella NOT placed — placed keys:', placedSrcs.slice(0,30));
         }catch(e){}
-
-        // FLIP animation: animate anchors from their previous positions (oldRects)
-        (function doFLIP(){
-          try{
-            if (!oldRects || oldRects.size === 0) { setupAnimations(); return; }
-            const newAnchors = Array.from(gallery.querySelectorAll('a.card-link'));
-            let any = false;
-            newAnchors.forEach(a => {
-              try{
-                const img = a.querySelector && a.querySelector('img');
-                const src = a.dataset.groupSrc || a.dataset.src || (img ? img.src : '') || '';
-                const old = oldRects.get(src);
-                if (!old) return;
-                const nr = a.getBoundingClientRect();
-                const dx = Math.round(old.left - nr.left);
-                const dy = Math.round(old.top - nr.top);
-                if (Math.abs(dx) < 1 && Math.abs(dy) < 1) return;
-                any = true;
-                // place element at its new position but visually offset to old position
-                a.style.transition = 'none';
-                a.style.transform = `translate(${dx}px, ${dy}px)`;
-                a.style.opacity = '0.9';
-                // force layout then animate to natural position
-                requestAnimationFrame(() => {
-                  requestAnimationFrame(() => {
-                    a.style.transition = 'transform 520ms cubic-bezier(.2,.8,.2,1), opacity 260ms ease';
-                    a.style.transform = '';
-                    a.style.opacity = '';
-                  });
-                });
-              }catch(e){}
-            });
-            // If nothing to animate, call setupAnimations immediately
-            if (!any){ setupAnimations(); return; }
-            // Otherwise call setupAnimations after the transition completes
-            setTimeout(()=>{ try{ setupAnimations(); }catch(e){ console.warn('setupAnimations failed', e); } }, 560);
-          }catch(e){ console.warn('FLIP failed', e); try{ setupAnimations(); }catch(e){} }
-        })();
+        setupAnimations();
       }catch(e){ console.warn('setupAnimations failed', e); }
       // expose the set of placed keys for the fallback checker
       try{ latestPlacedSet = placedSet; }catch(e){}
@@ -815,90 +711,6 @@
   try{ gallery.classList.add('gallery-loading'); }catch(e){}
   await placeAll();
   try{ revealInitial(); }catch(e){}
-
-  // --- Filtering support: allow the Search controls to filter the scattered
-  // gallery without switching to list mode. Filters read from the selects
-  // #filter-type, #filter-country, #filter-cause and the #search-input box.
-  (function attachFilters(){
-    try{
-      const selType = document.getElementById('filter-type');
-      const selCountry = document.getElementById('filter-country');
-      const selCause = document.getElementById('filter-cause');
-      const searchInput = document.getElementById('search-input');
-      if (!gallery || (!selType && !selCountry && !selCause && !searchInput)) return;
-
-      const groupsMap = gallery._groupsBySrc || new Map();
-
-      function groupMatchesFilters(group, query, type, country, cause){
-        if (!group || !group.items) return false;
-        const q = query ? String(query).trim().toLowerCase() : '';
-        // An item matches if it satisfies all non-empty filters; a group is
-        // considered a match if any of its items matches.
-        return group.items.some(it => {
-          if (!it) return false;
-          if (type && it.type){ if (String(it.type) !== String(type)) return false; }
-          if (country && it.country){ if (String(it.country) !== String(country)) return false; }
-          if (cause && it.cause){ if (String(it.cause) !== String(cause)) return false; }
-          if (q){ const hay = ((it.title||'') + ' ' + (it.name||'') + ' ' + (it.description||'') + ' ' + (it.tags || '')).toLowerCase(); if (hay.indexOf(q) === -1) return false; }
-          return true;
-        });
-      }
-
-      function applyFilters(){
-        try{
-          const type = selType ? selType.value : '';
-          const country = selCountry ? selCountry.value : '';
-          const cause = selCause ? selCause.value : '';
-          const query = searchInput ? searchInput.value : '';
-          // Build a filtered groups array (preserve original order from `groups`)
-          const filtered = (Array.isArray(groups) ? groups : Array.from(groupsMap.values())).filter(g => groupMatchesFilters(g, query, type, country, cause));
-          console.info('[gallery] filtered groups', filtered.length, 'of', (groups && groups.length) || (Array.from(groupsMap.values()).length));
-          // show a small transient status overlay so the user sees filtering occurred
-          try{
-            let status = document.getElementById('gallery-filter-status');
-            if(!status){ status = document.createElement('div'); status.id = 'gallery-filter-status'; status.style.position = 'fixed'; status.style.left = '50%'; status.style.transform = 'translateX(-50%)'; status.style.bottom = '84px'; status.style.padding = '8px 12px'; status.style.background = 'rgba(0,0,0,0.8)'; status.style.color = '#fff'; status.style.borderRadius = '8px'; status.style.zIndex = 4000; status.style.fontSize = '13px'; document.body.appendChild(status); }
-            status.textContent = `Filtering: ${filtered.length} result${filtered.length===1?'':'s'}`;
-            status.style.opacity = '1';
-            setTimeout(()=>{ try{ status.style.transition = 'opacity 420ms ease'; status.style.opacity = '0'; setTimeout(()=>{ try{ status.remove(); }catch(e){} }, 480); }catch(e){} }, 900);
-          }catch(e){}
-
-          // Force a reflow of the scatter layout for only the filtered groups.
-          // Reset lastLayoutKey so placeAll will run even if layout params didn't change.
-          lastLayoutKey = null;
-          try{ gallery.classList.add('gallery-loading'); }catch(e){}
-          // call placeAll with the filtered array. It's async but we don't await
-          // here; placeAll will handle animations and reveal.
-          placeAll(filtered).catch(err => console.warn('placeAll (filtered) failed', err));
-        }catch(e){ console.warn('applyFilters failed', e); }
-      }
-
-      // debounce helper
-      function debounce(fn, wait){ let t = null; return function(){ const args = arguments; clearTimeout(t); t = setTimeout(()=> fn.apply(this, args), wait); }; }
-
-      const debouncedApply = debounce(applyFilters, 180);
-      // debounce select changes as they trigger a full reflow
-      if (selType) selType.addEventListener('change', debouncedApply);
-      if (selCountry) selCountry.addEventListener('change', debouncedApply);
-      if (selCause) selCause.addEventListener('change', debouncedApply);
-      if (searchInput) searchInput.addEventListener('input', debouncedApply);
-
-      // debugging: log filter state when applied so we can diagnose issues
-      const origApply = applyFilters;
-      applyFilters = function(){
-        try{
-          const type = selType ? selType.value : '';
-          const country = selCountry ? selCountry.value : '';
-          const cause = selCause ? selCause.value : '';
-          const query = searchInput ? searchInput.value : '';
-          console.info('[gallery] applyFilters', { type, country, cause, query });
-        }catch(e){}
-        return origApply();
-      };
-
-      // Expose a global hook for other UI (eg. nav) to trigger filters.
-      gallery.applyGalleryFilters = applyFilters;
-    }catch(e){ console.warn('attachFilters failed', e); }
-  })();
 
   // If stochastic placement failed to place every object, fall back to a simple
   // flat grid that guarantees one thumbnail per object (links to detail pages).

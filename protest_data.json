@@ -1228,6 +1228,34 @@
     "Gapova, E. (2021). The 'Women in White' and the Belarusian Revolution of 2020. Slavic Review.",
     { "url": "https://www.example-analysis.org/color-protests-belarus", "title": "The Semiotics of Red and White in Belarusian Dissent", "note": "Sociological study" }
   ]
+}, 
+
+{
+  "id": 54,
+  "name": "The Lion and Sun Flag",
+  "image_filename": "images/iranflag.webp",
+ "categories_object_type": ["Visual Claims"],
+  "categories_country": ["Iran"],
+  "categories_cause": ["Anti-Theocracy", "National Heritage", "Persian Identity", "Secularism", "Regime Change"],
+  "categories_protest": ["Woman, Life, Freedom", "2009 Green Movement", "2022-2026 Iranian Protests"],
+  "categories_timeframe": ["1979", "2009", "2022", "2026", "20th Century", "21st Century"],
+  "description_html": "After decades of state suppression following the <span class=\"highlight-timeframe\">1979</span> Revolution, the historic <span class=empasisc>Lion and Sun flag</span> of <span class=\"highlight-country\">Iran</span> has re-emerged as a primary symbol of resistance. Originally the national emblem until <span class=\"highlight-timeframe\">1980</span>, the design features a <span class=strong-emphasis>lion with a sword before a radiant sun</span> on a green, white, and red tricolor, representing <span class=\"highlight-cause\">Persian heritage, power, and enlightenment</span>. Although banned domestically, the flag resurfaced during major crises—notably in <span class=\"highlight-timeframe\">2009, 2019, and 2022</span>—reaching a peak in <span class=\"highlight-timeframe\">2026</span>. Protesters use the flag as a <span class=strong-emphasis>visual rejection of theocratic rule</span>, a movement amplified by activists in the <span class=\"highlight-country\">UK</span>, <span class=\"highlight-country\">Germany</span>, and <span class=\"highlight-country\">Australia</span> who have replaced official state flags at diplomatic missions. While historically tied to the <span class=empasisc>Pahlavi dynasty</span>, its contemporary use has evolved into a broad <span class=\"highlight-cause\">unifying marker</span> of opposition to the current political system. <br>"
+ ,
+  "images": [
+    { "src": "images/lion_sun_diaspora_protest.webp", "caption": "The Lion and Sun flag carried by protesters in London, 2026" },
+    { "src": "images/embassy_flag_replacement.webp", "caption": "Activists installing the historic emblem at an Iranian diplomatic mission" },
+    { "src": "https://www.youtube.com/embed/example-lion-sun", "thumb": "https://img.youtube.com/vi/example-lion-sun/hqdefault.jpg", "caption": "The history and resurgence of the Lion and Sun (YouTube)", "type": "embed" }
+  ]
+  ,
+  "eyewitness": [
+    "When we raise this flag, we aren't just looking back at the past; we are looking at a future where Iran belongs to its people again, not the clerics. (Diaspora activist, Berlin, 2026)",
+    "For years we were told this symbol was 'forbidden.' Now, seeing it painted on walls in Tehran gives us the courage to keep going."
+  ],
+  "sources": [
+    { "url": "https://www.example-history.ir/lion-sun-origins", "title": "The Lion and Sun: A History of the Persian Emblem", "note": "Vexillological archive" },
+    "Ansari, A. (2024). Symbols of Resistance: The Re-emergence of Pre-Revolutionary Icons in Modern Iran.",
+    { "url": "https://www.example-news.com/iran-embassy-protests-2026", "title": "Diplomatic Tensions: The Battle of the Flags", "note": "2026 News analysis" }
+  ]
 }
 ]
 

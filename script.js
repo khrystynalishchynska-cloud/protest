@@ -726,18 +726,68 @@ document.addEventListener('transitionend', (e) => {
 });
 
 function renderExtraSections(data) {
-    // Eyewitness stories
+    // Eyewitness stories -> render as square preview cards that expand on click
     const eyewitnessContainer = document.getElementById('eyewitness-contents');
     if (!eyewitnessContainer) return;
     eyewitnessContainer.innerHTML = '';
     if (Array.isArray(data.eyewitness) && data.eyewitness.length > 0) {
-        const list = document.createElement('ul');
-        data.eyewitness.forEach(item => {
-            const li = document.createElement('li');
-            li.innerHTML = item; // assume HTML-safe or plain text
-            list.appendChild(li);
+        const cards = document.createElement('div');
+        cards.className = 'eyewitness-cards';
+
+        data.eyewitness.forEach((item, idx) => {
+            const card = document.createElement('article');
+            card.className = 'eyewitness-card';
+            card.tabIndex = 0;
+            card.setAttribute('role', 'button');
+            card.setAttribute('aria-pressed', 'false');
+
+            // Preview: short text excerpt
+            const preview = document.createElement('div');
+            preview.className = 'eyewitness-preview';
+
+            // Full content container (hidden initially)
+            const full = document.createElement('div');
+            full.className = 'eyewitness-full';
+            full.style.display = 'none';
+
+            // If item appears to contain embed markup (iframe/video/img), place into full
+            const isHtml = /</.test(String(item));
+            if (isHtml) {
+                // For preview, extract text content for a short snippet
+                const temp = document.createElement('div'); temp.innerHTML = item;
+                const text = temp.textContent || temp.innerText || '';
+                preview.textContent = (text.length > 140) ? text.slice(0,140).trim() + '…' : text;
+                full.innerHTML = item; // preserve HTML (embed/video/etc.)
+            } else {
+                const text = String(item || '');
+                preview.textContent = (text.length > 140) ? text.slice(0,140).trim() + '…' : text;
+                // put full text into full container (safe since data is local); if you need sanitation, add it later
+                full.textContent = text;
+            }
+
+            // Toggle function for expand/collapse
+            const toggle = (ev) => {
+                // allow anchor clicks inside full content to work normally
+                if (ev && ev.target && ev.target.closest && ev.target.closest('a')) return;
+                const expanded = card.classList.toggle('expanded');
+                card.setAttribute('aria-pressed', expanded ? 'true' : 'false');
+                if (expanded) {
+                    full.style.display = '';
+                } else {
+                    full.style.display = 'none';
+                }
+            };
+
+            // Click and keyboard handlers
+            card.addEventListener('click', toggle);
+            card.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(e); } });
+
+            card.appendChild(preview);
+            card.appendChild(full);
+            cards.appendChild(card);
         });
-        eyewitnessContainer.appendChild(list);
+
+        eyewitnessContainer.appendChild(cards);
     } else {
         eyewitnessContainer.innerHTML = '<p>No eyewitness accounts available.</p>';
     }
@@ -809,10 +859,23 @@ function setupHighlighting(objectData) {
         button.addEventListener('mouseout', () => toggleHighlight(false));
         
         // Click Logic (Triggers the Split-Screen/Context Panel)
-        button.addEventListener('click', (event) => {
-            // PASS THE FULL GLOBAL DATA ARRAY HERE
-            handleContextPanel(event);
-        });
+        // On the object-detail page we want filter buttons to keep their hover
+        // styling but be non-clickable. Detect object-detail by URL and disable
+        // the interactive behavior while preserving hover styles.
+        const isObjectDetailPage = (typeof window !== 'undefined') && (window.location.pathname.includes('object-detail') || window.location.href.includes('object-detail.html'));
+        if (isObjectDetailPage) {
+            // mark as disabled for accessibility; keep hover effects via CSS
+            try { button.setAttribute('aria-disabled', 'true'); } catch (e) {}
+            // Prevent clicks from opening the context panel while still allowing :hover to apply
+            button.addEventListener('click', (ev) => { ev.preventDefault(); ev.stopPropagation(); });
+            // use default cursor so it doesn't imply navigation, but hover styling still shows
+            try { button.style.cursor = 'default'; } catch (e) {}
+        } else {
+            button.addEventListener('click', (event) => {
+                // PASS THE FULL GLOBAL DATA ARRAY HERE
+                handleContextPanel(event);
+            });
+        }
     });
 
     // Add click event to highlighted spans in description
@@ -831,6 +894,19 @@ function setupHighlighting(objectData) {
                 // Open the panel first so the layout is correct
                 togglePanel(true);
                 const panelContent = document.getElementById('context-panel-content');
+                // If this click refers to the Iranian anti-regime protests and we're
+                // on object-detail id=54, show custom content inline in the panel.
+                try {
+                    const q = new URLSearchParams(location.search);
+                    const currentId = parseInt(q.get('id')) || null;
+                    if (currentId === 54 && String(value).toLowerCase() === 'iranian anti-regime protests') {
+                        // open the scrollytelling protest view driven by protest_info.json
+                        try { openProtestScrolly('iranian-anti-regime-protests'); } catch (err) { console.warn('openProtestScrolly failed', err); }
+                        return;
+                    }
+                } catch (e) {
+                    // ignore and fall back to default behaviour
+                }
                 if (value === 'Umbrella Revolution') {
                     panelContent.innerHTML = `
                         <iframe src="umbrella-movement.html" style="width:100%;height:600px;border:none;"></iframe>
@@ -1056,7 +1132,7 @@ function populateContextPanel(filterData) {
 
     // This section runs ONLY if a specific term (like 'Hong Kong') was clicked.
     const resultsList = filteredResults.map(obj =>
-        `<div class="context-result"><a href="object-detail.html?id=${encodeURIComponent(obj.id)}"><strong>${obj.name}</strong></a> (${(obj.categories_country && obj.categories_country[0]) || ''})</div>`
+        `<div class="context-result"><a href="object-detail.html?id=${encodeURIComponent(obj.id)}"><strong>${obj.name}</strong></a> </div>`
     ).join('');
 
     panelContent.innerHTML = `
@@ -1068,6 +1144,96 @@ function populateContextPanel(filterData) {
 }
 
 /* --- PHOTO GALLERY RENDERING --- */
+// --- Scrollytelling protest renderer ---
+let _protestInfoCache = null;
+async function fetchProtestInfo() {
+    if (_protestInfoCache) return _protestInfoCache;
+    try {
+        const res = await fetch('protest_info.json');
+        if (!res.ok) throw new Error('Failed to load protest_info.json');
+        _protestInfoCache = await res.json();
+        return _protestInfoCache;
+    } catch (err) {
+        console.warn('fetchProtestInfo error', err);
+        _protestInfoCache = {};
+        return _protestInfoCache;
+    }
+}
+
+async function openProtestScrolly(slug) {
+    const data = await fetchProtestInfo();
+    const entry = data[slug];
+    const panel = document.getElementById('context-panel');
+    const content = document.getElementById('context-panel-content');
+    if (!entry) {
+        if (content) content.innerHTML = '<p>No protest data found.</p>';
+        togglePanel(true);
+        return;
+    }
+
+    // Open panel and ensure split layout
+    try { togglePanel(true); } catch (e) {}
+
+    if (panel) { panel.classList.remove('compact'); panel.classList.add('active'); }
+    try { document.getElementById('object-container').classList.add('split'); document.getElementById('content-display').classList.add('split'); } catch(e){}
+
+    // Build scrolly layout
+    content.innerHTML = '';
+    const scrolly = document.createElement('div'); scrolly.className = 'scrolly-container';
+    const stepsCol = document.createElement('div'); stepsCol.className = 'scrolly-steps';
+    const graphicCol = document.createElement('div'); graphicCol.className = 'scrolly-graphic';
+    const graphicInner = document.createElement('div'); graphicInner.className = 'graphic-inner'; graphicCol.appendChild(graphicInner);
+
+    if (entry.intro) {
+        const intro = document.createElement('div'); intro.className = 'scrolly-intro'; intro.innerHTML = entry.intro; stepsCol.appendChild(intro);
+    }
+
+    (entry.sections || []).forEach((s, i) => {
+        const step = document.createElement('article');
+        step.className = 'scrolly-step';
+        step.setAttribute('data-step-index', i);
+        step.tabIndex = 0;
+        step.innerHTML = `<h4>${s.heading}</h4><p>${s.body}</p>`;
+        stepsCol.appendChild(step);
+        if (i === 0) graphicInner.innerHTML = s.media || '';
+    });
+
+    scrolly.appendChild(stepsCol); scrolly.appendChild(graphicCol); content.appendChild(scrolly);
+
+    // IntersectionObserver to activate steps
+    const stepElems = Array.from(stepsCol.querySelectorAll('.scrolly-step'));
+    const options = { root: stepsCol, rootMargin: '0px', threshold: [0.55] };
+
+    if (openProtestScrolly._observer) openProtestScrolly._observer.disconnect();
+    openProtestScrolly._observer = new IntersectionObserver((entries) => {
+        entries.forEach(en => {
+            if (en.isIntersecting) {
+                const el = en.target;
+                stepElems.forEach(s => s.classList.remove('is-active'));
+                el.classList.add('is-active');
+                const idx = parseInt(el.getAttribute('data-step-index'), 10);
+                const section = (entry.sections || [])[idx];
+                if (section) graphicInner.innerHTML = section.media || '';
+            }
+        });
+    }, options);
+    stepElems.forEach(el => openProtestScrolly._observer.observe(el));
+
+    // keyboard support for steps
+    stepsCol.addEventListener('keydown', (ev) => {
+        if (ev.key === 'Enter' || ev.key === ' ') {
+            const active = document.activeElement;
+            if (active && active.classList.contains('scrolly-step')) {
+                active.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                active.classList.add('is-active');
+                const idx = parseInt(active.getAttribute('data-step-index'), 10);
+                const section = (entry.sections || [])[idx];
+                if (section) graphicInner.innerHTML = section.media || '';
+                ev.preventDefault();
+            }
+        }
+    });
+}
 function renderGallery(data) {
     const gallery = document.getElementById('photo-gallery');
     if (!gallery) return;

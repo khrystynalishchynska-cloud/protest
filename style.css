@@ -33,6 +33,21 @@
     /* (hero variables removed) */
 }
 
+/* Site-wide link colour: make all anchors use the requested brand colour */
+/* Use body a so it applies broadly but can still be overridden by very specific rules if needed */
+body a,
+a:link,
+a:visited {
+    color: #C00E88;
+}
+
+/* Keep a clear hover/focus state for accessibility */
+body a:hover,
+body a:focus {
+    color: #C00E88;
+    text-decoration: underline;
+}
+
 /* Hero-mode styles
     Minimal rules to support the JS hero lifecycle (hero-init -> hero-active -> hero-revealed).
     These keep the description/content hidden while the page is in hero mode and
@@ -651,6 +666,44 @@ body {
     color: #111;
 }
 
+/* Eyewitness cards: square preview cards that expand to reveal full text/embed */
+.eyewitness-cards {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+.eyewitness-card {
+    background: #FFF351;
+    border: 1px solid #eee;
+    
+    width: 220px;
+    aspect-ratio: 1 / 1; /* square */
+    padding: 12px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 160ms ease;
+}
+.eyewitness-card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0,0,0,0.10); }
+.eyewitness-card:focus { outline: 3px solid rgba(192,14,136,0.12); outline-offset: 2px; }
+.eyewitness-preview { flex: 1 1 auto; color: #111; font-size: 0.95rem; line-height: 1.3; overflow: hidden; }
+.eyewitness-full { margin-top: 8px; font-size: 0.95rem; line-height: 1.4; overflow: auto; }
+.eyewitness-card .eyewitness-full a { color: #C00E88; }
+.eyewitness-card.expanded { width: 100%; aspect-ratio: auto; }
+.eyewitness-card.expanded .eyewitness-full { display: block; }
+.eyewitness-card .eyewitness-full { display: none; }
+
+/* Responsive: on narrow viewports, make cards full-width stacked */
+@media (max-width: 720px) {
+    .eyewitness-cards { gap: 14px; }
+    .eyewitness-card { width: 100%; aspect-ratio: auto; }
+    .eyewitness-card.expanded { width: 100%; }
+}
+
 /* Collapsible subsection body styles */
 .subsection .subsection-body {
     overflow: hidden;
@@ -1049,6 +1102,7 @@ h1 {
 .strong-emphasis {
     font-family: 'Blur medium', sans-serif;
     font-size: 20px;
+    line-height: 1;
 }
 
 .empasisc {
@@ -1056,6 +1110,7 @@ h1 {
     font-size: 20px;
     text-decoration: underline;
     color: rgb(192, 14, 136);
+    line-height: 1;
 }
 /* --- Filter Buttons --- */
 #filter-buttons-container {
@@ -1204,6 +1259,60 @@ h1 {
 #context-panel-content {
     margin-top: 20px; 
 }
+
+/* Scrollytelling layout for protest context panel */
+.scrolly-container {
+    display: grid;
+    grid-template-columns: 340px 1fr; /* left steps, right sticky graphic */
+    gap: 24px;
+    align-items: start;
+    width: 100%;
+    box-sizing: border-box;
+}
+@media (max-width: 900px) {
+    .scrolly-container { grid-template-columns: 1fr; gap: 12px; }
+}
+
+.scrolly-steps {
+    max-height: calc(100vh - 200px);
+    overflow: auto;
+    padding-right: 8px;
+}
+.scrolly-step {
+    padding: 14px;
+    border-left: 4px solid transparent;
+    margin-bottom: 12px;
+    background: transparent;
+    transition: background 220ms ease, border-color 220ms ease, transform 160ms ease;
+    cursor: default;
+}
+.scrolly-step.is-active {
+    background: rgba(192,14,136,0.05);
+    border-left-color: #C00E88;
+    transform: translateX(2px);
+}
+
+.scrolly-graphic { position: relative; }
+.scrolly-graphic .graphic-inner {
+    position: sticky;
+    top: 28px;
+    width: 100%;
+    min-height: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fafafa;
+    border: 1px solid #eee;
+    padding: 12px;
+    box-sizing: border-box;
+}
+.scrolly-graphic img,
+.scrolly-graphic iframe,
+.scrolly-graphic video { max-width: 100%; max-height: 60vh; display: block; }
+
+.scrolly-step h4 { margin: 0 0 6px 0; font-size: 1rem; font-weight:700; }
+.scrolly-step p { margin: 0; font-size: 0.95rem; line-height:1.35; }
+
 
 /* Inner layout for context panel: narrow list at left, detail at right */
 .context-panel-layout {

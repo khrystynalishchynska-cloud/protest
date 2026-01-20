@@ -6,17 +6,13 @@
     <title>Symbol Detail | The Umbrella</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="hero-init">
+<body>
 
     <!-- Global Back button placed above the column layout -->
     <div id="global-back-wrap">
         <button id="back-button" type="button" aria-label="Go back">Back</button>
     </div>
-    <!-- Hero sentinel: small spacer used to detect when the user scrolls down
-         far enough to reveal the page content. Observed by script.js. -->
-    <div id="hero-sentinel" aria-hidden="true"></div>
     <main id="object-container" class="split-layout"> 
-    <!-- hero-mode removed: place main image + title into the normal page columns -->
 
     <section id="metadata-controls" class="metadata-column" data-column-name="Left — Metadata">
             <!-- Main image for the object -->
@@ -116,7 +112,7 @@
             </div>
             
             <aside id="context-panel" class="hidden-panel" data-column-name="Right — Context Panel">
-                <button id="close-panel-btn">✕ Close Context</button>
+                <button id="close-panel-btn">✕ </button>
                 <div id="context-panel-content">
                     </div>
             </aside>

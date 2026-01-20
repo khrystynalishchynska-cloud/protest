@@ -816,11 +816,15 @@ function setupHighlighting(objectData) {
     });
 
     // Add click event to highlighted spans in description
+    // Use closest() so clicks on nested elements (e.g. inner <span> tags) still
+    // activate the outer highlight span.
     document.getElementById('description-text').addEventListener('click', async function(e) {
-        if (e.target.matches('span[class^="highlight-"]')) {
-            const typeClass = Array.from(e.target.classList).find(cls => cls.startsWith('highlight-'));
-            const categoryKey = typeClass.replace('highlight-', 'categories_');
-            const value = e.target.textContent.trim();
+        const clicked = (e.target && e.target.closest) ? e.target.closest('span[class^="highlight-"]') : null;
+        if (!clicked) return;
+        const typeClass = Array.from(clicked.classList).find(cls => cls.startsWith('highlight-'));
+        if (!typeClass) return;
+        const categoryKey = typeClass.replace('highlight-', 'categories_');
+        const value = clicked.textContent.trim();
 
             // Special-case protest info: show embedded resources or fetch details
             if (categoryKey === 'categories_protest') {
@@ -855,7 +859,6 @@ function setupHighlighting(objectData) {
                 // For normal tags, let the central togglePanel/populateContextPanel handle filtering
                 togglePanel(true, { key: categoryKey, term: value });
             }
-        }
     });
 }
 
@@ -978,50 +981,69 @@ function populateContextPanel(filterData) {
                 item.tabIndex = 0;
                 item.dataset.objId = obj.id;
 
-                // Make the item show a selectable preview and also include a direct "Open" link
-                item.innerHTML = `
-                    <div class="context-item-main" style="flex:1;min-width:0;cursor:pointer">
-                        <strong class="context-item-title">${obj.name}</strong>
-                        <div style="font-size:0.85em;color:#666;margin-top:4px">${(obj.categories_country || []).join(', ')}</div>
-                    </div>
-                    <a class="context-item-open" href="object-detail.html?id=${encodeURIComponent(obj.id)}" style="margin-left:12px;white-space:nowrap">Open</a>
-                `;
+                // Build an anchor link for the object so the list is directly navigable
+                const link = document.createElement('a');
+                link.className = 'context-item-link';
+                link.href = `object-detail.html?id=${encodeURIComponent(obj.id)}`;
+                link.style.flex = '1';
+                link.style.minWidth = '0';
+                link.style.display = 'block';
+                link.style.textDecoration = 'none';
+                link.style.color = 'inherit';
 
-                // Click handler: populate detail pane (keeps previous inline-panel behavior)
-                item.querySelector('.context-item-main').addEventListener('click', () => {
-                    if (window.__debug) console.log('context item clicked:', obj.id, obj.name);
+                const titleEl = document.createElement('strong');
+                titleEl.className = 'context-item-title';
+                titleEl.textContent = obj.name;
+                const metaEl = document.createElement('div');
+                metaEl.style.fontSize = '0.85em';
+                metaEl.style.color = '#666';
+                metaEl.style.marginTop = '4px';
+                metaEl.textContent = (obj.categories_country || []).join(', ');
+
+                link.appendChild(titleEl);
+                link.appendChild(metaEl);
+
+                // Small preview button to populate the right-hand detail pane without navigating
+                const previewBtn = document.createElement('button');
+                previewBtn.className = 'context-item-preview';
+                previewBtn.type = 'button';
+                previewBtn.style.marginLeft = '12px';
+                previewBtn.textContent = 'Preview';
+
+                // Click handler for preview button: populate detail pane (keeps inline-panel behavior)
+                previewBtn.addEventListener('click', (ev) => {
+                    ev.preventDefault(); ev.stopPropagation();
+                    if (window.__debug) console.log('context item preview clicked:', obj.id, obj.name);
                     // mark active
                     document.querySelectorAll('.context-panel-list .context-item').forEach(i => i.classList.remove('active'));
                     item.classList.add('active');
 
-                    // remove no-detail so detail column becomes visible
+                    // show detail column
                     layout.classList.remove('no-detail');
-
-                    // expand the outer context panel so the detail area has more room
                     if (panel) {
                         panel.classList.remove('compact');
                         panel.classList.add('expanded');
                     }
 
                     // populate detail with larger text about the object
-                    detail.innerHTML = `
-                        <h3>${obj.name}</h3>
-                        <div class="context-detail-body">${obj.description_html || '<p>No description available.</p>'}</div>
-                    `;
+                    detail.innerHTML = '';
+                    const h3 = document.createElement('h3'); h3.textContent = obj.name;
+                    const body = document.createElement('div'); body.className = 'context-detail-body';
+                    body.innerHTML = obj.description_html || '<p>No description available.</p>';
+                    detail.appendChild(h3); detail.appendChild(body);
                 });
 
-                // Make the "Open" link keyboard-accessible and ensure it navigates normally.
-                const openLink = item.querySelector('.context-item-open');
-                if (openLink) {
-                    openLink.addEventListener('click', (e) => {
-                        // allow normal navigation to proceed; no need to preventDefault
-                        // If you want navigation in a new tab, set target="_blank" here.
-                    });
-                }
+                // keyboard accessibility: Enter/Space on the item focuses the link (navigate) or triggers preview with Space
+                item.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') { // Enter -> follow link (navigate)
+                        e.preventDefault(); link.focus(); link.click();
+                    } else if (e.key === ' ') { // Space -> preview
+                        e.preventDefault(); previewBtn.click();
+                    }
+                });
 
-                // keyboard accessibility for selecting (Enter/Space activates preview click)
-                item.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); item.querySelector('.context-item-main').click(); } });
-
+                item.appendChild(link);
+                item.appendChild(previewBtn);
                 list.appendChild(item);
             });
         }
@@ -1033,21 +1055,15 @@ function populateContextPanel(filterData) {
     }
 
     // This section runs ONLY if a specific term (like 'Hong Kong') was clicked.
-    const resultsList = filteredResults.map(obj => {
-        const country = (obj.categories_country && obj.categories_country[0]) ? obj.categories_country[0] : '';
-        return `
-            <div class="context-result">
-                <a class="context-result-link" href="object-detail.html?id=${encodeURIComponent(obj.id)}">${obj.name}</a>
-                ${country ? `<span class="context-result-meta"> (${country})</span>` : ''}
-            </div>`;
-    }).join('');
+    const resultsList = filteredResults.map(obj =>
+        `<div class="context-result"><a href="object-detail.html?id=${encodeURIComponent(obj.id)}"><strong>${obj.name}</strong></a> (${(obj.categories_country && obj.categories_country[0]) || ''})</div>`
+    ).join('');
 
     panelContent.innerHTML = `
         <h3>Results for: ${termToFilterBy}</h3>
         <p>Found ${filteredResults.length} object(s) linked to <strong>${termToFilterBy}</strong>:</p>
         ${resultsList}
         <hr>
-        <p>This demonstrates real-time filtering based on a term clicked in the description text.</p>
     `;
 }
 

@@ -1,3 +1,8 @@
+
+@view-transition {
+  navigation: auto;
+}
+
 /* Highlight clickable tag spans on hover */
 .highlight-country:hover,
 .highlight-cause:hover,
@@ -109,8 +114,6 @@ body {
    down while the back button remains fixed above them. */
 
 #object-container { padding-top: var(--global-back-offset); }
-
-
  
  /* #object-container { padding-top: 18px; }*/
 
@@ -127,9 +130,9 @@ body {
 
 /* Use the parent .split flag to size the context panel on desktop */
 .split-layout.split #context-panel {
-    flex: 0 0 50%;
-    width: 40%;
-    border-left: 2px solid black;
+    flex: 0 0 65%;
+    width: 65%;
+    border-left: 1px solid #000;
     padding: 30px;
 }
 
@@ -145,7 +148,7 @@ body {
 .split-layout.split #context-panel {
     flex: 0 0 50%;
     width: 50%;
-    border-left: 2px solid #000;
+    border-left: 1px solid #000;
     padding: 30px;
 }
 
@@ -191,6 +194,7 @@ body {
     z-index: 1200;
 }
 #back-button:focus {
+    outline: 2px solid rgba(0,0,0,0.12);
     outline-offset: 2px;
 }
 #back-button:hover { color: rgba(0,0,0,0.65); }
@@ -205,8 +209,8 @@ body {
     right: 6px;  /*nudge slightly inward from the very edge */
     top: 12px;
     bottom: 12px;
-    width: 2px;
-    background:black
+    width: 1px;
+    background: rgba(0,0,0,0.85);
     pointer-events: none;
 }
 
@@ -238,8 +242,7 @@ body {
     padding: 30px 30px;
     padding-right: 18%;
     /* Make the content column scroll independently so the left column can remain fixed */
-    /* account for fixed global controls (back button) when sizing */
-    max-height: calc(100vh - var(--global-back-offset));
+    max-height: 100vh;
     overflow-y: auto;
     transition: flex 0.4s;
 }
@@ -421,6 +424,7 @@ body {
     height: auto; /* preserve aspect ratio */
     display: block;
     cursor: pointer;
+    border: 1px solid rgba(0,0,0,0.06);
     transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
     object-fit: cover;
     box-sizing: border-box;
@@ -548,18 +552,11 @@ body {
 }
 
 /* Subsection titles and dividers inside the description column */
-.subsection { 
-    margin: 0;
-margin-bottom: 30px; }
-
+.subsection { margin: 0; }
 .subsection-title {
     font-family: 'Blur Medium', sans-serif;
     font-size: 1.6em;
-<<<<<<< Updated upstream
     justify-content: left;
-=======
-    justify-content: top;
->>>>>>> Stashed changes
     letter-spacing: 0.6px;
     margin: 0;
     text-transform: none;
@@ -652,101 +649,6 @@ margin-bottom: 30px; }
 .eyewitness-contents, .sources-contents {
     font-size: 0.95em;
     color: #111;
-}
-
-/* Eyewitness cards (grid + modal) */
-.eyewitness-contents {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 18px;
-    margin-top: 12px;
-}
-
-.eyewitness-card {
-    position: relative;
-    background: #D9D9D9;
-    padding: 28px 22px 48px 22px; /* extra bottom space for icon */
-    box-shadow: none;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    min-height: 260px;
-}
-.eyewitness-card:focus,
-.eyewitness-card:hover { transform: translateY(-4px); transition: transform 180ms ease; outline: none; }
-
-.eyewitness-card .ew-head { display:block; }
-.ew-name {
-    font-family: 'Lekton', monospace;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-size: clamp(10px, 2.6vw, 20px);
-    margin: 0 0 8px 0;
-    display: inline-block;
-    border-bottom: 2px solid rgba(0,0,0,0.85);
-    padding-bottom: 8px;
-}
-.ew-role {
-    font-family: 'Lekton', monospace;
-    font-size: 18px;
-    color: #333;
-    margin: 8px 0 0 0;
-}
-.ew-preview {
-    font-family: 'Lekton', monospace;
-    color: #111;
-    font-size: 18px;
-    line-height: 1.2;
-    max-height: 10.8em; /* about 3 lines * line-height */
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin-top: auto;
-    align-self: stretch; /* ensure it fills available width */
-    box-sizing: border-box;
-}
-
-/* small open icon in bottom-right */
-.ew-open {
-    position: absolute;
-    right: 12px;
-    bottom: 12px;
-    width: 42px;
-    height: 42px;
-    border: none;
-    color: #c81b7a;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: transparent;
-    font-size: 20px;
-    box-sizing: border-box;
-}
-
-
-/* modal */
-.eyewitness-modal { display:none; position:fixed; inset:0; z-index:2200; align-items:center; justify-content:center; }
-.eyewitness-modal[aria-hidden="false"] { display:flex; }
-.eyewitness-modal-backdrop { position:fixed; inset:0; background:rgba(0,0,0,0.5); }
-.eyewitness-modal-content {
-    position:relative;
-    max-width:760px;
-    width:calc(100% - 48px);
-    max-height:80vh;
-    overflow:auto;
-    background:#fff;
-    border-radius:10px;
-    padding:20px;
-    box-shadow:0 28px 80px rgba(0,0,0,0.3);
-}
-.modal-close { position:absolute; top:12px; right:12px; border:none; background:transparent; font-size:18px; cursor:pointer; }
-.ew-modal-role { color:#666; margin-top:0; margin-bottom:12px; }
-.ew-modal-body { line-height:1.55; white-space:pre-wrap; }
-
-@media (max-width:600px){
-  .eyewitness-contents { grid-template-columns: 1fr; }
-  .eyewitness-modal-content { width: calc(100% - 24px); padding:16px; }
 }
 
 /* Collapsible subsection body styles */
@@ -855,18 +757,12 @@ margin-bottom: 30px; }
     padding: 4px 2px;
 }
 .subsection-toggle:focus {
-    outline: 2px solid #000;
+    outline: 1px solid #000;
     outline-offset: 2px;
 }
-<<<<<<< Updated upstream
  /* .subsection-title .subsection-toggle::after {
     /* Default plus/minus marker (hidden in our rotated-label layout) */
 /*    content: '−';
-=======
-.subsection-title .subsection-toggle::after {
-    /* Default plus/minus marker (hidden in our rotated-label layout) */
-    content: '−'; /* Unicode minus */
->>>>>>> Stashed changes
     float: right;
     font-weight: 700;
     transition: transform 220ms ease, content 120ms ease; 
@@ -1035,134 +931,6 @@ margin-bottom: 30px; }
        doesn't push subsections down. This only affects wide viewports. */
     .split-layout.split .content-column {
         padding-top: 0;
-    }
-}
-
-/* Hide metadata divider (we'll place the line with subsections instead) */
-.metadata-column::after { display: none !important; }
-
-/* Remove visual plus/minus marker when using rotated labels */
-.subsection-title .subsection-toggle::after,
-.description-block .subsection .subsection-toggle::after {
-    display: none !important;
-    content: none !important;
-}
-
-/* Remove horizontal divider element used previously between subsection headers */
-.divider { display: none !important; }
-
-/* Desktop layout: left label column with rotated horizontal text reading top->bottom */
-@media (min-width: 900px) {
-    /* Width reserved for rotated labels and offset for the guide line */
-    :root {
-        /* Make label column responsive and narrower: min 48px up to 80px depending on viewport.
-           This reduces the horizontal footprint of rotated labels while remaining responsive. */
-        --section-label-width: clamp(20px, 2.34vw, 45px);
-        /* reduce distance from guide to label for a tighter visual relationship */
-        --label-line-offset: 12px; /* ~12px gap (smaller) */
-        --tick-length: 16px; /* shorter connector length to match reduced gap */
-        /* font size for rotated subsection labels (responsive) */
-        --section-label-font-size: clamp(0.85rem, 1.6vw, 1.15rem);
-    }
-
-    .description-block { position: relative; }
-
-    /* Vertical guide line anchored to the description block (option 2).
-       It spans the full height of .description-block so it grows/shrinks
-       with the content when subsections open/close. */
-    .description-block::before {
-        content: '';
-        position: absolute;
-        /* place the guide to the left of the label column by shifting
-           it left by --label-line-offset (so it sits outside the label column)
-           This keeps the vertical line visually to the left of the subsection buttons. */
-        left: calc(0px - var(--label-line-offset));
-        top: 0;
-        bottom: 0;
-        width: 2px;
-        background: rgba(0,0,0,0.85);
-        pointer-events: none;
-        /* raise above subsection backgrounds so the guide is visible */
-        z-index: 60;
-    }
-
-    .description-block .subsection {
-        display: grid;
-        grid-template-columns: var(--section-label-width) 1fr;
-        /* single row grid so the body can sit at the top; title will be
-           absolutely positioned into the left column so it doesn't create
-           vertical space above the body */
-        grid-template-rows: 1fr;
-        gap: 0;
-        align-items: start;
-        padding: 8px 0;
-        background: var(--site-bg);
-        position: relative; /* needed so subsection::after positions relative to header block */
-    }
-
-    .description-block .subsection .subsection-title {
-        /* place the title absolutely in the left column so it doesn't
-           take up vertical space; this allows the subsection-body to
-           start at the very top of the subsection */
-        grid-column: 1 / 2;
-        position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: var(--section-label-width);
-        display:flex;
-        align-items:flex-start;
-        justify-content:flex-start;
-        padding: 0 0 0 0;
-    }
-
-    .description-block .subsection .subsection-toggle {
-        all: unset;
-        position: absolute;
-        /* place the rotated label so its leftmost edge aligns with the
-           left edge of the subsection (i.e., the left edge of the label column) */
-        left: 0;
-        top: 50%;
-        writing-mode: horizontal-tb;
-        /* rotate then vertically center via translateY */
-        transform: rotate(90deg) translateY(-50%);
-        transform-origin: left center;
-        white-space: nowrap;
-        cursor: pointer;
-        font-family: 'Blur Medium', 'FramesPartOne-Bold', sans-serif;
-        /* use a responsive variable so it's easy to tweak */
-        font-size: var(--section-label-font-size);
-        letter-spacing: 0.4px;
-        padding: 4px 2px 4px 0;
-        line-height: 1;
-        z-index: 70; /* keep above guide/ticks */
-    }
-
-    .description-block .subsection .subsection-body {
-        /* occupy the primary grid cell at the top so the content begins
-           at the top of the description-block */
-        grid-column: 2 / -1;
-        grid-row: 1 / 2;
-        padding-left: 18px;
-        margin-top: 0;
-    }
-
-    /* Small tick that intersects the vertical line at each subsection header. */
-    .description-block .subsection::after {
-        content: '';
-        position: absolute;
-        /* align tick at the same x-position as the guide (left of label column)
-           and extend it rightwards so it visually connects to the rotated label */
-        left: calc(0px - var(--label-line-offset));
-        top: 50%;
-        transform: translateY(-50%);
-        width: var(--tick-length); /* tick length (extends right from the guide)
-                                     tweak --tick-length if you want longer/shorter connectors */
-        height: 2px;
-        background: rgba(0,0,0,0.85);
-        pointer-events: none;
-        /* make sure ticks sit above the guide line */
-        z-index: 65;
     }
 }
 
@@ -1362,10 +1130,10 @@ h1 {
     transition: flex 260ms ease, width 260ms ease;
 }
 
-/* Compact: initially narrow panel for list view — increased to give more room */
+/* Compact: narrow panel for list view */
 #content-display.split #context-panel.compact {
-    flex: 0 0 65%;
-    width: 65%;
+    flex: 0 0 28%;
+    width: 28%;
 }
 
 /* Expanded: larger panel for detailed content */
@@ -1395,8 +1163,8 @@ h1 {
 #content-display.split .description-block,
 #content-display.split #description-text {
      /* Shrink description to the left so the context panel can be fully visible
-         without horizontal scrolling. Adjust this percentage to taste (45-60%). */
-     flex: 0 0 50%;
+         without horizontal scrolling. Adjust this percentage to taste (50-60%). */
+     flex: 0 0 55%;
      max-width: 100%;
      padding-right: 20px;
      box-sizing: border-box;
@@ -1407,7 +1175,7 @@ h1 {
     position: static;
     flex: 1 1 auto;
     width: auto;
-    border-left: 2px solid #000;
+    border-left: 1px solid #000;
     padding: 30px;
     box-sizing: border-box;
     overflow: auto;
@@ -1416,10 +1184,10 @@ h1 {
 /* --- Context Panel specific content --- */
 #close-panel-btn {
     position: absolute;
-    border: 0;
     top: 5px;
     right: 5px;
     background: transparent;
+    border: 1px solid #000;
     cursor: pointer;
     padding: 5px 10px;
     font-size: 0.8em;
@@ -1435,11 +1203,6 @@ h1 {
 }
 #context-panel-content {
     margin-top: 20px; 
-    width: 100%;
-    /* make the panel content scroll independently and fit the viewport
-       subtract the global back-offset so it doesn't overflow under the fixed back button */
-    height: calc(100vh - var(--global-back-offset));
-    overflow-y: auto;
 }
 
 /* Inner layout for context panel: narrow list at left, detail at right */
@@ -1457,18 +1220,6 @@ h1 {
     padding-right: 8px;
     max-height: calc(100vh - 220px);
     overflow: auto;
-}
-.context-panel-list.single-column {
-    border-right: none;
-    padding-right: 0;
-    max-height: calc(100vh - 140px);
-}
-.context-panel-list.single-column .context-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 6px;
-    border-bottom: 1px solid #f0f0f0;
 }
 .context-panel-list .context-item {
     padding: 10px 6px;

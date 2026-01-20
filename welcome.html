@@ -9,7 +9,7 @@
     /* Minimal, focused gallery layout */
   :root{--site-gutter:24px;--bottom-nav-height:64px}
   html,body{height:100%;margin:0}
-  main{min-height:100vh;padding:var(--site-gutter);box-sizing:border-box;padding-bottom:calc(var(--site-gutter) + var(--bottom-nav-height) + env(safe-area-inset-bottom));}
+  main{min-height:100vh;padding:var(--site-gutter);box-sizing:border-box; padding-bottom:calc(var(--site-gutter) + var(--bottom-nav-height) + env(safe-area-inset-bottom));}
     #infinite-gallery{
       display:grid;
       grid-template-columns: repeat(auto-fill,minmax(200px,1fr));
@@ -30,14 +30,14 @@
      and is shown when the Search toggle is activated. */
     .controls-bar{
       display:none; /* hidden until Search is pressed */
-      gap:12px;align-items:center;flex-wrap:wrap;justify-content:flex-start;padding:10px;border-radius:8px;background:#fff;box-shadow:0 8px 24px rgba(0,0,0,0.12);width:320px;box-sizing:border-box}
+      gap:12px;align-items:center;flex-wrap:wrap;justify-content:flex-start;padding:10px;background:#fff;box-shadow:0 8px 24px rgba(0,0,0,0.12);width:320px;box-sizing:border-box}
     .controls-bar.visible{display:flex;flex-direction:column}
     .view-toggle{display:inline-flex;border:1px solid rgba(0,0,0,0.08);border-radius:6px;overflow:hidden}
     .view-toggle button{all:unset;padding:8px 12px;cursor:pointer;font-weight:600}
     .view-toggle button[aria-pressed="true"]{background:#000;color:#fff}
     .controls-inputs{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
     .controls-inputs input[type="search"],.controls-inputs select{padding:8px 10px;border-radius:6px;border:1px solid rgba(0,0,0,0.08);font-size:15px}
-    #list-view{max-width:1400px;margin:0 auto;display:none;padding:0  var(--site-gutter);box-sizing:border-box}
+    #list-view{max-width:1400px;margin:0 auto;display:none; max-height: calc(100vh - 120px); box-sizing:border-box}
     .list-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
   /* List view: tags-only rows (no photos). */
   /* Make the list area horizontally scrollable and prevent vertical scrolling
@@ -46,13 +46,14 @@
   #list-grid{
     display:flex;
     flex-wrap:nowrap;
-    gap:16px;
+    gap:16px; 
     overflow-x:auto;
     overflow-y:hidden;
-    padding-bottom: calc(var(--bottom-nav-height) + 12px);
+    padding-bottom: calc(var(--bottom-nav-height));
     -webkit-overflow-scrolling: touch;
+    width: 100vw;
   }
-  .list-row{background:#fff;padding:10px 14px;border-radius:8px;margin-bottom:10px;box-shadow:0 6px 14px rgba(0,0,0,0.06);display:block;text-decoration:none;color:inherit;min-width:260px;flex:0 0 auto}
+  .list-row{background:#fff;padding:10px 14px;border-radius:8px;text-decoration:none;color:inherit;min-width:260px;flex:0 0 auto}
   .list-row h3{margin:0 0 6px 0;font-size:18px}
   .list-row .tags{margin-top:6px}
   .list-card{display:none}
@@ -63,38 +64,30 @@
     --tag-row-height:44px;
     display:grid;
     grid-auto-flow: column; /* fill rows first, then create new columns */
-    grid-template-rows: repeat(8, var(--tag-row-height)); /* 8 rows */
+    grid-template-rows: repeat(10, var(--tag-row-height)); /* 8 rows */
     grid-auto-columns: max-content; /* columns sized to their content */
-    gap:16px 20px; /* row-gap then column-gap */
+    /* gap:16px 20px; row-gap then column-gap */
     margin:12px 0;
     /* include padding in height calculations so scroll height is correct */
     box-sizing: border-box;
     padding:12px 8px  calc(var(--bottom-nav-height) + 12px); /* keep extra bottom padding to clear fixed nav */
-    /* limit visible area to 8 rows but subtract bottom-nav so last row isn't hidden */
-    max-height: calc(var(--tag-row-height) * 8 + 24px - var(--bottom-nav-height) - env(safe-area-inset-bottom));
+    /* limit visible area to 8 rows but subtract bottom-nav so last row isn't hidden 
+    (--bottom-nav-height) - env(safe-area-inset-bottom));
     overflow-x:auto; /* horizontal scroll */
     overflow-y:hidden;
     -webkit-overflow-scrolling:touch;
   }
-  /* Compact, straight tag tiles (no rotation / panning) */
-  .tags{
-    --tag-row-height:40px;
-    display:grid;
-    grid-auto-flow: row; /* natural row flow */
-    grid-template-columns: repeat(auto-fill, minmax(80px, max-content));
-    gap:8px; /* small inter-tag gap */
-    margin:6px 0;
-    box-sizing: border-box;
-    padding:6px 0; /* remove large padding around tag area */
-    max-height: none; /* allow normal flow */
-    overflow-x:auto;
-    overflow-y:hidden;
-    -webkit-overflow-scrolling: touch;
-  }
-  .tag{display:inline-block;padding:6px 8px;font-size:16px;color:#000000;align-self:center;border-radius:6px}
-  /* Remove all playful rotations/transforms and disable hover movement */
-  .tags .tag, .tags .tag:focus, .tags .tag:hover{transform:none !important; transition:none !important}
-  .tags .tag{transition:none}
+  /* Make tag tiles larger with more padding */
+  .tag{display:inline-block;padding:10px 16px;font-family:'Lekton-Bold';font-size:22px;color:#000000;align-self:center}
+  /* Give a playful 'scattered' look by rotating some tags a little */
+  .tags .tag:nth-child(5n+1){transform:rotate(-6deg) translateY(-2px)}
+  .tags .tag:nth-child(5n+2){transform:rotate(4deg) translateY(0)}
+  .tags .tag:nth-child(5n+3){transform:rotate(-3deg) translateY(2px)}
+  .tags .tag:nth-child(5n+4){transform:rotate(2deg) translateY(-1px)}
+  .tags .tag:nth-child(5n+5){transform:rotate(0deg)}
+  /* Smooth transform on hover/focus */
+  .tags .tag{transition:transform .18s ease}
+  .tags .tag:focus, .tags .tag:hover{transform:translateY(-4px) scale(1.02)}
   /* horizontal scrollbar styling */
   .tags::-webkit-scrollbar{height:10px}
   .tags::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.12);border-radius:6px}
@@ -108,12 +101,12 @@
   /* List controls: search + kind toggles (appears at top of #list-view) */
   #list-controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
   #list-controls .list-search{flex:1;min-width:160px;padding:8px 10px;;background:transparent;border:2px solid #000;font-size:15px}
-  #list-controls .list-search::placeholder{color:rgba(0,0,0,0.45)}
+  #list-controls .list-search::placeholder{color:rgba(255, 255, 255, 0.45)}
   .tag-toggles{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   /* Make the tag-toggle labels minimal (no background or border). The checkbox
      itself becomes the visible affordance: a black square with a white check when
      checked. */
-  .tag-toggle{display:inline-flex;align-items:center;gap:8px;background:transparent;padding:6px 10px;;border:0;cursor:pointer;font-size:13px;color:#000}
+  .tag-toggle{display:inline-flex;align-items:center;gap:8px;background:transparent;padding:6px 10px;;border:1;cursor:pointer;font-size:13px;color:#000000}
   /* Keep the active state minimal too: transparent background and black text */
   .tag-toggle.active{background:transparent;color:#000;border-color:transparent;box-shadow:none}
   .tag-toggle input{
@@ -128,7 +121,7 @@
   }
   /* keyboard focus visible state */
   .tag-toggle input:focus{outline:2px solid rgba(0,0,0,0.12);outline-offset:2px}
-  .tag-toggle.active{background:#000;color:#fff;border-color:transparent}
+  .tag-toggle.active{background:#000000;color:#fff;border-color:transparent}
   /* Photo results grid used when a tag is clicked */
   /* Photo results flow horizontally in list view */
   .photo-results-grid{display:flex;flex-wrap:nowrap;gap:10px}
@@ -136,8 +129,8 @@
   .photo-result img{width:100%;height:140px;object-fit:cover;border-radius:6px;display:block}
   @media (max-width:520px){ .photo-result img{height:110px} }
   /* Scattered list view: absolutely-positioned card tiles inside the list area */
-  .scatter-results{position:relative;min-height:480px;padding:12px;border-radius:8px}
-  .scatter-results .scatter-item{position:absolute;width:200px;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 8px 20px rgba(0,0,0,0.08);text-decoration:none;color:inherit;display:block}
+  .scatter-results{position:relative;min-height:480px;padding:12px}
+  .scatter-results .scatter-item{position:absolute;width:200px;background:#fff;overflow:hidden;box-shadow:0 8px 20px rgba(0,0,0,0.08);text-decoration:none;color:inherit;display:block}
   .scatter-results .scatter-item img{width:100%;height:140px;object-fit:cover;display:block;background:#f4f4f4}
   @media (max-width:520px){ .scatter-results .scatter-item{width:140px} .scatter-results .scatter-item img{height:100px} }
   /* Masonry layout for tag-search results */
@@ -147,12 +140,12 @@
   @media (max-width:520px){ .masonry{column-width:140px} }
   /* Clickable names list shown when tag-originated list is displayed */
   .names-list{display:block;background:transparent;padding:8px 12px;margin-bottom:8px}
-  .names-list-item{display:block;padding:8px 10px;border-radius:6px;color:inherit;text-decoration:none;border:1px solid rgba(0,0,0,0.04);margin-bottom:6px;background:#fff}
+  .names-list-item{display:block;padding:8px 10px;color:inherit;text-decoration:none;border:1px solid rgba(0,0,0,0.04);margin-bottom:6px;background:#fff}
   .names-list-item:hover{background:#000;color:#fff}
   /* Result mode toggle and search helper */
-  .result-mode-toggle{display:inline-flex;border:1px solid rgba(0,0,0,0.08);border-radius:6px;overflow:hidden}
+  .result-mode-toggle{display:inline-flex;border:1px solid rgba(0,0,0,0.08);overflow:hidden}
   .result-mode-toggle button{all:unset;padding:8px 12px;cursor:pointer;font-weight:700;font-size:14px;display:inline-flex;align-items:center;justify-content:center}
-  .result-mode-toggle button[aria-pressed="true"]{background:#000;color:#fff}
+  .result-mode-toggle button[aria-pressed="true"]{background:#C00E88;color:#fff}
   #clear-search{background:#fff}
   #match-count{padding-left:6px}
   /* Main horizontal navigation (Explore / Search / List / About) */
@@ -251,13 +244,10 @@
       <div id="list-controls" aria-hidden="false">
         <input id="list-search" class="list-search" type="search" placeholder="Search tags..." aria-label="Search tags" />
         <div class="result-mode-wrap" style="display:inline-flex;align-items:center;gap:8px;margin-left:8px">
-          <div class="result-mode-toggle" role="tablist" aria-label="Result mode">
-            <button id="mode-images" type="button" aria-pressed="true">Images</button>
-            <button id="mode-list" type="button" aria-pressed="false">List</button>
+            <!-- images/list toggle removed: default to list view when opening search -->
+            <button id="clear-search" type="button" title="Clear search" style="display:none;padding:6px 10px;border:1px solid rgba(0,0,0,0.06);background:#fff;cursor:pointer">Clear</button>
+            <span id="match-count" style="font-size:13px;color:#333;min-width:64px;display:none"></span>
           </div>
-          <button id="clear-search" type="button" title="Clear search" style="display:none;padding:6px 10px;border-radius:6px;border:1px solid rgba(0,0,0,0.06);background:#fff;cursor:pointer">Clear</button>
-          <span id="match-count" style="font-size:13px;color:#333;min-width:64px;display:none"></span>
-        </div>
         <div class="tag-toggles" role="toolbar" aria-label="Tag kinds">
           <label class="tag-toggle active" data-kind="name"><input type="checkbox" data-kind="name" checked />Names</label>
           <label class="tag-toggle active" data-kind="country"><input type="checkbox" data-kind="country" checked />Countries</label>
@@ -286,8 +276,7 @@
   <script src="js/welcome.js"></script>
   <script>
   (function(){
-  const btnImages = document.getElementById('mode-images');
-  const btnList = document.getElementById('mode-list');
+  // images/list mode buttons removed; default behavior will use 'list' mode
   const clearBtn = document.getElementById('clear-search');
   const matchCount = document.getElementById('match-count');
   const searchInput = document.getElementById('list-search');
@@ -382,9 +371,7 @@
       return count;
     }
 
-    // wire UI: view toggle buttons
-    btnImages && btnImages.addEventListener('click', ()=> setMode('images'));
-    btnList && btnList.addEventListener('click', ()=> setMode('list'));
+  // image/list mode UI removed — no per-result toggle. Default mode will be 'list'.
 
     // updated setMode to duplicate controls instead of moving them
     function setMode(m){
@@ -440,8 +427,8 @@
       });
     }
 
-    // initialize default
-    setMode('images');
+  // initialize default to list view
+  setMode('list');
 
     // When a tag-kind toggle inside the original controls changes, re-run image search when active
     try{
@@ -571,5 +558,87 @@
   requestAnimationFrame(checkOverlap);
   })();
   </script>
+  <script>
+  // Build search tags dynamically from protest_data.json
+  (function(){
+    const DATA_URL = 'protest_data.json';
+    const TARGET_SELECTOR = '#list-grid .tags';
+
+    function textCase(str){
+      if(!str) return '';
+      return String(str).trim();
+    }
+
+    function mkSpan(kind, value){
+      const s = document.createElement('span');
+      s.className = `tag ${kind} clickable-tag`;
+      s.dataset.kind = kind;
+      s.dataset.value = value;
+      s.textContent = textCase(value);
+      return s;
+    }
+
+    async function buildTags(){
+      const containers = Array.from(document.querySelectorAll(TARGET_SELECTOR));
+      if(!containers.length) return;
+      let data;
+      try{
+        const res = await fetch(DATA_URL, {cache: 'no-store'});
+        data = await res.json();
+      }catch(e){
+        console.warn('Could not load', DATA_URL, e);
+        return;
+      }
+
+      // collect unique values
+      const sets = {
+        country: new Set(),
+        cause: new Set(),
+        type: new Set(),
+        name: new Set(),
+        protest: new Set(),
+        timeframe: new Set()
+      };
+
+      (data || []).forEach(item => {
+        if(!item || typeof item !== 'object') return;
+        if(item.name) sets.name.add(item.name);
+
+        const add = (key, set) => {
+          const v = item[key];
+          if(!v) return;
+          if(Array.isArray(v)) v.forEach(x => x && set.add(String(x)));
+          else if(typeof v === 'string') set.add(v);
+        };
+
+        // try common property names
+        add('categories_country', sets.country);
+        add('categories_cause', sets.cause);
+        add('categories_object_type', sets.type);
+        add('categories_timeframe', sets.timeframe);
+        add('categories_protest', sets.protest);
+        // legacy / alternate keys
+        add('countries', sets.country);
+        add('causes', sets.cause);
+        add('object_type', sets.type);
+      });
+
+      // render into each container
+      const order = ['cause','country','type','name','protest','timeframe'];
+      containers.forEach(container => {
+        container.innerHTML = '';
+        order.forEach(kind => {
+          const arr = Array.from(sets[kind] || []).sort((a,b)=> a.localeCompare(b, undefined, {sensitivity:'base'}));
+          arr.forEach(v => container.appendChild(mkSpan(kind, v)));
+        });
+      });
+    }
+
+    if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', buildTags);
+    else buildTags();
+    window.refreshSearchTags = buildTags;
+  })();
+  </script>
+
 </body>
 </html>

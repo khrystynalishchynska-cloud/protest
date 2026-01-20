@@ -1,11 +1,46 @@
 {
-  
   "Umbrella Revolution": {
     "year": "2014",
-    "summary": "The Umbrella Movement was a 79-day pro-democracy protest that occupied major districts of Hong Kong from September 26 to December 15, 2014. The movement took its name from the umbrellas protesters used to shield themselves from police pepper spray and tear gas, becoming one of the most significant demonstrations in the city's history.​ The protests were primarily driven by demands for genuine universal suffrage in the election of the Chief Executive of Hong Kong, opposing the Chinese government's decision to pre-screen candidates.​",
+    "summary": "The Umbrella Movement was a 79-day pro-democracy protest that occupied major districts of Hong Kong from September 26 to December 15, 2014. The movement took its name from the umbrellas protesters used to shield themselves from police pepper spray and tear gas, becoming one of the most significant demonstrations in the city's history. The protests were primarily driven by demands for genuine universal suffrage in the election of the Chief Executive of Hong Kong.",
     "key_events": [
       "International media coverage",
       "Protest art and installations"
+    ]
+  },
+
+  "iranian-anti-regime-protests": {
+    "id": 54,
+    "slug": "iranian-anti-regime-protests",
+    "title": "Iranian anti-regime protests.",
+    "intro": "<p>The 2025–2026 Iran protests are a nationwide uprising that began over economic collapse in late December 2025 and rapidly turned into mass anti‑regime protests met with one of the bloodiest crackdowns in the Islamic Republic’s history.</p>",
+    "sections": [
+      {
+        "heading": "When and how the protests started",
+        "body": "<p>Protests began on 28 December 2025 with shop closures and strikes in Tehran’s Grand Bazaar and other commercial centers after a sharp currency collapse, soaring inflation and market instability. Within days, demonstrations spread to dozens of cities and smaller towns across at least 25 of Iran’s 31 provinces, including Tehran, Shiraz, Hamadan, Zanjan and Qeshm Island. </p>",
+        "media": "<img src=\"images/1-396.jpg\" alt=\"Protesters in Iran\" style=\"max-width:100%;height:auto;\">"
+      },
+      {
+        "heading": "Main causes and slogans",
+        "body": "<p>Immediate triggers included record‑high inflation, severe currency depreciation, unemployment, low wages, and chronic mismanagement of essential services such as water and electricity. Economic anger quickly merged with political grievances: protesters chanted “Death to the Dictator” against Supreme Leader Ali Khamenei and called for the downfall of the Islamic Republic and an end to corruption and repression.</p>",
+        "media": "<iframe src=\"https://www.youtube.com/embed/dummy\" frameborder=\"0\" allowfullscreen style=\"width:100%;height:240px;\"></iframe>"
+      },
+      {
+        "heading": "Scale, repression and victims",
+        "body": "<p>Protests faced a brutal crackdown ordered by Supreme Leader Ali Khamenei, with security forces using live ammunition, pellet shotguns, tear gas, water cannons, beatings, and mass arrests, killing thousands—among modern Iran's largest massacres—and overwhelming hospitals in Tehran and Shiraz with gunshot victims.  Authorities imposed nationwide internet and telephone blackouts in January 2026 to disrupt coordination and hide the violence's scale. Reports estimate 5,000 to 16,000 protesters killed and many injured, with Khamenei acknowledging thousands dead in a “savage manner” and blaming the US.</p>",
+        "media": "<iframe src=\"https://www.youtube.com/embed/dummy\" frameborder=\"0\" allowfullscreen style=\"width:100%;height:240px;\"></iframe>"
+      },
+      {
+        "heading": "Government and international reactions",
+        "body": "<p>The leadership, including Khamenei and President Masoud Pezeshkian, framed the unrest as “riots” orchestrated by the United States and Israel, while at the same time offering talks on economic issues and promising to address living‑standard problems.​ Authorities imposed near‑total internet and communications shutdowns to hinder organisation, while the scale of killings and arrests has drawn strong criticism from human‑rights groups, UN Security Council discussion, and warnings and pressure from foreign governments, including the United States.​>",
+        "media": "<iframe src=\"https://www.youtube.com/embed/dummy\" frameborder=\"0\" allowfullscreen style=\"width:100%;height:240px;\"></iframe>"
+      },
+      {
+        "heading": "Political significance and current situation (January 2026)",
+        "body": "<p>Analysts describe the protests as the largest challenge to the Islamic Republic since the 1979 revolution, with participation from bazaar merchants, students, workers, pensioners, and ethnic minorities, and slogans openly rejecting both reform and the current system.
+
+As of mid‑January 2026, reports suggest that an intensive securitization of public space, mass arrests, and lethal force have largely suppressed street protests, but underlying economic crisis and political grievances remain unresolved.</p>",
+        "media": "<p><a href=\"https://www.bbc.com/news/world-middle-east-62905450\" target=\"_blank\" rel=\"noopener noreferrer\">BBC coverage</a></p>"
+      }
     ]
   }
 }

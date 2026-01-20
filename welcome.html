@@ -161,8 +161,8 @@
   .main-nav .nav-inner .nav-item.active{font-family:'Blur Bold','Blur Medium',sans-serif;font-weight:700}
     /* About sliding panel (hidden off-canvas bottom -> slides up) */
     .about-panel{
-      position:fixed;left:0;right:0;bottom:var(--bottom-nav-height);z-index:2500;transform:translateY(120%);transition:transform .45s cubic-bezier(.2,.9,.2,1);background:transparent;border-top:2px solid rgba(0,0,0,0.02);max-height:82vh;overflow:auto;padding:36px 24px 48px;box-sizing:border-box;pointer-events:auto}
-    .about-panel.open{transform:translateY(0%)}
+      position:fixed;left:0;right:0;bottom:var(--bottom-nav-height);z-index:2500;transform:translateY(120%);transition:transform .45s cubic-bezier(.2,.9,.2,1);background:transparent;max-height:82vh;overflow:auto;padding:36px 24px 48px;box-sizing:border-box;pointer-events:auto}
+  .about-panel.open{transform:translateY(-10vh)}
     .about-panel .about-inner{max-width:1100px;margin:0 auto}
   .about-panel .about-text{font-family:'Lekton-Bold','Lekton-Regular',sans-serif;font-weight:700;font-size:40px;line-height:1.04;color:#000;margin:0;text-transform:uppercase}
     .about-panel .about-close{position:absolute;right:12px;top:8px;border:0;background:transparent;font-size:36px;line-height:1;padding:6px 10px;cursor:pointer}

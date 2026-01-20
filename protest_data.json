@@ -5,7 +5,7 @@
   "image_filename": "images/umbrella.jpg",
   "categories_object_type": ["Clothes/Accessory", "Tool/Defense"],
   "categories_country": ["Hong Kong", "China", "Myanmar", "Thailand"],
-  "categories_cause": ["Democracy", "Universal Suffrage", "Passive Resistance"],
+  "categories_cause": ["Pro-Democracy", "Universal Suffrage"],
   "categories_protest": ["Umbrella Movement", "Umbrella Revolution"],
   "categories_timeframe": ["2014", "21st Century"],
   "description_html": "Umbrellas became a defining symbol of the  <span class=\"highlight-timeframe\">2014</span> <span class=empasisc> <span class=\"highlight-country\"> Hong Kong</span></span> <span class=empasisc><span class=\"highlight-cause\">pro-democracy</span></span> protests  – soon dubbed the <span class=empasisc> “<span class=\"highlight-protest\">Umbrella Movement</span>” or “<span class=\"highlight-protest\">Umbrella Revolution</span>”.</span> When police first fired tear-gas canisters at student-led sit-ins on 28 September <span class=\"highlight-timeframe\">2014</span>, demonstrators instinctively <span class=strong-emphasis> raised umbrellas to block pepper spray, rubber bullets, and the blazing midday sun,</span> turning an everyday accessory into an emblem of passive resistance and the fight for <span class=\"highlight-cause\">universal suffrage</span>. Images of pastel-colored canopies clustered outside government headquarters in Admiralty – and later across Mong Kok and Causeway Bay – spread worldwide, capturing the movement’s creativity and determination. <span class=strong-emphasis> Yellow umbrellas, especially, became shorthand for the cause:</span> they appeared in protest art, were projected onto skyscrapers, and even inspired the 3-metre-tall <span class=strong-emphasis>“Umbrella Man”</span> statue erected in the occupied streets. Beyond defence, umbrellas served as makeshift banners for slogans such as “I want real <span class=\"highlight-cause\">democracy</span>,” and were lashed together into improvised barricades or held high to shield protesters’ faces from surveillance cameras. The symbolism soon travelled: activists in <span class=empasisc> <span class=\"highlight-country\"> Myanmar</span></span>,  <span class=empasisc> <span class=\"highlight-country\"> Thailand,</span> </span> and elsewhere have since wielded umbrellas in their own demonstrations, using them both for physical protection and as a vivid visual link to <span class=empasisc> <span class=\"highlight-country\">Hong Kong</span>’s</span> precedent. <br>"
@@ -51,7 +51,7 @@
     "image_filename": "images/headscarve.webp",
     "categories_object_type": ["Visual Claims"],
     "categories_country": ["Argentina", "Iran"],
-    "categories_cause": ["Truth and Justice", "Human Rights", "Women's Rights", "Anti-Compulsory Veiling"],
+    "categories_cause": ["Human Rights", "Women's Rights", "Anti-Compulsory Veiling"],
     "categories_protest": ["Mothers of Plaza de Mayo", "White Wednesdays", "Girl of Enghelab Street"],
     "categories_timeframe": ["1977", "2017", "20th Century", "21st Century"],
     "description_html": "In <span class=\"highlight-timeframe\">1977</span> <span class=\"highlight-country\">Argentina</span>’s <span class=\"highlight-protest\">Mothers of Plaza de Mayo</span> donned white scarves—evoking diapers—to mark the innocence of children who disappeared under military rule. Their weekly marches in Buenos Aires turned the scarf into a <span class=\"dramatic-emphasis\">global emblem</span> of the quest for <span class=\"highlight-cause\">truth and justice</span>. In <span class=\"highlight-country\">Iran</span>, white scarves signal defiance of compulsory <span class=\"highlight-cause\">hijab laws</span>. Spurred by <span class=\"highlight-protest\">#WhiteWednesdays</span>, women wore or waved white scarves to protest mandatory veiling. The gesture drew worldwide attention in <span class=\"highlight-timeframe\">2017</span> when Vida Movahed, the “<span class=\"highlight-protest\">Girl of Enghelab Street</span>,” stood unveiled and brandished her scarf, inspiring similar protests and arrests."
@@ -113,7 +113,7 @@
     "image_filename": "images/1-309.webp",
     "categories_object_type": ["Shields & Mitigation"],
     "categories_country": ["Brazil"],
-    "categories_cause": ["Anti-Tear Gas", "Freedom of Assembly", "Anti-Police Brutality"],
+    "categories_cause": ["Freedom of Assembly", "Anti-Police Brutality"],
     "categories_protest": ["Vinegar Protests", "Revolta do Vinagre"],
     "categories_timeframe": ["2013", "21st Century"],
     "description_html": "<span class=\"highlight-cause\">Vinegar</span> became an emblematic tool during the <span class=\"highlight-timeframe\">2013</span> protests in <span class=\"highlight-country\">Brazil</span>, often called the “<span class=\"dramatic-emphasis\"><span class=\"highlight-protest\">Vinegar Protests</span></span>” (<span class=\"highlight-protest\">Revolta do Vinagre</span>). Protesters carried bottles of vinegar, believing that breathing through a cloth soaked in vinegar could help neutralize the effects of tear gas and pepper spray used by police, though its medical effectiveness is debated. The tactic became so widespread that police arrested over 60 people for carrying vinegar, including journalists, turning the substance into a symbol of <span class=\"highlight-cause\">resistance</span> and sparking sarcastic nicknames like “the vinegar march”."
@@ -144,7 +144,7 @@
     "image_filename": "images/1-224.webp",
     "categories_object_type": ["Dress to protest"],
     "categories_country": ["Brazil"],
-    "categories_cause": ["Political Alignment", "Nationalism", "Anti-Government"],
+    "categories_cause": ["Nationalism", "Anti-Government"],
     "categories_protest": ["Brasília Insurrection", "Bolsonaro Supporters"],
     "categories_timeframe": ["Recent years", "2023", "21st Century"],
     "description_html": "The yellow <span class=\"highlight-country\">Brazilian football jersey</span>, traditionally a unifying national symbol, has been controversially co-opted as a <span class=\"highlight-cause\">protest symbol</span> in <span class=\"highlight-timeframe\">recent years</span>. Most notably, <span class=\"dramatic-emphasis\">supporters of former President Jair Bolsonaro</span> adopted the jersey during political rallies and protests, including the storming of government buildings in <span class=\"highlight-country\">Brasília</span> in <span class=\"highlight-timeframe\">January 2023</span>. The jersey, once seen as non-partisan, became closely linked to right-wing and <span class=\"highlight-cause\">nationalist movements</span>, leading to widespread controversy and debate over its meaning. The Brazilian Football Confederation publicly condemned the <span class=\"highlight-cause\">politicization</span> of the jersey, emphasizing its intended role to unite, not divide, Brazilians."
@@ -206,7 +206,7 @@
     "image_filename": "images/1-266.webp",
     "categories_object_type": ["Shields & Mitigation"],
     "categories_country": ["Georgia"],
-    "categories_cause": ["Pro-EU / Anti-Russian Influence", "Self-Defense", "Freedom of Assembly"],
+    "categories_cause": ["Pro-EU", "Freedom of Assembly"],
     "categories_protest": ["Pro-EU Protests (2024-2025)"],
     "categories_timeframe": ["2024", "2025", "21st Century"],
     "description_html": "During <span class=\"highlight-country\">Georgia’s</span> <span class=\"highlight-timeframe\">2024–25</span> <span class=\"highlight-cause\">pro-EU protests</span>, fireworks have become both rallying beacon and improvised weapon. Night after night in <span class=\"highlight-country\">Tbilisi</span>—and in smaller rallies in <span class=\"highlight-country\">Batumi</span> and <span class=\"highlight-country\">Kutaisi</span>—thousands launch rockets skyward or toward police cordons outside parliament. The crackling bursts energise crowds, mask tear-gas plumes, and disrupt water-cannon advances. Protesters frame the pyrotechnics as a non-lethal form of <span class=\"highlight-cause\">self-defence</span> and defiance; riot police answer with tear gas, stun grenades, and mass arrests. The salvos have so unsettled officials that Prime Minister Irakli Kobakhidze has ordered an <span class=\"dramatic-emphasis\">emergency ban on retail fireworks</span>, accusing shops of “arming a revolution,” while rights groups argue the measure merely criminalises dissent. In this clash of light and law, fireworks have come to symbolise the creativity—and determination—of Georgia’s EU-leaning generation."
@@ -237,7 +237,7 @@
     "image_filename": "images/watermelon.webp",
     "categories_object_type": ["Food/Consumable", "Visual Claims"],
     "categories_country": ["Palestine", "Global"],
-    "categories_cause": ["National Identity", "Anti-Censorship", "Solidarity"],
+    "categories_cause": ["National Identity", "Anti-Censorship", "Pro-Palestine"],
     "categories_protest": ["Six-Day War Aftermath", "Gaza Conflict (2023)"],
     "categories_timeframe": ["1967", "2023", "20th Century", "21st Century"],
     "description_html": "The watermelon has become a creative stand-in for the Palestinian flag: its red flesh, green rind, white pith, and black seeds echo the flag’s four colours. After <span class=\"highlight-country\">Israel</span> outlawed public displays of the Palestinian flag and even its colour combination following the <span class=\"highlight-timeframe\">1967</span> <span class=\"highlight-protest\">Six-Day War</span>, <span class=\"highlight-country\">Palestinians</span> began painting, carrying, and photographing watermelon slices to sidestep the ban and signal <span class=\"dramatic-emphasis\">national identity</span>. The fruit soon appeared in murals, posters, and street rallies. During the <span class=\"highlight-timeframe\">2023</span> <span class=\"highlight-protest\">Gaza conflict</span>, its image and emoji spread <span class=\"highlight-country\">globally</span> online, letting supporters show solidarity and evade <span class=\"highlight-cause\">censorship</span> when the flag itself was still forbidden."
@@ -249,7 +249,7 @@
     "image_filename": "images/hanger.webp",
     "categories_object_type": ["Tool/Object", "Visual Claims"],
     "categories_country": ["USA", "Poland", "Global"],
-    "categories_cause": ["Abortion Rights", "Reproductive Healthcare", "Anti-Criminalization"],
+    "categories_cause": ["Abortion Rights", "Anti-Criminalization"],
     "categories_protest": ["Pre-Roe v. Wade Era", "Black Monday Strike", "Post-Roe Protests"],
     "categories_timeframe": ["1969", "2016", "21st Century"],
     "description_html": "A coat hanger is a powerful and enduring symbol in <span class=\"highlight-cause\">abortion rights protests</span>, representing the dangers of unsafe, illegal abortions. Its origins as a protest icon date back to the <span class=\"highlight-protest\">pre-Roe v. Wade era</span> in the <span class=\"highlight-country\">United States</span>, when women sometimes resorted to using wire coat hangers to self-induce abortions due to lack of access to safe medical procedures. The coat hanger thus serves as a stark warning of the <span class=\"dramatic-emphasis\">life-threatening risks</span> women face when abortion is criminalized. Activists have prominently featured coat hangers in demonstrations, such as the <span class=\"highlight-timeframe\">1969</span> Washington march where protesters wore them around their necks and in more recent actions, including sending hangers to the U.S. Supreme Court. In <span class=\"highlight-country\">Poland</span>, coat hangers have also become a central visual element in protests against abortion bans. During the <span class=\"highlight-timeframe\">2016</span> “<span class=\"highlight-protest\">Black Monday</span>” strike and subsequent demonstrations, <span class=\"highlight-country\">Polish</span> women held up wire coat hangers to represent the peril of illegal abortions, warning against the consequences of restrictive legislation. The use of coat hangers in both American and Polish contexts underscores their role as a universal symbol of <span class=\"highlight-cause\">resistance to abortion bans</span> and a call for safe, legal <span class=\"highlight-cause\">reproductive healthcare</span>."
@@ -261,7 +261,7 @@
     "image_filename": "images/Chrysanthemums.webp",
     "categories_object_type": ["Protest Flowers"],
     "categories_country": ["Hungary", "Hong Kong", "USA"],
-    "categories_cause": ["Peaceful Resistance", "Remembrance", "Anti-War"],
+    "categories_cause": ["Anti-War"],
     "categories_protest": ["Aster Revolution", "Tiananmen Commemorations", "March on the Pentagon"],
     "categories_timeframe": ["1918", "1967", "20th Century", "21st Century"],
     "description_html": "Chrysanthemums and their close relative, asters, have occasionally served as protest emblems, drawing on their associations with remembrance or <span class=\"highlight-cause\">peaceful resistance</span>. The clearest political use came in <span class=\"highlight-country\">Hungary’s</span> <span class=\"highlight-timeframe\">1918</span> <span class=\"highlight-protest\">Aster Revolution</span>, when supporters pinned asters to their coats while proclaiming the First Hungarian People’s Republic. In East <span class=\"highlight-country\">Asia</span>, white chrysanthemums—long linked to mourning—appear at vigils such as <span class=\"highlight-country\">Hong Kong’s</span> annual <span class=\"highlight-protest\">Tiananmen commemorations</span>, honoring those lost in political struggle. A famous Western image is Marc Riboud’s <span class=\"highlight-timeframe\">1967</span> photograph from the <span class=\"highlight-protest\">March on the Pentagon</span>, showing 17-year-old Jan Rose Kasmir holding a chrysanthemum in front of soldiers’ bayonets, powerfully representing <span class=\"dramatic-emphasis\">peaceful resistance</span> during the <span class=\"highlight-cause\">anti–Vietnam War movement</span>."
@@ -273,7 +273,7 @@
     "image_filename": "images/spoon.webp",
     "categories_object_type": ["Tool/Object", "Visual Claims"],
     "categories_country": ["Palestine", "Israel"],
-    "categories_cause": ["Prisoner Rights", "Freedom", "Ingenuity"],
+    "categories_cause": ["Prisoner Rights", "Pro-Palestine"],
     "categories_protest": ["Gilboa Prison Escape"],
     "categories_timeframe": ["2021", "21st Century"],
     "description_html": "The spoon emerged as a powerful symbol of <span class=\"highlight-country\">Palestinian</span> <span class=\"highlight-cause\">resistance</span> following the dramatic escape of six Palestinian prisoners from <span class=\"highlight-country\">Israel’s</span> high-security Gilboa Prison in <span class=\"highlight-timeframe\">September 2021</span>. According to reports, the escapees used spoons, along with plates and kettle handles, to dig a tunnel from their cell, evading security measures and sparking widespread admiration. The event quickly inspired artists, activists, and demonstrators, who began featuring spoons in protest art, sculptures, and public rallies as an emblem of determination, <span class=\"dramatic-emphasis\">ingenuity</span>, and the struggle for <span class=\"highlight-cause\">freedom</span>."
@@ -284,7 +284,7 @@
     "image_filename": "images/woodspoon.webp",
     "categories_object_type": ["Tool/Object", "Sound & Noise"],
     "categories_country": ["Slovakia", "Burkina Faso"],
-    "categories_cause": ["Reproductive Rights", "Women's Rights", "Civil Disobedience"],
+    "categories_cause": ["Abortion Rights", "Women's Rights"],
     "categories_protest": ["Anti-Abortion Protests (Slovakia)", "Women's Civil Action (Burkina Faso)"],
     "categories_timeframe": ["2020", "21st Century"],
     "description_html": "In <span class=\"highlight-country\">Slovakia</span>, the wooden spoon has become a prominent symbol in protests against the restriction of <span class=\"highlight-cause\">reproductive rights</span>. During demonstrations opposing stricter abortion laws in <span class=\"highlight-timeframe\">2020</span>, organizers encouraged participants to bring wooden spoons—alongside pots and brooms—as a representation of care, domestic labor, and <span class=\"highlight-cause\">civil disobedience</span>. The spoons were often customized with messages, symbolizing both the everyday work of women and <span class=\"dramatic-emphasis\">resistance to political attempts to control their bodies</span>. In <span class=\"highlight-country\">Burkina Faso</span>, the wooden spoon has also been used as a <span class=\"highlight-cause\">protest symbol</span>, particularly by women who bang them against pots to make noise and draw attention to their demands. This act, rooted in local traditions, highlights the role of women in civic action and <span class=\"highlight-cause\">protest</span>."
@@ -296,7 +296,7 @@
     "image_filename": "images/duck.webp",
     "categories_object_type": ["Toy", "Shields & Mitigation"],
     "categories_country": ["Thailand"],
-    "categories_cause": ["Pro-Democracy", "Anti-Police Violence", "Satire"],
+    "categories_cause": ["Pro-Democracy", "Anti-Police Violence"],
     "categories_protest": ["Thai Pro-Democracy Protests (2020)"],
     "categories_timeframe": ["2020", "21st Century"],
     "description_html": "Rubber ducks became an iconic symbol of <span class=\"highlight-country\">Thailand’s</span> <span class=\"highlight-cause\">pro-democracy protests</span> in <span class=\"highlight-timeframe\">2020</span>. Initially brought to demonstrations as a humorous response to government barricades, inflatable yellow ducks quickly gained prominence when protesters used them as improvised <span class=\"dramatic-emphasis\">shields against police water cannons</span> and tear gas during violent clashes near parliament. Their cheerful, fragile appearance contrasted with their new role as protectors, capturing public imagination and inspiring widespread protest art and memes."
@@ -308,7 +308,7 @@
     "image_filename": "images/yellowribbon.webp",
     "categories_object_type": ["Textile", "Visual Claims"],
     "categories_country": ["Ukraine", "Philippines", "South Korea"],
-    "categories_cause": ["Hope", "Accountability", "Sovereignty", "Democratization", "Nonviolent Resistance"],
+    "categories_cause": [ "Accountability", "Sovereignty", "Democratization"],
     "categories_protest": ["Sewol Ferry Disaster", "Yellow Ribbon Resistance Movement"],
     "categories_timeframe": ["1980s", "2014", "2022", "21st Century"],
     "description_html": "Yellow ribbons have historically symbolized <span class=\"dramatic-emphasis\">hope for a loved one’s safe return</span>. In the <span class=\"highlight-timeframe\">1980s</span>, they became a sign of <span class=\"highlight-cause\">democratization</span> in the <span class=\"highlight-country\">Philippines</span>. After the <span class=\"highlight-timeframe\">2014</span> <span class=\"highlight-protest\">Sewol Ferry disaster</span> in <span class=\"highlight-country\">South Korea</span>, they spread online as a symbol of hope, later evolving into a <span class=\"highlight-cause\">protest icon</span> as public anger toward the government grew, representing grief and the demand for <span class=\"highlight-cause\">accountability</span>. Since <span class=\"highlight-timeframe\">2022</span>, <span class=\"highlight-country\">Ukraine’s</span> “<span class=\"highlight-protest\">Yellow Ribbon</span>” resistance movement has used the symbol in russian-occupied territories. Tied in public spaces, the ribbons express support for <span class=\"highlight-cause\">Ukrainian sovereignty</span> and serve as quiet signs of unity and <span class=\"highlight-cause\">nonviolent resistance</span>."
@@ -320,7 +320,7 @@
     "image_filename": "images/waterjug.webp",
     "categories_object_type": ["Container", "Shields & Mitigation"],
     "categories_country": ["USA"],
-    "categories_cause": ["Pro-Palestinian Solidarity", "Anti-Police Sentiment", "Grassroots Resistance"],
+    "categories_cause": ["Pro-Palestine", "Anti-Police Sentiment"],
     "categories_protest": ["Student Encampments (2024-2025)", "Cal Poly Humboldt Protest"],
     "categories_timeframe": ["2024", "2025", "21st Century"],
     "description_html": "The water jug has emerged as an unexpected symbol in <span class=\"highlight-cause\">pro-Palestinian protests</span> across the <span class=\"highlight-country\">United States</span>, particularly during the wave of student-led demonstrations in <span class=\"highlight-timeframe\">2024</span> and <span class=\"highlight-timeframe\">2025</span>. Its rise began with viral incidents at university protests, most notably at <span class=\"highlight-protest\">California Polytechnic State University, Humboldt</span>, where a protester struck a police officer with a large, empty water jug. The moment, captured on video, quickly spread across social media, where the jug was dubbed the “<span class=\"dramatic-emphasis\">Jug of Justice</span>” and became an emblem of <span class=\"highlight-cause\">grassroots resistance</span>. Protesters began bringing water jugs to demonstrations, using them as makeshift shields, tools for practical needs, and a symbol of anti-police sentiment and solidarity with the <span class=\"highlight-cause\">Palestinian cause</span>."
@@ -331,7 +331,7 @@
     "image_filename": "images/blacktape.webp",
     "categories_object_type": ["Material/Accessory", "Visual Claims"],
     "categories_country": ["Zimbabwe", "Global"],
-    "categories_cause": ["Censorship", "Free Speech", "Anti-Repression"],
+    "categories_cause": ["Anti-Censorship", "Free Speech", "Anti-Repression"],
     "categories_protest": ["Cricket World Cup (2003)", "Silence Protests"],
     "categories_timeframe": ["2003", "21st Century"],
     "description_html": "Tape has become a stark <span class=\"highlight-cause\">protest symbol</span>. Protesters often place tape over their mouths to represent <span class=\"highlight-cause\">censorship</span>, <span class=\"dramatic-emphasis\">forced silence</span>, or the suppression of <span class=\"highlight-cause\">free speech</span>, making visible the experience of being silenced by authorities or unjust laws. Another notable example of tape’s symbolic use occurred during the <span class=\"highlight-timeframe\">2003</span> <span class=\"highlight-protest\">Cricket World Cup</span> when <span class=\"highlight-country\">Zimbabwean</span> players Andy Flower and Henry Olonga, lacking black armbands, wore strips of black insulating tape to “mourn the death of democracy,” drawing global attention to government repression. This highlights how an ordinary item can instantly signal profound political dissent."
@@ -343,7 +343,7 @@
     "image_filename": "images/eggs.webp",
     "categories_object_type": ["Thrown & Spilled"],
     "categories_country": ["Global"],
-    "categories_cause": ["Humiliation", "Moral Objection", "Anti-Politician"],
+    "categories_cause": ["Anti-Politician"],
     "categories_protest": ["Suffragette Movement", "General Political Protests"],
     "categories_timeframe": ["1910", "20th Century", "21st Century"],
     "description_html": "The act of throwing eggs at people or property has a long history as a <span class=\"highlight-cause\">protest tactic</span>, especially against politicians and public figures. The intention is typically to <span class=\"dramatic-emphasis\">humiliate the target</span> rather than cause physical harm, turning them into figures of ridicule and signaling moral objection to their actions or presence. Notable incidents include the egging of Winston Churchill by a suffragette in <span class=\"highlight-timeframe\">1910</span>, and various politicians like Richard Nixon, Harold Wilson, and Scott Morrison. Egging is considered vandalism and can result in legal consequences, especially if property is damaged or injuries occur."
@@ -355,7 +355,7 @@
     "image_filename": "images/flour.webp",
     "categories_object_type": ["Food/Consumable", "Thrown & Spilled"],
     "categories_country": ["New Zealand", "USA", "Global"],
-    "categories_cause": ["Humiliation", "Disruption", "Anti-Politician", "Economic Protest"],
+    "categories_cause": ["Anti-Politician", "Economic Protest"],
     "categories_protest": ["Springbok Tour (1981)", "Flour Riot of 1837"],
     "categories_timeframe": ["1837", "1981", "20th Century", "21st Century"],
     "description_html": "Flour bombing is a classic protest method involving the throwing of flour, often contained in paper bags, at people or objects. This tactic is used to create an inconvenient and messy stain, serving as a form of <span class=\"highlight-cause\">public humiliation</span> or disruption. Flour bombs have been used alongside eggs in protests against politicians like Tony Blair and Emmanuel Macron, and during major demonstrations, such as the <span class=\"highlight-timeframe\">1981</span> <span class=\"highlight-protest\">Springbok Tour</span> in <span class=\"highlight-country\">New Zealand</span>. Historically, flour has also been central to <span class=\"highlight-cause\">food riots</span>, such as the <span class=\"highlight-timeframe\">1837</span> <span class=\"highlight-protest\">Flour Riot</span> in <span class=\"highlight-country\">New York City</span>, where public anger over rising prices led to mass looting and destruction of flour stores. The tactic remains a simple, non-lethal way to achieve <span class=\"dramatic-emphasis\">maximum disruption</span>."
@@ -366,7 +366,7 @@
     "image_filename": "images/soup.webp",
     "categories_object_type": ["Thrown & Spilled"],
     "categories_country": ["Global"],
-    "categories_cause": ["Climate Action", "Food Security", "Systemic Change"],
+    "categories_cause": ["Climate Action", "Food Security"],
     "categories_protest": ["Art Museum Protests"],
     "categories_timeframe": ["2023", "21st Century"],
     "description_html": "Soup has become a notable tool in <span class=\"highlight-cause\">climate and social justice protests</span>, particularly in high-profile actions targeting famous artworks in museums. Activists have thrown soup at protected paintings such as Leonardo da Vinci’s Mona Lisa and Vincent van Gogh’s Sunflowers to draw attention to issues like <span class=\"highlight-cause\">environmental policy</span> and <span class=\"highlight-cause\">food security</span>. These acts are intended to provoke public debate and highlight the perceived <span class=\"dramatic-emphasis\">imbalance between the protection of art and urgent social needs</span>. The protests often include statements demanding systemic changes, such as the right to healthy and sustainable food, and are orchestrated by groups aiming to integrate food justice into broader social security systems. The artworks themselves are typically unharmed due to protective glass coverings."
@@ -377,7 +377,7 @@
     "image_filename": "images/pie.webp",
     "categories_object_type": ["Thrown & Spilled"],
     "categories_country": ["USA", "Belgium", "Global"],
-    "categories_cause": ["Ridicule", "Anti-Authority", "Anti-Greed/Corruption", "Humor/Spectacle"],
+    "categories_cause": ["Anti-Authority", "Anti-Corruption"],
     "categories_protest": ["Patisserie Guerrilla", "Biotic Baking Brigade"],
     "categories_timeframe": ["Late 20th Century", "1980s", "21st Century"],
     "description_html": "Throwing cakes and pies at public figures is a long-standing protest tactic used to ridicule, embarrass, or draw attention to the actions of politicians and celebrities. This form of protest gained prominence in the <span class=\"highlight-timeframe\">late 20th century</span>, with activists targeting political and cultural figures to challenge authority through <span class=\"dramatic-emphasis\">humor and spectacle</span>. Belgian anarchist Noël Godin popularized “<span class=\"highlight-protest\">patisserie guerrilla</span>,” turning pie-throwing into an art form. Groups like the <span class=\"highlight-protest\">Biotic Baking Brigade</span> in the <span class=\"highlight-country\">U.S.</span> have used pieing to protest against perceived greed or corruption among “titans of power.” Notable incidents span decades, involving figures from William F. Buckley Jr. and Anita Bryant to Bill Gates, highlighting the endurance of this tactic."
@@ -388,7 +388,7 @@
     "image_filename": "images/protest_milkshake.webp",
     "categories_object_type": ["Food/Consumable", "Thrown & Spilled"],
     "categories_country": ["United Kingdom"],
-    "categories_cause": ["Anti-Brexit", "Anti-Far-Right", "Anti-Racism", "Spectacle"],
+    "categories_cause": ["Anti-Brexit", "Anti-Far-Right", "Racial Justice"],
     "categories_protest": ["2019 Brexit Party Protests", "Anti-Far-Right Rallies"],
     "categories_timeframe": ["2019", "21st Century"],
     "description_html": "Milkshakes have emerged as a distinctive protest symbol in recent years, particularly in the <span class=\"highlight-country\">United Kingdom</span>, where throwing them at public figures has become a widely recognized act of political dissent. This trend gained prominence during the <span class=\"highlight-timeframe\">2019</span> <span class=\"highlight-protest\">anti-Brexit and anti-far-right demonstrations</span>. Beyond its anti-Brexit roots, milkshaking has also taken on <span class=\"highlight-cause\">anti-racist symbolism</span>. Analysts note that while the alt-right has sometimes used milk as a symbol of white supremacy, the act of throwing milkshakes at far-right figures is seen as a form of <span class=\"dramatic-emphasis\">“political ju-jitsu”</span>—turning the symbolism against them and making them appear foolish. The milkshake thus functions both as a tool of protest and as a visual statement against <span class=\"highlight-cause\">extremism</span>."
@@ -423,7 +423,7 @@
   "image_filename": "images/shoe.webp",
   "categories_object_type": ["Thrown & Spilled"],
   "categories_country": ["Iraq", "United States", "India", "Pakistan", "Australia", "United Kingdom", "Greece"],
-  "categories_cause": ["Anti-War", "Political Dissent", "Anti-Imperialism", "Public Anger"],
+  "categories_cause": ["Anti-War", "Political Dissent", "Anti-Imperialism"],
   "categories_protest": ["Bush Shoe Incident", "Anti-Policy Rallies"],
   "categories_timeframe": ["2008", "21st Century"],
   "description_html": "Shoe-throwing is a widely recognized act of protest and symbolic defiance, particularly since the early <span class=\"highlight-timeframe\">21st century</span>. This gesture is rooted in the cultural significance of shoes as objects associated with <span class=strong-emphasis>insult and contempt</span> in many societies, especially in the <span class=\"highlight-country\">Middle East</span>. The most famous incident occurred in <span class=\"highlight-timeframe\">2008</span>, when <span class=\"highlight-country\">Iraqi</span> journalist <span class=empasisc>Muntadhar al-Zaidi</span> hurled both his shoes at U.S. President <span class=empasisc>George W. Bush</span> during a Baghdad press conference, declaring it a <span class=strong-emphasis>“farewell kiss”</span> from the Iraqi people. The act was instantly understood as a deep insult, sparking global headlines and inspiring similar <span class=\"highlight-cause\">political dissent</span> around the world. Since then, the tactic has been adopted in <span class=\"highlight-country\">India</span>, <span class=\"highlight-country\">Pakistan</span>, <span class=\"highlight-country\">Australia</span>, the <span class=\"highlight-country\">United Kingdom</span>, and <span class=\"highlight-country\">Greece</span>. While it serves as a <span class=\"highlight-cause\">potent symbol of protest</span>, it remains a polarizing gesture that frequently crosses the line from <span class=\"highlight-cause\">legitimate dissent</span> to perceived <span class=strong-emphasis>endangerment</span>. <br>"
@@ -451,7 +451,7 @@
   "image_filename": "images/cleaning_spray.webp",
   "categories_object_type": ["Shields & Mitigation"],
   "categories_country": ["Turkey"],
-  "categories_cause": ["Right to Protest", "Mutual Aid", "Public Health"],
+  "categories_cause": ["Freedom of Assembly"],
   "categories_protest": ["Gezi Park Protests"],
   "categories_timeframe": ["2013", "21st Century"],
   "description_html": "During the <span class=\"highlight-timeframe\">2013</span> <span class=empasisc><span class=\"highlight-protest\">Gezi Park protests</span></span> in <span class=empasisc><span class=\"highlight-country\">Turkey</span></span>, cleaning sprays were repurposed as emergency medical supplies. As police deployed <span class=strong-emphasis>tear gas and pepper spray</span>, protesters and volunteer medics used cleaning sprays—often filled with <span class=strong-emphasis>water, saline, or vinegar solutions</span>—to rinse eyes and skin, providing quick relief from chemical irritants. This improvisation became a symbol of the protesters’ <span class=\"highlight-cause\">adaptability and determination</span> to care for each other despite harsh police tactics and limited access to medical care. The sight of protesters carrying these bottles became shorthand for <span class=\"highlight-cause\">mutual aid</span> and <span class=\"highlight-cause\">passive resistance</span> in the face of state-led intervention. <br>"
@@ -479,7 +479,7 @@
   "image_filename": "images/whistle.webp",
   "categories_object_type": ["Sound & Protest", "Instrument"],
   "categories_country": ["Italy", "Thailand", "United States"],
-  "categories_cause": ["Anti-Corruption", "Anti-Asian Violence", "Solidarity", "Public Safety"],
+  "categories_cause": ["Anti-Corruption", "Anti-Asian Violence","Public Safety"],
   "categories_protest": ["Whistle Blowing Protests (PDRC)", "The Yellow Whistle Initiative"],
   "categories_timeframe": ["Antiquity", "2013", "2014", "2021", "2024", "21st Century"],
   "description_html": "The whistle is a small but potent tool of protest and self-defence. In <span class=\"highlight-timeframe\">classical antiquity</span>, Romans hissed and whistled (<i>sibilare</i>) at gladiatorial games to signal <span class=\"highlight-cause\">mass disapproval</span>. In modern times, whistles have become standard equipment at demonstrations due to their accessibility. <span class=\"highlight-country\">Thailand</span> offers an instructive example: during the <span class=\"highlight-timeframe\">2013–14</span> <span class=empasisc>“<span class=\"highlight-protest\">whistle blowing</span>” protests</span>, crowds used plastic whistles to show opposition to the government. Whistles have also been featured in campaigns against <span class=\"highlight-cause\">anti-Asian violence</span> in the <span class=\"highlight-country\">United States</span>. Launched in <span class=\"highlight-timeframe\">2021</span>, <span class=empasisc>The <span class=\"highlight-protest\">Yellow Whistle</span> initiative</span> distributed bright yellow whistles stamped <span class=strong-emphasis>“WE BELONG”</span> as both an audible alarm and a visible statement of <span class=\"highlight-cause\">solidarity</span>. By <span class=\"highlight-timeframe\">2024</span>, over 350,000 whistles were distributed to help Asian Americans, particularly elders, broadcast a collective stand against hate. The humble whistle transforms a simple burst of sound into a <span class=strong-emphasis>highly shareable symbol of unity and resistance</span>. <br>"
@@ -507,7 +507,7 @@
   "image_filename": "images/pots_and_pans.webp",
   "categories_object_type": ["Sound & Protest"],
   "categories_country": ["Chile", "Argentina", "Brazil", "Canada", "Iceland", "Mexico", "Lebanon", "France", "Myanmar", "Puerto Rico"],
-  "categories_cause": ["Food Shortages", "Economic Crisis", "Anti-Corruption", "Anti-Austerity", "Democracy", "Tuition Hikes"],
+  "categories_cause": ["Food Security", "Economic Protest", "Anti-Corruption", "Anti-Austerity", "Pro-Democracy", "Tuition Hikes"],
   "categories_protest": ["March of the Empty Pots", "Cacerolazo", "Panelaço", "Casseroles Marches", "Pots-and-Pans Revolution"],
   "categories_timeframe": ["1971", "1983", "1986", "2001", "2006", "2008", "2009", "2012", "2015", "2016", "2019", "2021", "2023", "20th Century", "21st Century"],
   "description_html": "Banging pots, pans, and other kitchen utensils—known as <span class=empasisc><span class=\"highlight-protest\">cacerolazo</span></span> in Spanish and <span class=empasisc><span class=\"highlight-protest\">panelaço</span></span> in Portuguese—turns ordinary cookware into a deafening, non-violent show of dissent. The best-documented starting point was <span class=\"highlight-country\">Chile</span>’s <span class=empasisc>“<span class=\"highlight-protest\">March of the Empty Pots and Pans</span>”</span> on 1 December <span class=\"highlight-timeframe\">1971</span>, when women in Santiago highlighted <span class=\"highlight-cause\">food shortages</span>. During the <span class=\"highlight-timeframe\">1983–1986</span> period under military rule, Chileans revived the tactic to register dissent from balconies. <span class=\"highlight-country\">Argentines</span> used the <i>cacerolazo</i> during the <span class=\"highlight-timeframe\">2001</span> <span class=\"highlight-cause\">economic collapse</span>, while <span class=\"highlight-country\">Brazilians</span> staged nationwide <i>panelaços</i> in <span class=\"highlight-timeframe\">2015</span> against <span class=\"highlight-cause\">corruption</span>. The tactic spread globally: <span class=\"highlight-country\">Canada</span>’s <span class=\"highlight-timeframe\">2012</span> <span class=empasisc>“<span class=\"highlight-protest\">casseroles</span>” marches</span>, <span class=\"highlight-country\">Iceland</span>’s <span class=\"highlight-timeframe\">2008–09</span> <span class=empasisc>“<span class=\"highlight-protest\">pots-and-pans revolution</span>”</span>, and <span class=\"highlight-country\">Myanmar</span>’s <span class=\"highlight-timeframe\">2021</span> resistance against the <span class=\"highlight-cause\">military coup</span>. Loud and inclusive, the rhythmic crash of kitchenware remains a powerful way to <span class=strong-emphasis>voice frustration and demand accountability</span> from private and public spaces. <br>"
@@ -536,7 +536,7 @@
   "image_filename": "images/rubber_boots.webp",
   "categories_object_type": ["Visual Claims"],
   "categories_country": ["Germany"],
-  "categories_cause": ["Agricultural Policy", "Fuel Subsidies", "Rural Resistance", "Regional Food Security"],
+  "categories_cause": ["Agricultural Policy", "Fuel Subsidies", "Food Security"],
   "categories_protest": ["German Farmers' Protests"],
   "categories_timeframe": ["2023", "2024", "16th Century", "21st Century"],
   "description_html": "Rubber boots have become a prominent and evocative symbol in the <span class=\"highlight-timeframe\">2023–2024</span> <span class=empasisc><span class=\"highlight-country\">German</span> <span class=\"highlight-protest\">farmers’ protests</span></span>. As a form of <span class=strong-emphasis>silent protest</span>, farmers hung their boots on town signs, street posts, and farm fences across rural Germany to express dissatisfaction with the abolition of <span class=\"highlight-cause\">tax breaks and fuel subsidies</span>. The empty boots signify farmers <span class=strong-emphasis>“hanging up their wellies,”</span> a metaphor for ceasing work and a warning of the disappearance of regional food production. This visual gesture also evokes historical uprisings—deliberately referencing the <span class=empasisc>strapped boots (<i>Bundschuh</i>)</span> of the <span class=\"highlight-timeframe\">16th-century</span> <span class=\"highlight-protest\">Peasants’ War</span>—linking today’s protests to a deeper tradition of <span class=\"highlight-cause\">rural resistance</span>. <br>"
@@ -591,7 +591,7 @@
   "image_filename": "images/skittles.webp",
   "categories_object_type": ["Visual Claims"],
   "categories_country": ["United States"],
-  "categories_cause": ["Racial Justice", "Anti-Profiling", "Black Lives Matter", "Systemic Injustice"],
+  "categories_cause": ["Racial Justice", "Black Lives Matter", "Systemic Injustice"],
   "categories_protest": ["Trayvon Martin Protests", "Justice for Trayvon"],
   "categories_timeframe": ["2012", "21st Century"],
   "description_html": "Skittles became a symbol in <span class=\"highlight-country\">U.S.</span> protests following the <span class=\"highlight-timeframe\">2012</span> killing of <span class=empasisc>Trayvon Martin</span>, a Black teenager who was shot while carrying a <span class=strong-emphasis>bag of Skittles and a bottle of iced tea</span>. Protesters adopted the candy as an emblem of <span class=\"highlight-cause\">Martin’s innocence</span> and the injustice of his death, often holding Skittles at rallies and creating memorials. The candy’s colorful appearance came to represent both the loss of innocent life and the broader fight against <span class=\"highlight-cause\">racial profiling</span> and <span class=\"highlight-cause\">systemic injustice</span>. Images of Skittles bags were integrated into protest art and hoodies—another symbol of the movement—making the brand a lasting icon in the movement for <span class=\"highlight-cause\">racial justice</span> in America. <br>"
@@ -619,7 +619,7 @@
   "image_filename": "images/yellow_vest.webp",
   "categories_object_type": ["Visual Claims"],
   "categories_country": ["France", "Belgium", "Canada", "Taiwan"],
-  "categories_cause": ["Cost of Living", "Economic Justice", "Tax Reform", "Working-class Rights"],
+  "categories_cause": ["Economic Protest", "Tax Reform", "Working-class Rights"],
   "categories_protest": ["Yellow Vests Movement", "Mouvement des gilets jaunes"],
   "categories_timeframe": ["2018", "2019", "21st Century"],
   "description_html": "The high-visibility motorist jacket, or <span class=empasisc><i>gilet jaune</i></span>, became the central symbol of the <span class=empasisc>“<span class=\"highlight-protest\">Yellow Vests</span>” movement</span> that began in <span class=\"highlight-country\">France</span> in November <span class=\"highlight-timeframe\">2018</span>. Required by law in every vehicle for safety, the vest was adopted for its <span class=strong-emphasis>accessibility, visibility, and working-class associations</span>. Initially triggered by <span class=\"highlight-cause\">rising fuel taxes</span> and concerns over the <span class=\"highlight-cause\">cost of living</span>, the movement expanded to broader demands for <span class=\"highlight-cause\">economic justice</span>. Protesters wore the vests at <span class=strong-emphasis>roadblocks and rallies</span>, turning a mundane safety item into a unifying visual statement. The symbol has since traveled to other countries, representing <span class=\"highlight-cause\">grassroots discontent</span> and calls for systemic change. <br>"
@@ -674,7 +674,7 @@
   "image_filename": "images/green_bandana.webp",
   "categories_object_type": ["Visual Claims"],
   "categories_country": ["Argentina", "United States", "Poland", "Colombia", "Mexico"],
-  "categories_cause": ["Reproductive Rights", "Abortion Rights", "Health Care Access", "Feminism"],
+  "categories_cause": ["Abortion Rights", "Health Care Access", "Feminism"],
   "categories_protest": ["Green Wave", "Marea Verde"],
   "categories_timeframe": ["2003", "2018", "2020", "21st Century"],
   "description_html": "The green bandana, also known as the <span class=empasisc>green scarf (<span class=\"highlight-protest\">pañuelo verde</span>)</span>, is an internationally recognized symbol of <span class=\"highlight-cause\">reproductive rights</span>. Originating in <span class=\"highlight-country\">Argentina</span> in <span class=\"highlight-timeframe\">2003</span>, it was inspired by the white scarves of the <span class=empasisc>Mothers of the Plaza de Mayo</span> and chosen for its association with hope, life, and renewal. The bandana quickly spread across <span class=\"highlight-country\">Latin America</span> as part of the <span class=empasisc>“<span class=\"highlight-protest\">Green Wave</span>”</span> (<i>Marea Verde</i>) movement, uniting activists in the fight for legal, safe, and free abortion. Its use has since expanded globally, appearing at protests in the <span class=\"highlight-country\">United States</span> and <span class=\"highlight-country\">Poland</span>, symbolizing <span class=\"highlight-cause\">solidarity</span>, <span class=strong-emphasis>nonviolent resistance</span>, and the ongoing struggle for bodily autonomy. <br>"
@@ -702,7 +702,7 @@
   "image_filename": "images/one_piece_flag.webp",
   "categories_object_type": ["Visual Claims"],
   "categories_country": ["Japan", "Indonesia", "Nepal", "Thailand"],
-  "categories_cause": ["Anti-Corruption", "Freedom", "Anti-Authoritarianism", "Social Inequality", "Youth Activism"],
+  "categories_cause": ["Anti-Corruption", "Freedom", "Anti-Authoritarianism", "Social Inequality"],
   "categories_protest": ["Gen Z Demonstrations", "Milk Tea Alliance"],
   "categories_timeframe": ["2020", "2024", "2025", "21st Century"],
   "description_html": "The <span class=empasisc>One Piece flag</span>, depicting a grinning skull wearing a straw hat on a black field, is an emerging international symbol of <span class=\"highlight-cause\">youth-led protest</span> and resistance. Originating in <span class=\"highlight-country\">Japanese</span> popular culture as the Jolly Roger of the <span class=empasisc>Straw Hat Pirates</span>, it has been reinterpreted by <span class=strong-emphasis>Generation Z activists</span> for its associations with <span class=\"highlight-cause\">freedom and defiance</span> against an unjust world order. Since the mid-<span class=\"highlight-timeframe\">2020s</span>, the flag has appeared in demonstrations across <span class=\"highlight-country\">Indonesia</span> and <span class=\"highlight-country\">Nepal</span> to denounce <span class=\"highlight-cause\">corruption</span> and <span class=\"highlight-cause\">authoritarian governance</span>. Its narrative link to confronting a corrupt <span class=empasisc>“World Government”</span> allows diverse movements to project local grievances onto a globally recognizable image, turning a manga symbol into a marker of <span class=\"highlight-cause\">solidarity</span> and <span class=\"highlight-cause\">nonviolent resistance</span>. <br>"
@@ -730,7 +730,7 @@
   "image_filename": "images/banana_protest.webp",
   "categories_object_type": ["Mockery & Satire"],
   "categories_country": ["Poland", "Colombia"],
-  "categories_cause": ["Anti-Censorship", "Labor Rights", "Social Equality", "Anti-Colonialism"],
+  "categories_cause": ["Anti-Censorship", "Labor Rights", "Social Equality"],
   "categories_protest": ["Banana Selfies (Poland 2019)", "Banana Massacre (1928)", "Bananowa Młodzież (1968)"],
   "categories_timeframe": ["1928", "1968", "1973", "2019", "20th Century", "21st Century"],
   "description_html": "In <span class=\"highlight-country\">Poland</span>, the banana became a protest icon in April <span class=\"highlight-timeframe\">2019</span> after Warsaw’s National Museum removed <span class=empasisc>Natalia LL’s</span> <span class=\"highlight-timeframe\">1973</span> video <i>Consumer Art</i>. Activists condemned the <span class=\"highlight-cause\">censorship</span>, gathering to eat bananas and posting <span class=strong-emphasis>“banana selfies”</span> online. Historically, during <span class=\"highlight-country\">Poland</span>’s <span class=\"highlight-timeframe\">1968</span> protests, the term <span class=empasisc>“banana youth” (<i>bananowa młodzież</i>)</span> mocked elite children, with the fruit—a rare luxury—symbolizing <span class=\"highlight-cause\">social divide</span>. Beyond Europe, bananas have long symbolized <span class=\"highlight-cause\">colonial exploitation</span> in <span class=\"highlight-country\">Latin America</span>, epitomized by the <span class=\"highlight-timeframe\">1928</span> <span class=empasisc>“<span class=\"highlight-protest\">Banana Massacre</span>”</span> in <span class=\"highlight-country\">Colombia</span>, where troops killed striking workers of the <span class=strong-emphasis>United Fruit Company</span>. <br>"
@@ -759,7 +759,7 @@
   "image_filename": "images/sardines_protest.webp",
   "categories_object_type": ["Mockery & Satire"],
   "categories_country": ["Italy"],
-  "categories_cause": ["Anti-Populism", "Unity", "Inclusivity", "Social Justice"],
+  "categories_cause": ["Anti-Populism", "Inclusivity", "Social Justice"],
   "categories_protest": ["Sardines Movement", "Movimento delle Sardine"],
   "categories_timeframe": ["2019", "2020", "21st Century"],
   "description_html": "The sardine became a protest symbol in <span class=\"highlight-country\">Italy</span> with the birth of the <span class=empasisc><span class=\"highlight-protest\">Sardines movement</span> (<i>Movimento delle Sardine</i>)</span> in November <span class=\"highlight-timeframe\">2019</span>. Four friends in Bologna called on people to <span class=strong-emphasis>“pack like sardines”</span> in Piazza Maggiore to outnumber a League rally and show peaceful opposition to <span class=empasisc>Matteo Salvini’s</span> populist rhetoric. Thousands turned up, using the tightly packed crowd as a visual statement of <span class=\"highlight-cause\">unity</span> against divisive politics. The movement, which rejected formal party structures, used the <span class=\"highlight-cause\">mockery & satire</span> of being small fish that together become a powerful force to counteract the “sharks” of populism. Similar flash mobs spread across Italy, where protesters held cardboard sardines to represent a silent but massive <span class=\"highlight-cause\">peaceful resistance</span>. <br>"
@@ -787,7 +787,7 @@
   "image_filename": "images/guy_fawkes_mask.webp",
   "categories_object_type": ["Mockery & Satire"],
   "categories_country": ["United Kingdom", "United States", "Brazil", "Turkey", "Thailand", "Hong Kong"],
-  "categories_cause": ["Anti-Corruption", "Freedom of Information", "Anti-Establishment", "Privacy Rights", "Anonymity"],
+  "categories_cause": ["Anti-Corruption", "Freedom of Information", "Anti-Establishment", "Privacy Rights"],
   "categories_protest": ["Anonymous", "Occupy Wall Street", "Arab Spring", "Million Mask March"],
   "categories_timeframe": ["2008", "2011", "21st Century"],
   "description_html": "The <span class=empasisc>Guy Fawkes mask</span>, popularized by the graphic novel and film <i><span class=\"highlight-protest\">V for Vendetta</span></i>, has become a global symbol of protest against <span class=\"highlight-cause\">authority, corruption, and censorship</span>. First adopted by the hacktivist collective <span class=empasisc><span class=\"highlight-protest\">Anonymous</span></span> in <span class=\"highlight-timeframe\">2008</span> during Project Chanology, it offers both <span class=strong-emphasis>anonymity and a sense of unity</span> for demonstrators. Since then, it has appeared in protests worldwide—from <span class=empasisc><span class=\"highlight-protest\">Occupy Wall Street</span></span> to the <span class=\"highlight-protest\">Arab Spring</span>—representing <span class=\"highlight-cause\">anti-establishment sentiment</span> and collective resistance. Its distinctive, smiling visage has turned it into a universal emblem of <span class=\"highlight-cause\">dissent</span> in the <span class=\"highlight-timeframe\">21st century</span>, allowing individuals to submerge their identity into a larger, faceless movement. <br>"
@@ -842,8 +842,8 @@
   "name": "The Tractor",
   "image_filename": "images/ukrainian_tractor.webp",
   "categories_object_type": ["Mockery & Satire"],
-  "categories_country": ["Ukraine", "Russia"],
-  "categories_cause": ["National Resistance", "Anti-Invasion", "Defiance", "Sovereignty"],
+  "categories_country": ["Ukraine"],
+  "categories_cause": ["National Resistance", "Anti-Invasion", "Sovereignty"],
   "categories_protest": ["Ukrainian Resistance to Russian Invasion"],
   "categories_timeframe": ["2022", "2023", "2024", "21st Century"],
   "description_html": "The tractor has emerged as a notable symbol of <span class=\"highlight-country\">Ukrainian</span> resistance during the <span class=\"highlight-timeframe\">2022</span> invasion. Early in the conflict, viral videos and images showed Ukrainian farmers using tractors to <span class=strong-emphasis>tow away abandoned or captured Russian military vehicles</span>, including tanks and armored personnel carriers. These scenes quickly became iconic, circulating widely on social media and inspiring <span class=\"highlight-protest\">memes, posters, and merchandise</span>. The image of a humble farm vehicle dragging a multi-million dollar piece of high-tech weaponry became a <span class=strong-emphasis>potent symbol of David vs. Goliath defiance</span> and the ingenuity of the <span class=\"highlight-cause\">national resistance</span>. The \"Ukrainian tractor pulling a tank\" motif was even immortalized on official postage stamps, solidifying its place as a marker of the <span class=\"highlight-cause\">struggle for sovereignty</span>. <br>"
@@ -871,7 +871,7 @@
   "image_filename": "images/sunflower_seeds.webp",
   "categories_object_type": ["Mockery & Satire"],
   "categories_country": ["Ukraine", "China", "Russia"],
-  "categories_cause": ["National Resistance", "Anti-Invasion", "Anti-Repression", "Individuality", "Solidarity"],
+  "categories_cause": ["National Resistance", "Anti-Invasion", "Anti-Repression", "Solidarity"],
   "categories_protest": ["Ukrainian Resistance to Russian Invasion", "Sunflower Seeds (Ai Weiwei)"],
   "categories_timeframe": ["2010", "2022", "21st Century"],
   "description_html": "Sunflower seeds have emerged as a multifaceted protest symbol. In <span class=\"highlight-country\">Ukraine</span>, they became a global emblem of <span class=\"highlight-cause\">resistance</span> after the <span class=\"highlight-timeframe\">2022</span> <span class=\"highlight-country\">Russian</span> invasion, sparked by a viral video of a woman telling soldiers to <span class=strong-emphasis>carry seeds so flowers would grow when they died</span>. The sunflower, Ukraine's national flower, became a sign of <span class=\"highlight-cause\">resilience</span> in protest art and social media. In a different context, <span class=\"highlight-country\">Chinese</span> artist <span class=empasisc>Ai Weiwei</span> used 100 million hand-crafted porcelain sunflower seeds in his <span class=\"highlight-timeframe\">2010</span> installation to critique <span class=\"highlight-cause\">political repression</span> and collective conformity. Referencing <span class=empasisc>Maoist propaganda</span>—which depicted Chairman Mao as the sun and the people as sunflowers—his work reimagined the seed as a symbol of <span class=\"highlight-cause\">individuality</span> and <span class=\"highlight-cause\">solidarity</span> against the state. <br>"
@@ -899,7 +899,7 @@
   "image_filename": "images/toilet_brush.webp",
   "categories_object_type": ["Mockery & Satire"],
   "categories_country": ["Germany"],
-  "categories_cause": ["Right to the City", "Anti-Gentrification", "Civil Liberties", "Anti-Policing"],
+  "categories_cause": ["Anti-Gentrification", "Anti-Policing"],
   "categories_protest": ["Gefahrengebiete (Danger Zones) Protests", "Rote Flora Support"],
   "categories_timeframe": ["2013", "2014", "21st Century"],
   "description_html": "During <span class=\"highlight-country\">Hamburg</span>’s <span class=\"highlight-timeframe\">2013–2014</span> protests—sparked by the threatened eviction of the <span class=empasisc>Rote Flora</span> social center and the creation of <span class=empasisc>“danger zones” (<i>Gefahrengebiete</i>)</span> with broad stop-and-search powers—a toilet brush became an unlikely symbol of dissent. After a <span class=strong-emphasis>viral video showed police confiscating a toilet brush</span> from a protester's pocket during a search, the object was transformed into a tool of <span class=\"highlight-cause\">mockery & satire</span>. Demonstrators began brandishing toilet brushes at rallies and featuring them in street art to highlight what they viewed as <span class=\"highlight-cause\">arbitrary policing</span> and <span class=\"highlight-cause\">state overreach</span>. The humble cleaning tool quickly became shorthand for the <span class=\"highlight-cause\">right to the city</span> and resistance against the criminalization of everyday items in public spaces. <br>"
@@ -926,7 +926,7 @@
   "image_filename": "images/winnie_the_pooh_protest.webp",
   "categories_object_type": ["Mockery & Satire"],
   "categories_country": ["China", "Taiwan", "United States"],
-  "categories_cause": ["Anti-Censorship", "Freedom of Speech", "Democracy", "National Sovereignty"],
+  "categories_cause": ["Anti-Censorship", "Freedom of Speech", "Pro-Democracy", "National Sovereignty"],
   "categories_protest": ["White Paper Protests", "Anti-Xi Jinping Dissent"],
   "categories_timeframe": ["2013", "2018", "2022", "2023", "21st Century"],
   "description_html": "Winnie-the-Pooh became a playful stand-in for <span class=\"highlight-country\">China</span>’s <span class=empasisc>Xi Jinping</span> in <span class=\"highlight-timeframe\">2013</span>, after social-media users paired a photo of Xi and <span class=empasisc>Barack Obama</span> with an image of <span class=strong-emphasis>Pooh and Tigger</span>. Beijing soon scrubbed Pooh memes and even blocked the <span class=\"highlight-timeframe\">2018</span> film <i>Christopher Robin</i> as part of its <span class=\"highlight-cause\">anti-censorship</span> efforts. The bear remains a fixture in protest culture; during the <span class=\"highlight-timeframe\">2022</span> <span class=empasisc>“<span class=\"highlight-protest\">White Paper</span>”</span> anti-lockdown demonstrations, Pooh was depicted holding a blank sheet—the movement’s symbol of <span class=\"highlight-cause\">censored speech</span>. In <span class=\"highlight-timeframe\">2023</span>, a <span class=\"highlight-country\">Taiwanese</span> air-force patch depicting a <span class=strong-emphasis>Formosan black bear punching Pooh</span> went viral, underscoring the character's role as a lighthearted emblem of <span class=\"highlight-cause\">defiance</span> and <span class=\"highlight-cause\">national sovereignty</span>. <br>"
@@ -955,8 +955,8 @@
   "image_filename": "images/keffiyeh_protest.webp",
   "categories_object_type": ["Dress to protest"],
   "categories_country": ["Palestine", "Jordan", "Lebanon"],
-  "categories_cause": ["National Identity", "Anti-Occupation", "Self-Determination", "Solidarity"],
-  "categories_protest": ["1936–39 Arab Revolt", "Palestinian Resistance", "Global Solidarity Protests"],
+  "categories_cause": ["National Identity", "Anti-Occupation", "Self-Determination", "Pro-Palestine"],
+  "categories_protest": ["1936–39 Arab Revolt", "Pro-Palestine Resistance", "Global Solidarity Protests"],
   "categories_timeframe": ["1936", "1939", "1960s", "20th Century", "21st Century"],
   "description_html": "The keffiyeh—a traditional <span class=\"highlight-country\">Arab</span> scarf—became a political emblem during <span class=\"highlight-country\">Palestine</span>’s <span class=\"highlight-timeframe\">1936–39</span> <span class=empasisc><span class=\"highlight-protest\">Arab Revolt</span></span>, when rebels wore it to <span class=\"highlight-cause\">show solidarity</span> and hide their identities. The black-and-white pattern gained iconic status in the <span class=\"highlight-timeframe\">1960s</span> after PLO leader <span class=empasisc>Yasser Arafat</span> adopted it, turning the rural garment into a global mark of <span class=\"highlight-cause\">national identity</span>. The pattern itself—featuring motifs representing <span class=strong-emphasis>fishnets, olive leaves, and trade routes</span>—is deeply tied to the land. Today, Palestinians and their supporters worldwide wear the keffiyeh at demonstrations as a visible stand against <span class=\"highlight-cause\">occupation and injustice</span>, making it one of the most recognized symbols of <span class=\"highlight-cause\">self-determination</span> in the world. <br>"
  ,
@@ -983,7 +983,7 @@
   "image_filename": "images/miniskirt_protest.webp",
   "categories_object_type": ["Dress to protest"],
   "categories_country": ["United Kingdom", "France"],
-  "categories_cause": ["Feminism", "Women's Liberation", "Bodily Autonomy", "Self-Expression"],
+  "categories_cause": ["Feminism", "Women's Rights", "Bodily Autonomy", "Self-Expression"],
   "categories_protest": ["British Society for the Protection of Mini Skirts", "Dior Demonstration"],
   "categories_timeframe": ["1966", "1960s", "20th Century"],
   "description_html": "The miniskirt became a symbol of <span class=\"highlight-cause\">female liberation</span> and protest in the <span class=\"highlight-timeframe\">1960s</span>, closely linked to the rise of the <span class=\"highlight-cause\">feminist movement</span> and the rejection of restrictive gender norms. Popularized by designers like <span class=empasisc>Mary Quant</span>, the miniskirt represented a break from traditional, conservative fashion and signaled women’s growing <span class=\"highlight-cause\">independence and bodily autonomy</span>. A notable protest occurred in <span class=\"highlight-timeframe\">1966</span> at the <span class=empasisc>Dior headquarters</span> in London. When Dior’s collection featured longer hemlines, a group called the <span class=empasisc>“<span class=\"highlight-protest\">British Society for the Protection of Mini Skirts</span>”</span> gathered outside the show, wearing miniskirts and carrying placards with slogans like <span class=strong-emphasis>“Miniskirts forever!”</span> and <span class=strong-emphasis>“Dior, don’t betray mini skirt.”</span> This demonstration underscored the garment’s status as a symbol of women’s rights to <span class=\"highlight-cause\">self-expression</span> and resistance against imposed standards of modesty. <br>"
@@ -1010,7 +1010,7 @@
   "image_filename": "images/field_jacket_m65.webp",
   "categories_object_type": ["Dress to protest"],
   "categories_country": ["United States", "Vietnam"],
-  "categories_cause": ["Anti-War", "Counterculture", "Peace Movement", "Veteran Rights"],
+  "categories_cause": ["Anti-War", "Peace Movement", "Veteran Rights"],
   "categories_protest": ["Vietnam War Opposition", "Winter Soldier Investigation"],
   "categories_timeframe": ["1960s", "1970s", "20th Century"],
   "description_html": "The field jacket, particularly the <span class=empasisc>U.S. Army M-65 model</span>, became a powerful symbol of protest and <span class=\"highlight-cause\">counterculture</span> during the <span class=\"highlight-protest\">Vietnam War</span> era. Originally designed as functional military gear, it was widely adopted by anti-war activists and returning veterans. By wearing surplus military jackets, protesters subverted the garment’s original meaning, transforming it from a symbol of <span class=strong-emphasis>military authority</span> into a statement against war and government policy. Notable figures such as <span class=empasisc>John Lennon</span> and <span class=empasisc>John Kerry</span> wore field jackets at rallies, often customizing them with <span class=strong-emphasis>peace signs, slogans, and patches</span>. The jacket’s ubiquity at demonstrations made it a visible marker of <span class=\"highlight-cause\">rebellion, disillusionment, and solidarity</span> with those opposing military intervention. <br>"
@@ -1038,7 +1038,7 @@
   "image_filename": "images/beret_protest.webp",
   "categories_object_type": ["Dress to protest"],
   "categories_country": ["Cuba", "United States", "South Africa", "Uganda"],
-  "categories_cause": ["Anti-Imperialism", "Black Power", "Economic Freedom", "Working-class Solidarity"],
+  "categories_cause": ["Anti-Imperialism", "Civil Rights", "Anti-Discrimination", "Economic Freedom", "Working-class Solidarity"],
   "categories_protest": ["Cuban Revolution", "Black Panther Party", "Economic Freedom Fighters (EFF)", "People Power Movement"],
   "categories_timeframe": ["1960s", "2019", "20th Century", "21st Century"],
   "description_html": "The beret has long served as a powerful symbol of protest and <span class=\"highlight-cause\">revolutionary identity</span> around the world. It became iconic through figures like <span class=empasisc>Che Guevara</span>, whose use of the black beret helped link the garment to <span class=\"highlight-cause\">anti-imperialist struggle</span>. In the <span class=\"highlight-country\">United States</span>, the <span class=empasisc><span class=\"highlight-protest\">Black Panther Party</span></span> adopted the black beret in the <span class=\"highlight-timeframe\">late 1960s</span> to signal <span class=strong-emphasis>unity, strength, and resistance to racial oppression</span>. In <span class=\"highlight-country\">South Africa</span>, the <span class=strong-emphasis>red beret</span> is the signature of the <span class=empasisc><span class=\"highlight-protest\">Economic Freedom Fighters</span> (EFF)</span>, representing <span class=\"highlight-cause\">working-class solidarity</span>. In <span class=\"highlight-country\">Uganda</span>, the red beret was adopted by <span class=empasisc>Bobi Wine’s <span class=\"highlight-protest\">People Power movement</span></span>, becoming such a strong symbol that the government <span class=strong-emphasis>banned civilians from wearing it</span> in <span class=\"highlight-timeframe\">2019</span>. <br>"
@@ -1067,7 +1067,7 @@
   "image_filename": "images/leather_jacket_protest.webp",
   "categories_object_type": ["Dress to protest"],
   "categories_country": ["United States", "United Kingdom", "Germany"],
-  "categories_cause": ["Black Power", "Anti-Establishment", "Rebellion", "Anarchism", "Civil Rights"],
+  "categories_cause": ["Black Power", "Anti-Establishment", "Anarchism", "Civil Rights"],
   "categories_protest": ["Black Panther Party", "Punk Movement", "Student Protests"],
   "categories_timeframe": ["1960s", "1970s", "1980s", "20th Century"],
   "description_html": "The leather jacket has become an enduring symbol of <span class=\"highlight-cause\">rebellion</span> and protest, particularly in Western culture. In the <span class=\"highlight-timeframe\">1960s</span> and <span class=\"highlight-timeframe\">1970s</span>, the garment was embraced by countercultural groups, most notably the <span class=empasisc><span class=\"highlight-protest\">Black Panthers</span></span> in the <span class=\"highlight-country\">United States</span>. They wore black leather jackets as a core part of their uniform to project <span class=strong-emphasis>strength, unity, and resistance to oppression</span>. Simultaneously, <span class=\"highlight-protest\">punk movements</span> in the <span class=\"highlight-country\">U.K.</span> and <span class=\"highlight-country\">U.S.</span> further cemented the leather jacket as a symbol of <span class=\"highlight-cause\">anti-establishment sentiment</span>. Activists customized their jackets with <span class=strong-emphasis>slogans, patches, and studs</span> to express political messages, transforming a protective garment into a mobile billboard for <span class=\"highlight-cause\">social change</span> and individual defiance. <br>"
@@ -1095,7 +1095,7 @@
   "image_filename": "images/jeans_protest.webp",
   "categories_object_type": ["Dress to protest"],
   "categories_country": ["United States", "Soviet Union", "Belarus", "Italy"],
-  "categories_cause": ["Civil Rights", "Anti-Capitalism", "Democracy", "Anti-Victim Blaming", "Youth Rebellion"],
+  "categories_cause": ["Civil Rights", "Anti-Capitalism", "Pro-Democracy", "Anti-Victim Blaming"],
   "categories_protest": ["Blue Jean Sunday", "Jeans Revolution", "Denim Day"],
   "categories_timeframe": ["1950s", "1960s", "1962", "1963", "1999", "2006", "20th Century", "21st Century"],
   "description_html": "Jeans shifted from 19th-century workwear to a global protest symbol in the <span class=\"highlight-timeframe\">1950s-60s</span>, when they became shorthand for <span class=\"highlight-cause\">youthful rebellion</span>. In the <span class=\"highlight-country\">U.S.</span> <span class=\"highlight-cause\">civil-rights era</span>, activists wore denim to signal <span class=strong-emphasis>solidarity with poor sharecroppers</span>; <span class=empasisc>Martin Luther King Jr.</span> was arrested in Birmingham in <span class=\"highlight-timeframe\">1963</span> wearing work jeans. In the <span class=\"highlight-country\">USSR</span> and <span class=\"highlight-country\">Eastern Bloc</span>, jeans were seen as a manifestation of <span class=strong-emphasis>Western capitalist values</span> and were often restricted or forbidden. This symbolic power was highlighted during the <span class=\"highlight-timeframe\">2006</span> <span class=empasisc>“<span class=\"highlight-protest\">Jeans Revolution</span>”</span> in <span class=\"highlight-country\">Belarus</span>, where denim became an emblem for <span class=\"highlight-cause\">pro-democracy</span> activists. Later, denim became a tool against sexual-violence myths: after a controversial <span class=\"highlight-timeframe\">1999</span> Italian court ruling, activists launched <span class=empasisc>“<span class=\"highlight-protest\">Denim Day</span>”</span> to oppose <span class=\"highlight-cause\">victim-blaming</span> worldwide. <br>"
@@ -1123,7 +1123,7 @@
   "image_filename": "images/sunflower_protest.webp",
   "categories_object_type": ["Protest Flowers"],
   "categories_country": ["Taiwan", "Ukraine", "United States"],
-  "categories_cause": ["Democracy", "Transparency", "National Resistance", "Women's Suffrage", "Peace"],
+  "categories_cause": ["Pro-Democracy", "Transparency", "National Resistance", "Women's Suffrage"],
   "categories_protest": ["Sunflower Student Movement", "Ukrainian Resistance to Russian Invasion", "Kansas Suffrage Campaign"],
   "categories_timeframe": ["1867", "2014", "2022", "19th Century", "21st Century"],
   "description_html": "Sunflowers have served as potent protest symbols across diverse historical contexts. In <span class=\"highlight-country\">Taiwan</span>, the <span class=\"highlight-timeframe\">2014</span> <span class=empasisc><span class=\"highlight-protest\">Sunflower Student Movement</span></span> adopted the flower after a florist donated hundreds to students occupying the Legislative Yuan. Chosen for its heliotropic nature—turning toward the sun—it became a symbol of <span class=\"highlight-cause\">transparency</span> and resistance against a trade agreement with China. As <span class=\"highlight-country\">Ukraine</span>’s national flower, its symbolic power surged in <span class=\"highlight-timeframe\">2022</span> following a viral video of a woman telling soldiers to carry <span class=strong-emphasis>sunflower seeds so blooms would sprout where they died</span>, turning it into a worldwide emblem of <span class=\"highlight-cause\">resilience</span>. Historically, the sunflower also aided the <span class=\"highlight-country\">U.S.</span> <span class=\"highlight-cause\">women’s suffrage</span> movement; in <span class=\"highlight-timeframe\">1867</span>, <span class=empasisc>Elizabeth Cady Stanton</span> and <span class=empasisc>Susan B. Anthony</span> wore sunflower pins in Kansas, establishing <span class=strong-emphasis>yellow</span> as a defining color for the fight for <span class=\"highlight-cause\">equality</span>."
@@ -1152,7 +1152,7 @@
   "image_filename": "images/carnation_protest.webp",
   "categories_object_type": ["Protest Flowers"],
   "categories_country": ["Portugal", "Netherlands", "United States"],
-  "categories_cause": ["Democracy", "Anti-War", "Labour Rights", "Resistance", "Socialism"],
+  "categories_cause": ["Pro-Democracy", "Anti-War", "Labour Rights", "Socialism"],
   "categories_protest": ["Carnation Revolution", "International Workers' Day", "Vietnam War Opposition", "White Carnation Resistance"],
   "categories_timeframe": ["1940s", "1967", "1974", "20th Century"],
   "description_html": "Carnations are among the most recognizable protest flowers. During <span class=\"highlight-country\">Portugal</span>’s <span class=empasisc><span class=\"highlight-protest\">Carnation Revolution</span></span> on 25 April <span class=\"highlight-timeframe\">1974</span>, civilians and rebel soldiers placed <span class=strong-emphasis>red carnations in rifle barrels</span>, turning a military coup into a largely bloodless uprising that ended decades of dictatorship. Red carnations also symbolize <span class=\"highlight-cause\">labour solidarity</span>, worn on <span class=empasisc>International Workers’ Day</span> to represent socialist ideals. In the <span class=\"highlight-country\">United States</span>, Bernie Boston’s <span class=\"highlight-timeframe\">1967</span> <span class=empasisc>“Flower Power”</span> photo immortalized a <span class=\"highlight-protest\">Vietnam War</span> protester inserting a carnation into a soldier’s gun. Meanwhile, in Nazi-occupied <span class=\"highlight-country\">Netherlands</span>, <span class=strong-emphasis>white carnations</span> quietly signaled <span class=\"highlight-cause\">resistance</span> and loyalty to the exiled royal family. Whether red for revolution or white for quiet defiance, the carnation serves as a vivid botanical plea for <span class=\"highlight-cause\">peace</span> and justice. <br>"
@@ -1181,7 +1181,7 @@
   "image_filename": "images/wild_lily.webp",
   "categories_object_type": ["Protest Flowers"],
   "categories_country": ["Taiwan"],
-  "categories_cause": ["Democracy", "Political Reform", "Grassroots Unity", "Purity"],
+  "categories_cause": ["Pro-Democracy", "Political Reform", "Grassroots Unity"],
   "categories_protest": ["Wild Lily Student Movement"],
   "categories_timeframe": ["1990", "20th Century"],
   "description_html": "The lily, specifically the native <span class=empasisc>Formosan lily</span>, became a powerful protest symbol during <span class=\"highlight-country\">Taiwan</span>’s <span class=\"highlight-timeframe\">1990</span> <span class=empasisc><span class=\"highlight-protest\">Wild Lily Student Movement</span></span>. Students wore white lilies and created large replicas of the flower to represent <span class=\"highlight-cause\">democracy, purity, and resilience</span>. The movement, which called for <span class=strong-emphasis>direct presidential elections and political reform</span>, marked a turning point in Taiwan’s democratization. The choice of the Formosan lily reflected its cultural significance as a symbol of <span class=\"highlight-cause\">honor and vitality</span>, thriving even in harsh environments. It remains closely associated with <span class=\"highlight-cause\">peaceful protest</span> and the dismantling of the one-party state system. <br>"
@@ -1208,7 +1208,7 @@
   "image_filename": "images/belarus_flowers_protest.webp",
   "categories_object_type": ["Protest Flowers"],
   "categories_country": ["Belarus"],
-  "categories_cause": ["Democracy", "Anti-Authoritarianism", "Non-Violence", "Women's Solidarity"],
+  "categories_cause": ["Pro-Democracy", "Anti-Authoritarianism"],
   "categories_protest": ["2020 Belarusian Protests", "Lines of Solidarity"],
   "categories_timeframe": ["2020", "21st Century"],
   "description_html": "During <span class=\"highlight-country\">Belarus</span>’s <span class=\"highlight-timeframe\">2020</span> protests against <span class=empasisc>Alexander Lukashenko</span>, women dressed in white formed <span class=empasisc>“<span class=\"highlight-protest\">lines of solidarity</span>”</span> and handed out <span class=strong-emphasis>white and red flowers</span>—typically carnations or roses. The colors specifically matched the <span class=\"highlight-cause\">banned white-red-white flag</span> of the opposition, turning simple bouquets into a peaceful counterpart to state force. Under the slogan <span class=strong-emphasis>“Riot police have batons, we have flowers,”</span> these floral chains spread nationwide as a symbol of <span class=\"highlight-cause\">non-violence</span> and unity. By using flowers when traditional banners were confiscated, activists created a highly visible and difficult-to-repress marker of <span class=\"highlight-cause\">hope</span> amid severe government crackdowns on political symbols. <br>"
@@ -1236,15 +1236,18 @@
   "image_filename": "images/iranflag.webp",
  "categories_object_type": ["Visual Claims"],
   "categories_country": ["Iran"],
-  "categories_cause": ["Anti-Theocracy", "National Heritage", "Persian Identity", "Secularism", "Regime Change"],
+  "categories_cause": ["Anti-Theocracy", "National Heritage", "Secularism", "Regime Change"],
   "categories_protest": ["Woman, Life, Freedom", "2009 Green Movement", "2022-2026 Iranian Protests"],
   "categories_timeframe": ["1979", "2009", "2022", "2026", "20th Century", "21st Century"],
-  "description_html": "After decades of state suppression following the <span class=\"highlight-timeframe\">1979</span> Revolution, the historic <span class=empasisc>Lion and Sun flag</span> of <span class=\"highlight-country\">Iran</span> has re-emerged as a primary symbol of resistance. Originally the national emblem until <span class=\"highlight-timeframe\">1980</span>, the design features a <span class=strong-emphasis>lion with a sword before a radiant sun</span> on a green, white, and red tricolor, representing <span class=\"highlight-cause\">Persian heritage, power, and enlightenment</span>. Although banned domestically, the flag resurfaced during major crises—notably in <span class=\"highlight-timeframe\">2009, 2019, and 2022</span>—reaching a peak in <span class=\"highlight-timeframe\">2026</span>. Protesters use the flag as a <span class=strong-emphasis>visual rejection of theocratic rule</span>, a movement amplified by activists in the <span class=\"highlight-country\">UK</span>, <span class=\"highlight-country\">Germany</span>, and <span class=\"highlight-country\">Australia</span> who have replaced official state flags at diplomatic missions. While historically tied to the <span class=empasisc>Pahlavi dynasty</span>, its contemporary use has evolved into a broad <span class=\"highlight-cause\">unifying marker</span> of opposition to the current political system. <br>"
+  "description_html": "After decades of state suppression following the 1979 Revolution, the historic  <span class=strong-emphasis>Lion and Sun flag</span> of <span class=\"highlight-country\"><span class=empasisc>Iran</span></span> has re-emerged as a primary symbol of resistance during recent  <span class=strong-emphasis>nationwide and diaspora-led protests</span>. Originally the national emblem from <span class=\"highlight-timeframe\">1907 until 1979</span>, the design features a lion with a sword before a radiant sun on a green, white, and red tricolor,  <span class=strong-emphasis>representing Persian heritage, power, and enlightenment</span>. Although it was replaced by the Islamic Republic’s current emblem and banned domestically, the flag has resurfaced during major crises – most notably in <span class=\"highlight-timeframe\"><span class=strong-emphasis>2009</span></span> <span class=\"highlight-cause\"> <span class=strong-emphasis> electoral integrity</span> </span> protests <span class=\"highlight-protest\"><span class=empasisc>(Iranian Green Movement)</span></span>, the <span class=\"highlight-timeframe\"><span class=strong-emphasis><span class=strong-emphasis>2019–2020</span></span></span> <span class=\"highlight-cause\"><span class=empasisc>anti-regime</span></span> protests, sometimes known as <span class=\"highlight-protest\"><span class=empasisc>Bloody November (Aban)</span></span>, and <span class=\"highlight-timeframe\"><span class=strong-emphasis>2022</span></span> <span class=\"highlight-cause\"><span class=empasisc>women’s rights</span></span> <span class=\"highlight-protest\"><span class=empasisc>Mahsa Amini protests</span></span> – reaching its most visible peak in <span class=\"highlight-timeframe\"><span class=strong-emphasis>2025–2026</span></span> <span class=\"highlight-protest\"><span class=empasisc>Iranian <span class=\"highlight-cause\"><span class=empasisc>anti-regime</span></span> protests</span></span>.  <br> Protesters now use the flag as a visual <span class=\"highlight-cause\"><span class=strong-emphasis>rejection of theocratic rule,</span></span> a movement that gained momentum after <span class=strong-emphasis>exiled figure Reza Pahlavi</span> urged Iranians abroad to <span class=strong-emphasis>replace official state flags at diplomatic missions</span>. This led to activists in countries such as the <span class=\"highlight-country\"><span class=empasisc>United Kingdom</span></span>, <span class=\"highlight-country\"><span class=empasisc>Germany</span></span>, and <span class=\"highlight-country\"><span class=empasisc>Australia</span></span> <span class=strong-emphasis>installing the emblem at embassy entrances or painting it on diplomatic buildings</span>. Within Iran, the flag serves as a unifying marker in protest footage, linking local unrest to a broader national struggle. While historically tied to the Pahlavi dynasty, its contemporary use has evolved into a broad symbol of <span class=strong-emphasis>opposition to the current political system</span> rather than an explicit endorsement of monarchism."
  ,
   "images": [
-    { "src": "images/lion_sun_diaspora_protest.webp", "caption": "The Lion and Sun flag carried by protesters in London, 2026" },
-    { "src": "images/embassy_flag_replacement.webp", "caption": "Activists installing the historic emblem at an Iranian diplomatic mission" },
-    { "src": "https://www.youtube.com/embed/example-lion-sun", "thumb": "https://img.youtube.com/vi/example-lion-sun/hqdefault.jpg", "caption": "The history and resurgence of the Lion and Sun (YouTube)", "type": "embed" }
+    { "src": "images/Iran1.jpg", "caption": "Iranian protestors wave the pre-1979 Iranian flag bearing the lion and sun during 2025-2026 protests"},
+    { "src": "images/iran2.jpg", "caption": "Woman Life Freedom solidarity protest at the Tiergarten in Berlin on 22 October 2022. Photo by Leonhard Lenz" },
+    { "src": "images/iran3.jpg", "caption": "Lion and Sun flag during Iranian green movement Demonstration. Photo by Mike Palmer" },
+    { "src": "images/iran4.jpg", "caption": "A protest in Sheffield at repression in Iran as widespread women led protests continue. 09/10/2022 photo by Tim Dennell" },
+    { "src": "images/iran5.png", "caption": "Protester pulls down national flag from Iranian embassy in London on 10th of January, 2026. Screengrab" },
+    { "src": "images/twitter.png", "caption": "X has replaced the Iran flag emoji on its platform with a pre-1979, pre-revolution design featuring the historic lion and sun symbol." }
   ]
   ,
   "eyewitness": [

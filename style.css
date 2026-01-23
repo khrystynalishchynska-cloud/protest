@@ -145,26 +145,26 @@ body {
 
 /* Use the parent .split flag to size the context panel on desktop */
 .split-layout.split #context-panel {
-    flex: 0 0 65%;
-    width: 65%;
+    flex: 0 0 50%;
+    width: 50%;
     border-left: 1px solid #000;
     padding: 30px;
+    /* Independent scrolling for context panel */
+    height: calc(100vh - var(--global-back-offset));
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    position: sticky;
+    top: 0;
 }
 
-/* When a context panel is open, let the description take more room (80%) so it doesn't
+/* When a context panel is open, let the description take more room so it doesn't
    shrink excessively — this keeps the reading column comfortable while the panel sits
    at the right. */
 .split-layout.split #description-text {
     flex: 0 0 90%;
     width: 90%;
     padding-right: 20px;
-}
-
-.split-layout.split #context-panel {
-    flex: 0 0 50%;
-    width: 50%;
-    border-left: 1px solid #000;
-    padding: 30px;
 }
 
 .metadata-column {
@@ -270,7 +270,15 @@ body {
        the left column. */
     margin-left: var(--metadata-width);
     box-sizing: border-box;
-    width: calc(100% - var(--metadata-width));
+    width: calc(50% - var(--metadata-width));
+    /* Disable vertical scrolling on parent - children scroll independently */
+    height: calc(100vh - var(--global-back-offset));
+    overflow-y: hidden;
+    overflow-x: visible; /* Allow the guide line and labels to be visible */
+    position: sticky;
+    top: 0;
+    /* Add left padding to ensure room for guide line */
+    padding-left: 20px;
 }
 
 /* When the page is in split mode (context panel open), reduce the left column
@@ -865,7 +873,9 @@ body {
            This keeps the vertical line visually to the left of the subsection buttons. */
         left: calc(0px - var(--label-line-offset));
         top: 0;
-        bottom: 0;
+        /* Use a very large height instead of bottom:0 so the line extends 
+           beyond the viewport height to cover all scrollable content */
+        height: 10000px;
         width: 2px;
         background: rgba(0,0,0,0.85);
         pointer-events: none;
@@ -984,6 +994,32 @@ body {
        doesn't push subsections down. This only affects wide viewports. */
     .split-layout.split .content-column {
         padding-top: 0;
+    }
+
+    /* ========== SPLIT MODE OVERRIDES ==========
+       When context panel is open, shift the vertical line, ticks, and toggle
+       buttons to the right so they remain visible within the narrower content area.
+       The elements maintain the same alignment relative to each other. */
+
+    /* Shift the vertical guide line to the right in split mode */
+    #content-display.split .description-block::before {
+        left: 0; /* Move from -12px to 0 */
+        height: 10000px; /* Ensure line spans full scrollable content */
+    }
+
+    /* Shift horizontal ticks to align with the repositioned vertical line */
+    #content-display.split .description-block .subsection::before {
+        left: 0; /* Match the vertical line position */
+    }
+
+    /* Shift toggle buttons to the right of the vertical line in split mode */
+    #content-display.split .description-block .subsection .subsection-toggle {
+        left: calc(var(--section-label-width) + 6px); /* Position to the right of the vertical line */
+    }
+
+    /* Add left padding to description text to make room for the shifted navigation */
+    #content-display.split #description-text {
+        padding-left: calc(var(--label-line-offset) + 4px);
     }
 }
 
@@ -1205,7 +1241,12 @@ h1 {
 #content-display { position: relative; display: flex; flex: 1 1 auto; width: 100%; }
 
 /* When split is active, keep content area as row: description + context panel */
-#content-display.split { display: flex; }
+#content-display.split { 
+    display: flex;
+    height: calc(100vh - var(--global-back-offset));
+    overflow-y: hidden; /* Prevent parent from scrolling - children scroll independently */
+    overflow-x: visible; /* Allow guide line and labels to be visible */
+}
 
 /* When layout is split, remove the large right padding on the content column so the context panel
     can use the full remaining width. This allows the #context-panel (flex:1) to expand to the edge. */
@@ -1219,10 +1260,16 @@ h1 {
 #content-display.split #description-text {
      /* Shrink description to the left so the context panel can be fully visible
          without horizontal scrolling. Adjust this percentage to taste (50-60%). */
-     flex: 0 0 55%;
+     flex: 0 0 50%;
      max-width: 100%;
      padding-right: 20px;
+     /* Add left padding to make room for the guide line and rotated labels */
+     padding-left: 0px;
      box-sizing: border-box;
+     /* Independent scrolling for description */
+     height: calc(100vh - var(--global-back-offset));
+     overflow-y: auto;
+     overflow-x: visible;
 }
 
 /* Context panel should take the remaining width of the content area */
@@ -1233,7 +1280,10 @@ h1 {
     border-left: 1px solid #000;
     padding: 30px;
     box-sizing: border-box;
-    overflow: auto;
+    /* Independent scrolling for context panel */
+    height: calc(100vh - var(--global-back-offset));
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 /* --- Context Panel specific content --- */

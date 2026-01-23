@@ -296,7 +296,7 @@
     "image_filename": "images/duck.webp",
     "categories_object_type": ["Toy", "Shields & Mitigation"],
     "categories_country": ["Thailand"],
-    "categories_cause": ["Pro-Democracy", "Anti-Police Violence"],
+    "categories_cause": ["Pro-Democracy", "Anti-Police Brutality"],
     "categories_protest": ["Thai Pro-Democracy Protests (2020)"],
     "categories_timeframe": ["2020", "21st Century"],
     "description_html": "Rubber ducks became an iconic symbol of <span class=\"highlight-country\">Thailand’s</span> <span class=\"highlight-cause\">pro-democracy protests</span> in <span class=\"highlight-timeframe\">2020</span>. Initially brought to demonstrations as a humorous response to government barricades, inflatable yellow ducks quickly gained prominence when protesters used them as improvised <span class=\"dramatic-emphasis\">shields against police water cannons</span> and tear gas during violent clashes near parliament. Their cheerful, fragile appearance contrasted with their new role as protectors, capturing public imagination and inspiring widespread protest art and memes."
@@ -320,7 +320,7 @@
     "image_filename": "images/waterjug.webp",
     "categories_object_type": ["Container", "Shields & Mitigation"],
     "categories_country": ["USA"],
-    "categories_cause": ["Pro-Palestine", "Anti-Police Sentiment"],
+    "categories_cause": ["Pro-Palestine"],
     "categories_protest": ["Student Encampments (2024-2025)", "Cal Poly Humboldt Protest"],
     "categories_timeframe": ["2024", "2025", "21st Century"],
     "description_html": "The water jug has emerged as an unexpected symbol in <span class=\"highlight-cause\">pro-Palestinian protests</span> across the <span class=\"highlight-country\">United States</span>, particularly during the wave of student-led demonstrations in <span class=\"highlight-timeframe\">2024</span> and <span class=\"highlight-timeframe\">2025</span>. Its rise began with viral incidents at university protests, most notably at <span class=\"highlight-protest\">California Polytechnic State University, Humboldt</span>, where a protester struck a police officer with a large, empty water jug. The moment, captured on video, quickly spread across social media, where the jug was dubbed the “<span class=\"dramatic-emphasis\">Jug of Justice</span>” and became an emblem of <span class=\"highlight-cause\">grassroots resistance</span>. Protesters began bringing water jugs to demonstrations, using them as makeshift shields, tools for practical needs, and a symbol of anti-police sentiment and solidarity with the <span class=\"highlight-cause\">Palestinian cause</span>."
@@ -424,7 +424,7 @@
   "categories_object_type": ["Thrown & Spilled"],
   "categories_country": ["Iraq", "United States", "India", "Pakistan", "Australia", "United Kingdom", "Greece"],
   "categories_cause": ["Anti-War", "Political Dissent", "Anti-Imperialism"],
-  "categories_protest": ["Bush Shoe Incident", "Anti-Policy Rallies"],
+  "categories_protest": ["Bush Shoe Incident", "Anti-Policing"],
   "categories_timeframe": ["2008", "21st Century"],
   "description_html": "Shoe-throwing is a widely recognized act of protest and symbolic defiance, particularly since the early <span class=\"highlight-timeframe\">21st century</span>. This gesture is rooted in the cultural significance of shoes as objects associated with <span class=strong-emphasis>insult and contempt</span> in many societies, especially in the <span class=\"highlight-country\">Middle East</span>. The most famous incident occurred in <span class=\"highlight-timeframe\">2008</span>, when <span class=\"highlight-country\">Iraqi</span> journalist <span class=empasisc>Muntadhar al-Zaidi</span> hurled both his shoes at U.S. President <span class=empasisc>George W. Bush</span> during a Baghdad press conference, declaring it a <span class=strong-emphasis>“farewell kiss”</span> from the Iraqi people. The act was instantly understood as a deep insult, sparking global headlines and inspiring similar <span class=\"highlight-cause\">political dissent</span> around the world. Since then, the tactic has been adopted in <span class=\"highlight-country\">India</span>, <span class=\"highlight-country\">Pakistan</span>, <span class=\"highlight-country\">Australia</span>, the <span class=\"highlight-country\">United Kingdom</span>, and <span class=\"highlight-country\">Greece</span>. While it serves as a <span class=\"highlight-cause\">potent symbol of protest</span>, it remains a polarizing gesture that frequently crosses the line from <span class=\"highlight-cause\">legitimate dissent</span> to perceived <span class=strong-emphasis>endangerment</span>. <br>"
  ,

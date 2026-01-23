@@ -37,7 +37,7 @@
     .view-toggle button[aria-pressed="true"]{background:#000;color:#fff}
     .controls-inputs{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
     .controls-inputs input[type="search"],.controls-inputs select{padding:8px 10px;border-radius:6px;border:1px solid rgba(0,0,0,0.08);font-size:15px}
-    #list-view{max-width:1400px;margin:0 auto;display:none; max-height: calc(100vh - 120px); box-sizing:border-box}
+    #list-view{max-width:1400px;margin:0 auto;display:none; height: calc(100vh - 120px); box-sizing:border-box}
     .list-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
   /* List view: tags-only rows (no photos). */
   /* Make the list area horizontally scrollable and prevent vertical scrolling
@@ -52,6 +52,7 @@
     padding-bottom: calc(var(--bottom-nav-height));
     -webkit-overflow-scrolling: touch;
     width: 100vw;
+    align-content: flex-start;
   }
   .list-row{background:#fff;padding:10px 14px;border-radius:8px;text-decoration:none;color:inherit;min-width:260px;flex:0 0 auto}
   .list-row h3{margin:0 0 6px 0;font-size:18px}
@@ -122,12 +123,48 @@
   /* keyboard focus visible state */
   .tag-toggle input:focus{outline:2px solid rgba(0,0,0,0.12);outline-offset:2px}
   .tag-toggle.active{background:#000000;color:#fff;border-color:transparent}
-  /* Photo results grid used when a tag is clicked */
-  /* Photo results flow horizontally in list view */
-  .photo-results-grid{display:flex;flex-wrap:nowrap;gap:10px}
-  .photo-result{min-width:160px;flex:0 0 auto}
-  .photo-result img{width:100%;height:140px;object-fit:cover;border-radius:6px;display:block}
-  @media (max-width:520px){ .photo-result img{height:110px} }
+  /* Photo results grid used when a tag is clicked - Masonry layout */
+  .photo-results-grid{
+    column-count: 4;
+    column-gap: 10px;
+    padding: 12px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  /* Override #list-grid flex layout when showing photo results */
+  #list-grid:has(.photo-results-grid),
+  #list-grid.showing-photos{
+    display: block;
+    flex-wrap: unset;
+    overflow-x: visible;
+    overflow-y: auto;
+    width: 100%;
+  }
+  .photo-result{
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 10px;
+    break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+    overflow: hidden;
+  }
+  .photo-result img{
+    width: 100%;
+    height: auto; /* Preserve aspect ratio */
+    display: block;
+    background: #f4f4f4;
+    border-radius: 0; /* Sharp corners */
+  }
+  @media (max-width:768px){
+    .photo-results-grid{
+      column-count: 3;
+    }
+  }
+  @media (max-width:520px){
+    .photo-results-grid{
+      column-count: 2;
+    }
+  }
   /* Scattered list view: absolutely-positioned card tiles inside the list area */
   .scatter-results{position:relative;min-height:480px;padding:12px}
   .scatter-results .scatter-item{position:absolute;width:200px;background:#fff;overflow:hidden;box-shadow:0 8px 20px rgba(0,0,0,0.08);text-decoration:none;color:inherit;display:block}
@@ -255,7 +292,6 @@
           <label class="tag-toggle active" data-kind="cause"><input type="checkbox" data-kind="cause" checked />Causes</label>
         </div>
       </div>
-      <div id="list-count" style="margin:8px 0;color:#333"></div>
       <div id="list-grid" class="list-grid"></div>
     </section>
     <noscript>
@@ -458,6 +494,8 @@
         } else if(action === 'search'){
           // The nav's Search now opens the List view (was previously the List button)
           const btn = document.getElementById('btn-list'); if(btn) btn.click();
+          // Scroll to top of page
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         } else if(action === 'about'){
           // Open the in-page About sliding panel instead of navigating away
           const panel = document.getElementById('about-panel');

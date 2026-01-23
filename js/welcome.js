@@ -110,7 +110,8 @@
 
   async function loadData(){
     try{
-      const res = await fetch('protest_data.json');
+      // Add cache-busting to ensure latest data is loaded
+      const res = await fetch('protest_data.json?v=' + Date.now());
       state.data = await res.json();
       state.filtered = state.data.slice();
     }catch(e){ console.error('Failed to load data', e); }
@@ -145,10 +146,11 @@
       const container = $('#list-grid');
       if(!container){ console.warn('renderList: #list-grid not found'); return; }
       container.innerHTML = '';
-      if(!cards || cards.length===0){ container.innerHTML = '<p>No results.</p>'; return; }
+      if(!cards || cards.length===0){ container.innerHTML = '<p>No results.</p>'; container.classList.remove('showing-photos'); return; }
     const frag = document.createDocumentFragment();
     // If listMode === 'items' render a photos-only grid (no text). Otherwise render rows.
     if(state.listMode === 'items'){
+      container.classList.add('showing-photos'); // Add class for CSS override
       const grid = document.createElement('div'); grid.className = 'photo-results-grid';
       cards.forEach(item=>{
         const a = document.createElement('a');
@@ -163,7 +165,7 @@
       });
       frag.appendChild(grid);
     } else {
-      // Render simplified rows: no images, only title + tags.
+      container.classList.remove('showing-photos'); // Remove class when showing tags
       cards.forEach(item=>{
         const a = document.createElement('a');
         a.href = `object-detail.html?id=${encodeURIComponent(item.id)}`;
@@ -188,7 +190,6 @@
       });
     }
     container.appendChild(frag);
-    const lc = $('#list-count'); if(lc) lc.textContent = `${cards.length} result${cards.length===1? '':'s'}`;
   }catch(err){ console.error('renderList error', err); }
   }
 
